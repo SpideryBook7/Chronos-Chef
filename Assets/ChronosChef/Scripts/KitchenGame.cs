@@ -13,6 +13,19 @@ namespace ChronosChef
         public float Remaining { get; private set; }
         public float Anomaly { get; private set; }
         public float CloneRemaining { get; private set; }
+        public const float BorrowDuration = 5, BorrowRecharge = 32, BorrowAnomaly = 25;
+        public float BorrowRemaining { get; private set; }
+        public float BorrowCooldown { get; private set; }
+        public bool BorrowTime()
+        {
+            if (!Running || Paused || TutorialActive || BorrowCooldown > 0) return false;
+            BorrowRemaining = BorrowDuration;
+            BorrowCooldown = BorrowRecharge;
+            Respond("¡Cinco segundos prestados! Hasta el hambre se congela. El fogón sigue encendido.", "borrow");
+            AddAnomaly(BorrowAnomaly);
+            view.Refresh(this);
+            return true;
+        }
         public int Credits { get; private set; }
         public int Served { get; private set; }
         public int Lost { get; private set; }
@@ -57,6 +70,7 @@ namespace ChronosChef
         public IReadOnlyList<Vector2Int> RoutePreview => route;
         public float WorkProgress => work > 0 ? 1 - work / 1.6f : 0;
         public event Action<string> Feedback;
+        public event Action<int, Food, int> OrderServed;
         public void Configure(KitchenView target) { view = target; }
         void Start()
         {
@@ -69,6 +83,7 @@ namespace ChronosChef
         {
             if (level < 1 || level > Progress.Unlocked || level > 5 && Progress.Era < 2) { view.MenuNotice("Este portal todavía está cerrado."); return; }
             Level = level; ResetShift(); view.ShowMenu(false);
+            if (level == 3) Say("¡TOSTADA MUTANTE! Una raíz > corte > recoger > pan. El ojo es comestible.");
             if (guided) { TutorialActive = true; TutorialStep = 0; view.Refresh(this); }
         }
         public void ResetShift()
@@ -77,6 +92,7 @@ namespace ChronosChef
             Carry = StoveFood = PrepFood = Food.Empty; Remaining = LevelRules.Seconds;
             Credits = Served = Lost = Combo = arrivals = 0; Reputation = 100;
             Anomaly = CloneRemaining = CookTime = work = 0; CookDuration = 5;
+            BorrowRemaining = BorrowCooldown = 0;
             blocked = new Vector2Int(-1, -1); cell = new Vector2Int(5, 1);
             ChefPosition = KitchenRules.Position(cell); route.Clear(); destination = null;
             Running = true; Paused = false; TaskLabel = DestinationLabel = "";
@@ -96,7 +112,7 @@ namespace ChronosChef
         {
             respawn[slot] = 0;
             Customers[slot] = true; Species[slot] = arrivals % 4;
-            Orders[slot] = arrivals % 3 == 1 ? Food.Soup : Food.Burger; arrivals++;
+            Orders[slot] = KitchenRecipe.OrderFor(Level, arrivals++);
             MaxPatience[slot] = LevelRules.Patience + slot * 8;
             Patience[slot] = MaxPatience[slot]; special[slot] = false; speechTime[slot] = 3;
             banterCountdown[slot] = 8 + slot * 2; banterLine[slot] = 0;
@@ -119,7 +135,11 @@ namespace ChronosChef
         {
             if (UnityEngine.InputSystem.Keyboard.current != null && UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame) view.HandleBack();
             if (!Running || Paused) return;
-            float dt = Time.deltaTime, pressure = TutorialActive ? 0 : dt; Remaining = Mathf.Max(0, Remaining - pressure);
+            float dt = Time.deltaTime;
+            float pressure = TutorialActive ? 0 : Mathf.Max(0, dt - BorrowRemaining);
+            BorrowRemaining = Mathf.Max(0, BorrowRemaining - dt);
+            BorrowCooldown = Mathf.Max(0, BorrowCooldown - dt);
+            Remaining = Mathf.Max(0, Remaining - pressure);
             autosave -= dt; if (autosave <= 0) { SaveCurrentSession(); autosave = 5; }
             if (messageTime > 0) messageTime -= dt; else Message = "Entrega tocando el personaje o su tarjeta. Consulta RECETAS si necesitas ayuda.";
             for (int i = 0; i < 3; i++)
@@ -230,7 +250,8 @@ namespace ChronosChef
                     else Respond(Carry != Food.Empty ? "Libera las manos o espera a que el fogón esté libre." : "Todavía se cocina. ¡No mires el reloj tan fuerte!", "bad"); break;
                 case Station.Assemble:
                     if (Carry == Food.CookedDodo) { Carry = Food.Burger; Respond("¡Cyber-Dodo Burger! Toca un cliente que pida hamburguesa.", "ready"); }
-                    else Respond("Trae dodo cocinado. La sopa ya sale del fogón en su bol.", "bad"); break;
+                    else if (Carry == Food.ChoppedRoot) { Carry = Food.Toast; Respond("¡Tostada mutante! Si te mira, mantén el contacto visual.", "ready"); }
+                    else Respond("Trae dodo cocinado para una burger o una raíz cortada para una tostada.", "bad"); break;
                 case Station.Trash:
                     if (Carry != Food.Empty) { Carry = Food.Empty; Combo = 0; AddAnomaly(10); Respond("Basura enviada a otra línea temporal. +10 anomalía.", "bad"); } break;
                 default:
@@ -242,6 +263,7 @@ namespace ChronosChef
                     int reward = 100 + Mathf.CeilToInt(Patience[customer]) + Mathf.Min(Combo, 5) * 10;
                     Credits += reward; Served++; Reputation = Mathf.Min(100, Reputation + 3); Anomaly = Mathf.Max(0, Anomaly - 8);
                     Speech[customer] = "+" + reward + " créditos · ¡Delicioso!"; speechTime[customer] = 3;
+                    OrderServed?.Invoke(customer, Orders[customer], reward);
                     Respond("¡ENTREGADO! +" + reward + " créditos. Combo x" + Combo + ".", "serve"); break;
             }
             if (TutorialActive && (previousCarry != Carry || previousStove != StoveFood || previousPrep != PrepFood || previousServed != Served)) AdvanceTutorial();

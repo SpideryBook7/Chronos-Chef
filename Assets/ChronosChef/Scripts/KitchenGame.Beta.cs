@@ -45,6 +45,7 @@ namespace ChronosChef
             var session = new KitchenSession
             {
                 level = Level, carry = Carry, stove = StoveFood, prep = PrepFood, remaining = Remaining, anomaly = Anomaly, cloneTime = CloneRemaining,
+                borrowRemaining = BorrowRemaining, borrowCooldown = BorrowCooldown,
                 credits = Credits, served = Served, lost = Lost, reputation = Reputation, combo = Combo, arrivals = arrivals,
                 cell = cell, blocked = blocked, cookTime = CookTime, cookDuration = CookDuration, work = work,
                 customers = (bool[])Customers.Clone(), special = (bool[])special.Clone(), orders = (Food[])Orders.Clone(), species = (int[])Species.Clone(),
@@ -57,6 +58,7 @@ namespace ChronosChef
             var s = Progress.LoadSession(); if (s == null) return false;
             TutorialActive = IsTrainingResult = false; Level = s.level;
             Carry = s.carry; StoveFood = s.stove; PrepFood = s.prep; Remaining = s.remaining; Anomaly = s.anomaly; CloneRemaining = s.cloneTime;
+            BorrowRemaining = s.borrowRemaining; BorrowCooldown = s.borrowCooldown;
             Credits = s.credits; Served = s.served; Lost = s.lost; Reputation = s.reputation; Combo = s.combo; arrivals = s.arrivals;
             cell = s.cell; blocked = s.cloneTime > 0 ? s.blocked : new Vector2Int(-1, -1); ChefPosition = KitchenRules.Position(cell);
             CookTime = s.cookTime; CookDuration = s.cookDuration; work = s.work; TaskLabel = work > 0 ? "CORTANDO" : ""; DestinationLabel = "";

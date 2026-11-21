@@ -66,11 +66,11 @@ namespace ChronosChef
                 var hit = stations[5 + i].GetComponent<RectTransform>(); hit.anchoredPosition = new Vector2(630 + i * 270, 746); hit.sizeDelta = new Vector2(250, 232);
                 customerLabels[i].rectTransform.anchoredPosition = new Vector2(48, 6);
                 speciesLabels[i].rectTransform.anchoredPosition = new Vector2(0, 39); speciesLabels[i].rectTransform.sizeDelta = new Vector2(230, 18);
-                ingredientRows[i] = new GameObject[2];
-                for (int recipe = 0; recipe < 2; recipe++)
+                ingredientRows[i] = new GameObject[KitchenRecipe.All.Length];
+                for (int recipe = 0; recipe < ingredientRows[i].Length; recipe++)
                 {
                     var row = new GameObject("RecipeIngredients" + recipe, typeof(RectTransform)); row.transform.SetParent(card, false); row.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -35); ingredientRows[i][recipe] = row;
-                    Food[] foods = recipe == 0 ? new[] { Food.RawDodo, Food.ChoppedDodo, Food.CookedDodo, Food.Bread } : new[] { Food.Root, Food.Root, Food.Roots, Food.Soup };
+                    Food[] foods = KitchenRecipe.All[recipe].Ingredients;
                     for (int item = 0; item < 4; item++)
                     {
                         var icon = new GameObject("Step" + item, typeof(RectTransform)).GetComponent<RectTransform>(); icon.SetParent(row.transform, false); icon.anchoredPosition = new Vector2(-87 + item * 58, 0); icon.localScale = Vector3.one * .3f; DrawFood(icon, foods[item]);
@@ -125,7 +125,7 @@ namespace ChronosChef
             for (int i = 0; i < 3; i++)
             {
                 speciesLabels[i].fontSize = 11;
-                ingredientRows[i][0].SetActive(g.Orders[i] != Food.Soup); ingredientRows[i][1].SetActive(g.Orders[i] == Food.Soup);
+                for (int recipe = 0; recipe < ingredientRows[i].Length; recipe++) ingredientRows[i][recipe].SetActive(g.Orders[i] == KitchenRecipe.All[recipe].Dish);
             }
         }
         void SetParadoxVisible(bool visible)

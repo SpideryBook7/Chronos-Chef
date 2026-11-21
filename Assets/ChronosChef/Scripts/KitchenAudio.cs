@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace ChronosChef
 {
-    // Synthesized placeholders routed through a shared gain layer; no external audio assets.
+    // A score and percussion stem share a DSP start so the mix can change mid-bar.
     public sealed class KitchenAudio : MonoBehaviour
     {
-        AudioSource music, effects;
+        AudioSource music, effects, percussion;
+        float tension;
         KitchenGame owner;
         readonly Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
         public float MusicGain { get; private set; }
@@ -17,32 +18,55 @@ namespace ChronosChef
             if (!Object.FindFirstObjectByType<AudioListener>()) Camera.main.gameObject.AddComponent<AudioListener>();
             music = gameObject.AddComponent<AudioSource>(); music.loop = true; music.playOnAwake = false; music.spatialBlend = 0;
             effects = gameObject.AddComponent<AudioSource>(); effects.playOnAwake = false; effects.spatialBlend = 0;
-            foreach (var key in new[] { "click", "good", "cut", "cook", "ready", "serve", "bad", "warn", "paradox", "win" }) clips[key] = Synthesize(key);
-            music.clip = CreateMusic(); music.volume = MusicGain * .22f; music.Play();
+            foreach (var key in new[] { "click", "good", "cut", "cook", "ready", "serve", "bad", "warn", "paradox", "win", "borrow" }) clips[key] = Synthesize(key);
+            music.clip = CreateMusic(); music.volume = MusicGain * .22f;
+            percussion = gameObject.AddComponent<AudioSource>();
+            percussion.loop = true; percussion.playOnAwake = false; percussion.spatialBlend = 0;
+            percussion.clip = CreatePercussion(); percussion.volume = 0;
+            double downbeat = AudioSettings.dspTime + .15;
+            music.PlayScheduled(downbeat); percussion.PlayScheduled(downbeat);
             effects.volume = EffectsGain; game.Feedback += Play;
         }
-        public void SetMusic(float value) { MusicGain = value; music.volume = value * .22f; PlayerPrefs.SetFloat("ChronosChef.music", value); }
+        public void SetMusic(float value) { MusicGain = value; ApplyMix(); PlayerPrefs.SetFloat("ChronosChef.music", value); }
         public void SetEffects(float value) { EffectsGain = value; effects.volume = value; PlayerPrefs.SetFloat("ChronosChef.sfx", value); }
         public void Play(string key) { if (clips.TryGetValue(key, out var clip)) effects.PlayOneShot(clip, key == "click" ? .25f : .55f); }
-        void Update() { if (music && owner) music.volume = MusicGain * .22f * (owner.Paused ? .35f : 1); }
+        void Update()
+        {
+            if (!music || !owner) return;
+            float target = owner.Running && !owner.Paused ? Mathf.Clamp01(owner.Anomaly / 100 + (owner.Level > 5 ? .28f : 0)) : 0;
+            if (owner.Running && !owner.Paused && (owner.CloneRemaining > 0 || owner.Remaining < 20)) target = 1;
+            if (owner.BorrowRemaining > 0) target = 0;
+            tension = Mathf.MoveTowards(tension, target, Time.unscaledDeltaTime * .8f);
+            ApplyMix();
+        }
+        void ApplyMix()
+        {
+            float gain = MusicGain * (owner.Paused ? .35f : 1);
+            music.volume = gain * .22f;
+            percussion.volume = gain * tension * .35f;
+        }
         static AudioClip Synthesize(string key)
         {
             const int rate = 22050;
-            float seconds = key == "music" ? 8 : key == "win" || key == "paradox" ? .6f : key == "serve" ? .36f : .12f;
+            float seconds = key == "borrow" ? .85f : key == "win" || key == "paradox" ? .6f : key == "serve" || key == "cook" || key == "cut" ? .36f : .12f;
             var data = new float[(int)(rate * seconds)];
             float phase = 0;
             float[] triad = { 523.25f, 659.25f, 783.99f };
-            float[] bass = { 130.81f, 196, 164.81f, 196, 146.83f, 220, 174.61f, 196 };
+            var noise = new System.Random(321);
             for (int i = 0; i < data.Length; i++)
             {
                 float t = i / (float)rate, p = t / seconds;
                 float frequency = key == "bad" || key == "warn" ? Mathf.Lerp(330, 130, p) : key == "paradox" ? 150 + Mathf.Sin(t * 80) * 90 : 660 + p * 440;
                 if (key == "serve" || key == "win") frequency = triad[Mathf.Min(2, (int)(p * 3))];
-                if (key == "music") frequency = bass[(int)t % 8];
+                if (key == "borrow") frequency = Mathf.Lerp(1220, 145, p) + 35 * Mathf.Sin(t * 38);
+                if (key == "cut") frequency = 900 - 710 * Mathf.Repeat(p * 3, 1);
+                if (key == "cook") frequency = 82 + 38 * Mathf.Sin(t * 24);
                 phase += frequency * 2 * Mathf.PI / rate;
-                float envelope = key == "music" ? .35f + .15f * Mathf.Sin(t * Mathf.PI * 2) : Mathf.Pow(1 - p, 2);
+                float envelope = Mathf.Pow(1 - p, 2);
                 envelope *= Mathf.Min(1, t / .005f) * Mathf.Min(1, (seconds - t) / .005f);
                 data[i] = (Mathf.Sin(phase) + .2f * Mathf.Sin(phase * 2)) * envelope * .35f;
+                if (key == "cook") data[i] += (float)(noise.NextDouble() * 2 - 1) * .3f * envelope;
+                if (key == "cut") data[i] *= Mathf.Exp(-7 * Mathf.Repeat(p * 3, 1));
             }
             var clip = AudioClip.Create("Chronos_" + key, data.Length, 1, rate, false); clip.SetData(data, 0); return clip;
         }
@@ -64,6 +88,25 @@ namespace ChronosChef
             }
             var clip = AudioClip.Create("Chronos_TimeKitchen_Loop", data.Length, 1, rate, false); clip.SetData(data, 0); return clip;
         }
-        void OnDestroy() { foreach (var clip in clips.Values) if (clip) Destroy(clip); if (music && music.clip) Destroy(music.clip); }
+        static AudioClip CreatePercussion()
+        {
+            const int rate = 22050;
+            var samples = new float[rate * 4];
+            var noise = new System.Random(73);
+            for (int i = 0; i < samples.Length; i++)
+            {
+                float t = i / (float)rate;
+                int eighth = (int)(t * 4);
+                float phase = t - eighth * .25f;
+                float tap = eighth % 3 == 0 ? .23f : .09f;
+                float pan = Mathf.Sin(phase * 2 * Mathf.PI * 683) + .4f * Mathf.Sin(phase * 2 * Mathf.PI * 1137);
+                samples[i] = tap * pan * Mathf.Exp(-phase * 52);
+                if (eighth % 4 == 2) samples[i] += .21f * (float)(noise.NextDouble() * 2 - 1) * Mathf.Exp(-phase * 33);
+                samples[i] *= Mathf.Min(1, phase * 750);
+            }
+            var clip = AudioClip.Create("Chronos_Pots_and_Plasma", samples.Length, 1, rate, false);
+            clip.SetData(samples, 0); return clip;
+        }
+        void OnDestroy() { foreach (var clip in clips.Values) if (clip) Destroy(clip); if (music && music.clip) Destroy(music.clip); if (percussion && percussion.clip) Destroy(percussion.clip); }
     }
 }

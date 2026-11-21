@@ -6,6 +6,8 @@ namespace ChronosChef
     {
         [SerializeField] Texture2D ingredientAtlas, customerEmotionAtlas;
         Sprite[] ingredientFrames;
+        Sprite toastSprite;
+        Sprite DishSprite(Food food) => food == Food.Toast ? toastSprite : ingredientFrames != null ? ingredientFrames[FoodTiles[(int)food]] : circle;
         Sprite[,] customerPoses;
         UnityEngine.UI.Image[,] customerPictures;
         RectTransform[] prepIcons;
@@ -14,10 +16,20 @@ namespace ChronosChef
         TMP_Text prepCaption;
         UnityEngine.UI.Image prepFill;
         TMP_Text[] comicSounds;
+        UnityEngine.UI.Button borrowButton;
+        TMP_Text borrowCaption;
+        RectTransform borrowDial;
+        UnityEngine.UI.Image borrowFill;
+        RectTransform receipt;
+        TMP_Text receiptAmount;
+        UnityEngine.UI.Image receiptDish;
+        Vector2 receiptStart;
+        float receiptAge;
         static readonly int[] FoodTiles = { -1, 0, 1, 2, 4, 10, 5, 6, 9, 3, 7, 8 };
 
         void InitializeFoodArt()
         {
+            toastSprite = Resources.Load<Sprite>("MutantToast");
             if (!ingredientAtlas) return;
             ingredientFrames = new Sprite[12]; float w = ingredientAtlas.width / 6f, h = ingredientAtlas.height / 2f;
             for (int i = 0; i < 12; i++) ingredientFrames[i] = Sprite.Create(ingredientAtlas, new Rect(i % 6 * w, (1 - i / 6) * h, w, h), new Vector2(.5f, .5f), 100, 0, SpriteMeshType.FullRect);
@@ -26,7 +38,7 @@ namespace ChronosChef
         {
             if (ingredientFrames == null || food == Food.Empty) return false;
             var picture = Panel(parent, "FoodIllustration_" + food, 0, 0, 112, 104, Color.white).GetComponent<UnityEngine.UI.Image>();
-            picture.sprite = ingredientFrames[FoodTiles[(int)food]]; picture.type = UnityEngine.UI.Image.Type.Simple; picture.preserveAspect = true; return true;
+            picture.sprite = DishSprite(food); picture.type = UnityEngine.UI.Image.Type.Simple; picture.preserveAspect = true; return true;
         }
         void ReplaceFoodArt(Transform parent, Food food)
         {
@@ -37,7 +49,7 @@ namespace ChronosChef
         UnityEngine.UI.Image FoodPicture(Transform parent, string name, Food food, Vector2 position, Vector2 size)
         {
             var picture = Panel(parent, name, position.x, position.y, size.x, size.y, Color.white).GetComponent<UnityEngine.UI.Image>();
-            picture.sprite = ingredientFrames != null ? ingredientFrames[FoodTiles[(int)food]] : circle;
+            picture.sprite = DishSprite(food);
             picture.type = UnityEngine.UI.Image.Type.Simple; picture.preserveAspect = true; return picture;
         }
         void BuildLivingKitchen()
@@ -77,10 +89,51 @@ namespace ChronosChef
             comicSounds = new TMP_Text[3];
             for (int i = 0; i < 3; i++) comicSounds[i] = Label(stage, "", 550 + i * 270, 666, 160, 35, 23, Gold, FontStyles.Bold);
             BuildJourneyMap(); BuildRecipeTerminal();
+            borrowButton = Button(stage, "BorrowTime", 190, 77, 290, 100, C("213956"));
+            var dial = Dot(borrowButton.transform, "Clock", -100, 1, 56, Cyan);
+            Dot(dial, "ClockFace", 0, 0, 47, Ink);
+            borrowDial = Panel(dial, "MinuteHand", 0, 0, 4, 17, Gold);
+            borrowDial.pivot = new Vector2(.5f, 0);
+            borrowCaption = Label(borrowButton.transform, "", -65, 3, 199, 74, 17, Color.white, FontStyles.Bold);
+            borrowFill = Bar(borrowButton.transform, "Charge", 3, -40, 245, 6, Cyan);
+            borrowButton.onClick.AddListener(() => game.BorrowTime());
+            borrowButton.transform.SetSiblingIndex(stage.Find("BottomPanel").GetSiblingIndex() + 1);
+            receipt = Panel(stage, "DeliveryReceipt", 0, 0, 140, 42, C("163444"));
+            receipt.SetSiblingIndex(menu.transform.GetSiblingIndex());
+            receiptDish = FoodPicture(receipt, "DeliveredDish", Food.Burger, new Vector2(-47, 0), new Vector2(45, 40));
+            receiptAmount = Label(receipt, "", -29, 0, 95, 38, 24, Gold, FontStyles.Bold);
+            receipt.gameObject.SetActive(false);
+            game.OrderServed += ShowDeliveryReceipt;
+        }
+        void ShowDeliveryReceipt(int slot, Food dish, int credits)
+        {
+            receiptStart = new Vector2(630 + slot * 270, 678);
+            receipt.anchoredPosition = receiptStart;
+            receiptDish.sprite = DishSprite(dish);
+            receiptAmount.SetText("+{0}", credits);
+            receiptAge = 0;
+            receipt.gameObject.SetActive(true);
         }
         void RefreshLivingKitchen(KitchenGame g)
         {
             if (prepIcons == null) return;
+            if (receipt.gameObject.activeSelf)
+            {
+                if (!g.Paused) receiptAge += Time.deltaTime;
+                if (!g.Running || receiptAge >= 1) receipt.gameObject.SetActive(false);
+                else if (!ReducedMotion)
+                {
+                    float flight = Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.25f, 1, receiptAge));
+                    receipt.anchoredPosition = Vector2.Lerp(receiptStart, new Vector2(1470, 769), flight) + Vector2.up * (Mathf.Sin(flight * Mathf.PI) * 38);
+                }
+            }
+            bool borrowed = g.BorrowRemaining > 0;
+            borrowButton.gameObject.SetActive(g.Running && !g.TutorialActive && g.CloneRemaining <= 0);
+            borrowButton.interactable = g.BorrowCooldown <= 0;
+            borrowCaption.text = borrowed ? $"TIEMPO PRESTADO\n{Mathf.CeilToInt(g.BorrowRemaining)} s" : g.BorrowCooldown > 0 ? $"RECARGANDO\n{Mathf.CeilToInt(g.BorrowCooldown)} s" : "CONGELAR 5 s\n+25 ANOMALÍA";
+            borrowFill.fillAmount = 1 - g.BorrowCooldown / KitchenGame.BorrowRecharge;
+            borrowDial.localEulerAngles = new Vector3(0, 0, ReducedMotion ? -30 : -360 * borrowFill.fillAmount - 30);
+            if (borrowed) timer.color = Cyan;
             for (int i = 1; i < prepIcons.Length; i++) prepIcons[i].gameObject.SetActive((int)g.PrepFood == i);
             prepReadout.SetActive(g.PrepFood != Food.Empty);
             prepFill.transform.parent.gameObject.SetActive(g.PrepFood != Food.Empty);
@@ -115,6 +168,7 @@ namespace ChronosChef
         void UpdateLivingUI() { UpdateJourneyMap(); UpdateRecipeTerminal(); }
         void DestroyLivingAssets()
         {
+            if (game) game.OrderServed -= ShowDeliveryReceipt;
             if (ingredientFrames != null) foreach (var sprite in ingredientFrames) if (sprite) Destroy(sprite);
             if (customerPoses != null) foreach (var sprite in customerPoses) if (sprite) Destroy(sprite);
         }

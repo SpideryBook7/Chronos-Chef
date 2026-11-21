@@ -14,6 +14,7 @@ public static class ChronosBetaPlaytest
     static KitchenProgress original;
     static string prefix;
     static int phase, level;
+    static Food plannedDish;
     static double deadline;
     static float originalSpeed;
     static readonly List<string> results = new List<string>();
@@ -112,12 +113,14 @@ public static class ChronosBetaPlaytest
                 if (game.StoveFood == Food.CookedDodo || game.StoveFood == Food.Soup || game.StoveFood == Food.Burnt) { game.SelectStation(2); return; }
                 if (game.StoveFood != Food.Empty) return;
                 int slot = Customer(Food.Empty); if (slot < 0) return;
-                game.SelectStation(game.Orders[slot] == Food.Soup ? 8 : 0); break;
+                plannedDish = game.Orders[slot];
+                game.SelectStation(plannedDish == Food.Burger ? 0 : 8); break;
             case Food.RawDodo: game.SelectStation(1); break;
-            case Food.Root: case Food.ChoppedRoot: game.SelectStation(8); break;
+            case Food.Root: game.SelectStation(plannedDish == Food.Toast ? 1 : 8); break;
+            case Food.ChoppedRoot: game.SelectStation(3); break;
             case Food.ChoppedDodo: case Food.Roots: case Food.ChoppedRoots: game.SelectStation(2); break;
             case Food.CookedDodo: game.SelectStation(3); break;
-            case Food.Burger: case Food.Soup: int target = Customer(game.Carry); if (target >= 0) game.SelectStation(5 + target); break;
+            case Food.Toast: case Food.Burger: case Food.Soup: int target = Customer(game.Carry); if (target >= 0) game.SelectStation(5 + target); break;
             case Food.Burnt: game.SelectStation(4); break;
         }
     }

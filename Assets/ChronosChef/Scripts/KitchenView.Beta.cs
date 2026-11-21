@@ -46,6 +46,7 @@ namespace ChronosChef
         public void HandleBack()
         {
             if (transitioning) return;
+            if (privacy && privacy.activeSelf) { privacy.SetActive(false); return; }
             if (confirmation && confirmation.activeSelf) { confirmation.SetActive(false); confirmed = null; return; }
             if (recipes && recipes.activeSelf) { CloseRecipeBook(); return; }
             if (settings && settings.activeSelf) { settings.SetActive(false); PlayerPrefs.Save(); return; }

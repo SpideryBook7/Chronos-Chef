@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ChronosChef
 {
-    public enum Food { Empty, RawDodo, ChoppedDodo, CookedDodo, Burger, Burnt, Root, Roots, Soup, Bread, ChoppedRoot, ChoppedRoots }
+    public enum Food { Empty, RawDodo, ChoppedDodo, CookedDodo, Burger, Burnt, Root, Roots, Soup, Bread, ChoppedRoot, ChoppedRoots, Toast }
     public enum Station { Supply, Cut, Stove, Assemble, Trash, Customer0, Customer1, Customer2, Roots }
 
     // Kept independent from the view so recipes and routing can be extended separately.
@@ -24,7 +24,7 @@ namespace ChronosChef
             new Rect(300, 575, 1070, 80) // serving counter
         };
         public const float CookSeconds = 5f, BurnSeconds = 11f, ShiftSeconds = 120f;
-        public static readonly string[] FoodNames = { "Manos libres", "Dodo crudo", "Dodo cortado", "Dodo cocinado", "Cyber-Dodo Burger", "Comida quemada", "Raíz neón (1/2)", "Raíces neón (2/2)", "Sopa cuántica", "Pan espacial", "Raíz cortada (1/2)", "Raíces cortadas (2/2)" };
+        public static readonly string[] FoodNames = { "Manos libres", "Dodo crudo", "Dodo cortado", "Dodo cocinado", "Cyber-Dodo Burger", "Comida quemada", "Raíz neón (1/2)", "Raíces neón (2/2)", "Sopa cuántica", "Pan espacial", "Raíz cortada (1/2)", "Raíces cortadas (2/2)", "Tostada mutante" };
         public static Vector2Int Approach(Station station)
         {
             switch (station)

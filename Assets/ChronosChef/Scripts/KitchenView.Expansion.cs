@@ -12,12 +12,13 @@ namespace ChronosChef
         readonly System.Collections.Generic.List<Sprite> castSprites = new System.Collections.Generic.List<Sprite>();
         KitchenGame game;
         KitchenAudio audioFeedback;
-        GameObject menu, pauseOverlay, recipes, settings;
+        GameObject menu, pauseOverlay, recipes, settings, privacy;
         TMP_Text menuBank, menuMessage, goal, comboLabel, feedbackLabel, speedText, heatText, eraText;
         TMP_Text[] levelTexts, speechLabels, speciesLabels;
         UnityEngine.UI.Button[] levelButtons;
         RectTransform[][] customerArt;
         RectTransform[] burgers, bowls;
+        readonly UnityEngine.UI.Image[] toastOrders = new UnityEngine.UI.Image[3];
         RectTransform[] carriedFood;
         RectTransform[] workSparks;
         RectTransform[] routeDots, steam, stoveFoods;
@@ -80,6 +81,7 @@ namespace ChronosChef
                 var card = cards[i]; burgers[i] = card.Find("BurgerIcon").GetComponent<RectTransform>();
                 ReplaceFoodArt(burgers[i], Food.Burger);
                 bowls[i] = new GameObject("SoupIcon", typeof(RectTransform)).GetComponent<RectTransform>(); bowls[i].SetParent(card, false); bowls[i].anchoredPosition = new Vector2(-75, 5); bowls[i].localScale = Vector3.one * .8f; DrawFood(bowls[i], Food.Soup);
+                toastOrders[i] = FoodPicture(card, "ToastOrder", Food.Toast, new Vector2(-75, 5), new Vector2(90, 82));
                 speciesLabels[i] = card.GetComponentsInChildren<TMP_Text>().First(t => t != customerLabels[i]);
                 // Keep the original editable art as variant 0; add the other temporal visitors.
                 var old = stage.Find("Customer" + (i + 1)); old.gameObject.SetActive(false);
@@ -153,6 +155,12 @@ namespace ChronosChef
             MakeSlider(settings.transform, "EFECTOS", -10, audioFeedback.EffectsGain, audioFeedback.SetEffects);
             ActionButton(settings.transform, "SettingsRecipes", "VER RECETAS", -140, OpenRecipeBook);
             ActionButton(settings.transform, "SettingsClose", "GUARDAR Y VOLVER", -245, () => { PlayerPrefs.Save(); settings.SetActive(false); });
+            privacy = ScreenPanel("Privacy");
+            Label(privacy.transform, "PRIVACIDAD Y DATOS", -600, 245, 1200, 75, 47, Cyan, FontStyles.Bold);
+            Label(privacy.transform, "Chronos Chef guarda en este dispositivo tu turno, las estrellas, los créditos y los ajustes de sonido y movimiento. Usa estos datos para continuar donde lo dejaste.\n\nPuedes eliminarlos desde Ajustes de Android → Aplicaciones → Chronos Chef → Almacenamiento → Borrar datos. Esto reinicia todo el progreso local.\n\nPara consultas de privacidad, usa el contacto del desarrollador en la ficha de Chronos Chef de Google Play.", -500, 5, 1000, 340, 25, Color.white);
+            ActionButton(privacy.transform, "PrivacyBack", "VOLVER A AJUSTES", -260, () => privacy.SetActive(false));
+            privacy.SetActive(false);
+            ActionButton(settings.transform, "OpenPrivacy", "PRIVACIDAD Y DATOS", -340, () => { privacy.SetActive(true); privacy.transform.SetAsLastSibling(); });
             pauseOverlay.SetActive(false); recipes.SetActive(false); settings.SetActive(false); menu.SetActive(false);
         }
         GameObject ScreenPanel(string name)
@@ -224,7 +232,9 @@ namespace ChronosChef
             if (g.CloneRemaining > 0) { clone.localEulerAngles = new Vector3(0, 0, Mathf.Sin(clock * 35) * 4); clone.GetComponent<CanvasGroup>().alpha = .35f + Mathf.Abs(Mathf.Sin(clock * 17)) * .35f; }
             for (int i = 0; i < 3; i++)
             {
-                bool soup = g.Orders[i] == Food.Soup; burgers[i].gameObject.SetActive(!soup); bowls[i].gameObject.SetActive(soup);
+                burgers[i].gameObject.SetActive(g.Orders[i] == Food.Burger);
+                bowls[i].gameObject.SetActive(g.Orders[i] == Food.Soup);
+                toastOrders[i].gameObject.SetActive(g.Orders[i] == Food.Toast);
                 speciesLabels[i].text = string.IsNullOrEmpty(g.Speech[i]) ? speciesNames[g.Species[i]] : g.Speech[i];
                 speciesLabels[i].fontSize = environmentArt ? 11 : string.IsNullOrEmpty(g.Speech[i]) ? 14 : 12;
                 speechLabels[i].gameObject.SetActive(false);

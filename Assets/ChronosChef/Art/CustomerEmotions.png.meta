@@ -1,0 +1,1846 @@
+fileFormatVersion: 2
+guid: c89bc60fb78bc934f82d150dd8fe17fc
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5787257396709596385
+    second: CustomerEmotions_0
+  - first:
+      213: -9196922052926217046
+    second: CustomerEmotions_1
+  - first:
+      213: 3499865675299715000
+    second: CustomerEmotions_2
+  - first:
+      213: 8385495206078119052
+    second: CustomerEmotions_3
+  - first:
+      213: -5532497284812221047
+    second: CustomerEmotions_4
+  - first:
+      213: 3724885851022543014
+    second: CustomerEmotions_5
+  - first:
+      213: 5978105595639598121
+    second: CustomerEmotions_6
+  - first:
+      213: -5329774625663459013
+    second: CustomerEmotions_7
+  - first:
+      213: -6797625851910133502
+    second: CustomerEmotions_8
+  - first:
+      213: 8713090361654410952
+    second: CustomerEmotions_9
+  - first:
+      213: -5192252265086719811
+    second: CustomerEmotions_10
+  - first:
+      213: 6480058665520897009
+    second: CustomerEmotions_11
+  - first:
+      213: -5232295233693104659
+    second: CustomerEmotions_12
+  - first:
+      213: 855621587318950644
+    second: CustomerEmotions_13
+  - first:
+      213: 494464283118688410
+    second: CustomerEmotions_14
+  - first:
+      213: -7191867536632500253
+    second: CustomerEmotions_15
+  - first:
+      213: -2830673338593018009
+    second: CustomerEmotions_16
+  - first:
+      213: -642954486855424423
+    second: CustomerEmotions_17
+  - first:
+      213: -3898885477391192569
+    second: CustomerEmotions_18
+  - first:
+      213: 632692087481388700
+    second: CustomerEmotions_19
+  - first:
+      213: -3773980821581727969
+    second: CustomerEmotions_20
+  - first:
+      213: 8164588926269370911
+    second: CustomerEmotions_21
+  - first:
+      213: -300094604931425399
+    second: CustomerEmotions_22
+  - first:
+      213: 5756693888693147448
+    second: CustomerEmotions_23
+  - first:
+      213: -1515345569998418182
+    second: CustomerEmotions_24
+  - first:
+      213: 7495749736239921899
+    second: CustomerEmotions_25
+  - first:
+      213: -8111792962624661744
+    second: CustomerEmotions_26
+  - first:
+      213: -754995790529099137
+    second: CustomerEmotions_27
+  - first:
+      213: 7519034944858848856
+    second: CustomerEmotions_28
+  - first:
+      213: 3211247907093926622
+    second: CustomerEmotions_29
+  - first:
+      213: 4770554110690188771
+    second: CustomerEmotions_30
+  - first:
+      213: 1352472512587191470
+    second: CustomerEmotions_31
+  - first:
+      213: -8044805666803816683
+    second: CustomerEmotions_32
+  - first:
+      213: -6595270113280553762
+    second: CustomerEmotions_33
+  - first:
+      213: -1255097742146435253
+    second: CustomerEmotions_34
+  - first:
+      213: 1080539935371143545
+    second: CustomerEmotions_35
+  - first:
+      213: -2527486393898056622
+    second: CustomerEmotions_36
+  - first:
+      213: -3966787636084563845
+    second: CustomerEmotions_37
+  - first:
+      213: -5168194099380521684
+    second: CustomerEmotions_38
+  - first:
+      213: 6672194686861711317
+    second: CustomerEmotions_39
+  - first:
+      213: -4309772416486138870
+    second: CustomerEmotions_40
+  - first:
+      213: -8551048519044434911
+    second: CustomerEmotions_41
+  - first:
+      213: 1552186142524449473
+    second: CustomerEmotions_42
+  - first:
+      213: -5115224472383063546
+    second: CustomerEmotions_43
+  - first:
+      213: -2602287205963171553
+    second: CustomerEmotions_44
+  - first:
+      213: -5845328762190322651
+    second: CustomerEmotions_45
+  - first:
+      213: 2953050037425277328
+    second: CustomerEmotions_46
+  - first:
+      213: 7602448176080092499
+    second: CustomerEmotions_47
+  - first:
+      213: -934516664872299371
+    second: CustomerEmotions_48
+  - first:
+      213: 6057783338190241174
+    second: CustomerEmotions_49
+  - first:
+      213: 1101244289376905533
+    second: CustomerEmotions_50
+  - first:
+      213: -163226078936364151
+    second: CustomerEmotions_51
+  - first:
+      213: -3047245566160639715
+    second: CustomerEmotions_52
+  - first:
+      213: 9015341710747589302
+    second: CustomerEmotions_53
+  - first:
+      213: 3282517561294987874
+    second: CustomerEmotions_54
+  - first:
+      213: 195706637957154568
+    second: CustomerEmotions_55
+  - first:
+      213: -3633712871016147676
+    second: CustomerEmotions_56
+  - first:
+      213: 8527012206002201133
+    second: CustomerEmotions_57
+  - first:
+      213: -7315520513622888953
+    second: CustomerEmotions_58
+  - first:
+      213: 9003844469287442519
+    second: CustomerEmotions_59
+  - first:
+      213: -7498284801966342733
+    second: CustomerEmotions_60
+  - first:
+      213: -6818893347898822099
+    second: CustomerEmotions_61
+  - first:
+      213: 8909666127952878945
+    second: CustomerEmotions_62
+  - first:
+      213: 8168653399812561564
+    second: CustomerEmotions_63
+  - first:
+      213: -2136378553032963400
+    second: CustomerEmotions_64
+  - first:
+      213: 1840435593271496133
+    second: CustomerEmotions_65
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 50
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: CustomerEmotions_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 696
+        width: 393
+        height: 390
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f136f555f088fafa0800000000000000
+      internalID: -5787257396709596385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_1
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 734
+        width: 291
+        height: 344
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa46068ce18fd5080800000000000000
+      internalID: -9196922052926217046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_2
+      rect:
+        serializedVersion: 2
+        x: 716
+        y: 680
+        width: 393
+        height: 394
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b772d1e945029030800000000000000
+      internalID: 3499865675299715000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_3
+      rect:
+        serializedVersion: 2
+        x: 1102
+        y: 998
+        width: 94
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8cf60036734f5470800000000000000
+      internalID: 8385495206078119052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_4
+      rect:
+        serializedVersion: 2
+        x: 1126
+        y: 680
+        width: 309
+        height: 370
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98554f9280f9833b0800000000000000
+      internalID: -5532497284812221047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_5
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 1027
+        width: 32
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a8c31b32f371b330800000000000000
+      internalID: 3724885851022543014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_6
+      rect:
+        serializedVersion: 2
+        x: 1253
+        y: 1034
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92c8fd9ad5f76f250800000000000000
+      internalID: 5978105595639598121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_7
+      rect:
+        serializedVersion: 2
+        x: 1265
+        y: 1036
+        width: 13
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3160706736d806b0800000000000000
+      internalID: -5329774625663459013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_8
+      rect:
+        serializedVersion: 2
+        x: 1277
+        y: 1030
+        width: 80
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20962e49d4bf9a1a0800000000000000
+      internalID: -6797625851910133502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_9
+      rect:
+        serializedVersion: 2
+        x: 1311
+        y: 1027
+        width: 13
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ce7a4e158d1be870800000000000000
+      internalID: 8713090361654410952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_10
+      rect:
+        serializedVersion: 2
+        x: 1384
+        y: 971
+        width: 19
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db8e94b131a61f7b0800000000000000
+      internalID: -5192252265086719811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_11
+      rect:
+        serializedVersion: 2
+        x: 1402
+        y: 986
+        width: 31
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fb9012060bcde950800000000000000
+      internalID: 6480058665520897009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_12
+      rect:
+        serializedVersion: 2
+        x: 1078
+        y: 761
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de5c0c3f4372367b0800000000000000
+      internalID: -5232295233693104659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_13
+      rect:
+        serializedVersion: 2
+        x: 1084
+        y: 761
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fa4d46ec47cfdb00800000000000000
+      internalID: 855621587318950644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_14
+      rect:
+        serializedVersion: 2
+        x: 1110
+        y: 768
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a98586d45a0bcd600800000000000000
+      internalID: 494464283118688410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_15
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 716
+        width: 21
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ef2b5f549a513c90800000000000000
+      internalID: -7191867536632500253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_16
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 0
+        width: 333
+        height: 740
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76f7ef9989d67b8d0800000000000000
+      internalID: -2830673338593018009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_17
+      rect:
+        serializedVersion: 2
+        x: 762
+        y: 331
+        width: 333
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9562d3cfc44c317f0800000000000000
+      internalID: -642954486855424423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_18
+      rect:
+        serializedVersion: 2
+        x: 1142
+        y: 728
+        width: 15
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70e2b24c05064e9c0800000000000000
+      internalID: -3898885477391192569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_19
+      rect:
+        serializedVersion: 2
+        x: 1174
+        y: 716
+        width: 18
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9e4786f916c7c800800000000000000
+      internalID: 632692087481388700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_20
+      rect:
+        serializedVersion: 2
+        x: 1249
+        y: 690
+        width: 37
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f17fb7c207020abc0800000000000000
+      internalID: -3773980821581727969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_21
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 11
+        width: 417
+        height: 703
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f12bf5fde527e4170800000000000000
+      internalID: 8164588926269370911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_22
+      rect:
+        serializedVersion: 2
+        x: 1187
+        y: 706
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98b1d0afb89d5dbf0800000000000000
+      internalID: -300094604931425399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_23
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 678
+        width: 25
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 837973c6792e3ef40800000000000000
+      internalID: 5756693888693147448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_24
+      rect:
+        serializedVersion: 2
+        x: 1319
+        y: 696
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afe48449b3968fae0800000000000000
+      internalID: -1515345569998418182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_25
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 684
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: beafec1cba0460860800000000000000
+      internalID: 7495749736239921899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_26
+      rect:
+        serializedVersion: 2
+        x: 1092
+        y: 341
+        width: 335
+        height: 362
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0175e33574f1d6f80800000000000000
+      internalID: -8111792962624661744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_27
+      rect:
+        serializedVersion: 2
+        x: 738
+        y: 629
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7a09922457b585f0800000000000000
+      internalID: -754995790529099137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_28
+      rect:
+        serializedVersion: 2
+        x: 1066
+        y: 589
+        width: 33
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85e7f0ed17af85860800000000000000
+      internalID: 7519034944858848856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_29
+      rect:
+        serializedVersion: 2
+        x: 1412
+        y: 589
+        width: 21
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed2dc0425f4a09c20800000000000000
+      internalID: 3211247907093926622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_30
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 546
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3edd77d20b9643240800000000000000
+      internalID: 4770554110690188771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_31
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 487
+        width: 17
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea45d31a592f4c210800000000000000
+      internalID: 1352472512587191470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_32
+      rect:
+        serializedVersion: 2
+        x: 732
+        y: 445
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 517eb178edb1b5090800000000000000
+      internalID: -8044805666803816683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_33
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 412
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: edc892476c4e874a0800000000000000
+      internalID: -6595270113280553762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_34
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 387
+        width: 9
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4787f8d04ff49ee0800000000000000
+      internalID: -1255097742146435253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_35
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 396
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 979ab65a859defe00800000000000000
+      internalID: 1080539935371143545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_36
+      rect:
+        serializedVersion: 2
+        x: 1076
+        y: 378
+        width: 11
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 254c21514809cecd0800000000000000
+      internalID: -2527486393898056622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_37
+      rect:
+        serializedVersion: 2
+        x: 1005
+        y: 372
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b70a4c379a323f8c0800000000000000
+      internalID: -3966787636084563845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_38
+      rect:
+        serializedVersion: 2
+        x: 1038
+        y: 374
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c25772059d2e648b0800000000000000
+      internalID: -5168194099380521684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_39
+      rect:
+        serializedVersion: 2
+        x: 1070
+        y: 374
+        width: 7
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d714a687b5689c50800000000000000
+      internalID: 6672194686861711317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_40
+      rect:
+        serializedVersion: 2
+        x: 1239
+        y: 366
+        width: 15
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0c119442dc9034c0800000000000000
+      internalID: -4309772416486138870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_41
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 0
+        width: 303
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 124f9356da2945980800000000000000
+      internalID: -8551048519044434911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_42
+      rect:
+        serializedVersion: 2
+        x: 1046
+        y: 313
+        width: 37
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c22472a2197a8510800000000000000
+      internalID: 1552186142524449473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_43
+      rect:
+        serializedVersion: 2
+        x: 1084
+        y: 345
+        width: 11
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60af839a1721309b0800000000000000
+      internalID: -5115224472383063546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_44
+      rect:
+        serializedVersion: 2
+        x: 1110
+        y: 356
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f19750dd291d2ebd0800000000000000
+      internalID: -2602287205963171553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_45
+      rect:
+        serializedVersion: 2
+        x: 1182
+        y: 358
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 524a54ee57831eea0800000000000000
+      internalID: -5845328762190322651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_46
+      rect:
+        serializedVersion: 2
+        x: 1247
+        y: 341
+        width: 29
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09900b4fc575bf820800000000000000
+      internalID: 2953050037425277328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_47
+      rect:
+        serializedVersion: 2
+        x: 1050
+        y: 0
+        width: 385
+        height: 344
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35df19e2652518960800000000000000
+      internalID: 7602448176080092499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_48
+      rect:
+        serializedVersion: 2
+        x: 1291
+        y: 342
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5949a996b0ee703f0800000000000000
+      internalID: -934516664872299371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_49
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 280
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69dfb1fb9d1911450800000000000000
+      internalID: 6057783338190241174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_50
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 260
+        width: 11
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d39ec37b8d7684f00800000000000000
+      internalID: 1101244289376905533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_51
+      rect:
+        serializedVersion: 2
+        x: 1038
+        y: 274
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98b0beafeba1cbdf0800000000000000
+      internalID: -163226078936364151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_52
+      rect:
+        serializedVersion: 2
+        x: 1060
+        y: 258
+        width: 17
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d196c957d4206b5d0800000000000000
+      internalID: -3047245566160639715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_53
+      rect:
+        serializedVersion: 2
+        x: 1398
+        y: 268
+        width: 9
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ba5fd5458dec1d70800000000000000
+      internalID: 9015341710747589302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_54
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 256
+        width: 9
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26228f99458dd8d20800000000000000
+      internalID: 3282517561294987874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_55
+      rect:
+        serializedVersion: 2
+        x: 716
+        y: 244
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8074f9b762a47b200800000000000000
+      internalID: 195706637957154568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_56
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 197
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42551536565729dc0800000000000000
+      internalID: -3633712871016147676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_57
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 111
+        width: 15
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d226e2e5c68065670800000000000000
+      internalID: 8527012206002201133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_58
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 73
+        width: 15
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70eac662adc0a7a90800000000000000
+      internalID: -7315520513622888953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_59
+      rect:
+        serializedVersion: 2
+        x: 1077
+        y: 77
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7585eb427d414fc70800000000000000
+      internalID: 9003844469287442519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_60
+      rect:
+        serializedVersion: 2
+        x: 738
+        y: 63
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3bdf51243bdb0f790800000000000000
+      internalID: -7498284801966342733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_61
+      rect:
+        serializedVersion: 2
+        x: 1398
+        y: 54
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d22773dc0ac6e51a0800000000000000
+      internalID: -6818893347898822099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_62
+      rect:
+        serializedVersion: 2
+        x: 1410
+        y: 64
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16d16ff432e75ab70800000000000000
+      internalID: 8909666127952878945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_63
+      rect:
+        serializedVersion: 2
+        x: 1414
+        y: 48
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9a5d1ddcf2ec5170800000000000000
+      internalID: 8168653399812561564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_64
+      rect:
+        serializedVersion: 2
+        x: 740
+        y: 31
+        width: 21
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ba05b8660f0a52e0800000000000000
+      internalID: -2136378553032963400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CustomerEmotions_65
+      rect:
+        serializedVersion: 2
+        x: 1408
+        y: 23
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5cdcee8cb6a8a8910800000000000000
+      internalID: 1840435593271496133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      CustomerEmotions_0: -5787257396709596385
+      CustomerEmotions_1: -9196922052926217046
+      CustomerEmotions_10: -5192252265086719811
+      CustomerEmotions_11: 6480058665520897009
+      CustomerEmotions_12: -5232295233693104659
+      CustomerEmotions_13: 855621587318950644
+      CustomerEmotions_14: 494464283118688410
+      CustomerEmotions_15: -7191867536632500253
+      CustomerEmotions_16: -2830673338593018009
+      CustomerEmotions_17: -642954486855424423
+      CustomerEmotions_18: -3898885477391192569
+      CustomerEmotions_19: 632692087481388700
+      CustomerEmotions_2: 3499865675299715000
+      CustomerEmotions_20: -3773980821581727969
+      CustomerEmotions_21: 8164588926269370911
+      CustomerEmotions_22: -300094604931425399
+      CustomerEmotions_23: 5756693888693147448
+      CustomerEmotions_24: -1515345569998418182
+      CustomerEmotions_25: 7495749736239921899
+      CustomerEmotions_26: -8111792962624661744
+      CustomerEmotions_27: -754995790529099137
+      CustomerEmotions_28: 7519034944858848856
+      CustomerEmotions_29: 3211247907093926622
+      CustomerEmotions_3: 8385495206078119052
+      CustomerEmotions_30: 4770554110690188771
+      CustomerEmotions_31: 1352472512587191470
+      CustomerEmotions_32: -8044805666803816683
+      CustomerEmotions_33: -6595270113280553762
+      CustomerEmotions_34: -1255097742146435253
+      CustomerEmotions_35: 1080539935371143545
+      CustomerEmotions_36: -2527486393898056622
+      CustomerEmotions_37: -3966787636084563845
+      CustomerEmotions_38: -5168194099380521684
+      CustomerEmotions_39: 6672194686861711317
+      CustomerEmotions_4: -5532497284812221047
+      CustomerEmotions_40: -4309772416486138870
+      CustomerEmotions_41: -8551048519044434911
+      CustomerEmotions_42: 1552186142524449473
+      CustomerEmotions_43: -5115224472383063546
+      CustomerEmotions_44: -2602287205963171553
+      CustomerEmotions_45: -5845328762190322651
+      CustomerEmotions_46: 2953050037425277328
+      CustomerEmotions_47: 7602448176080092499
+      CustomerEmotions_48: -934516664872299371
+      CustomerEmotions_49: 6057783338190241174
+      CustomerEmotions_5: 3724885851022543014
+      CustomerEmotions_50: 1101244289376905533
+      CustomerEmotions_51: -163226078936364151
+      CustomerEmotions_52: -3047245566160639715
+      CustomerEmotions_53: 9015341710747589302
+      CustomerEmotions_54: 3282517561294987874
+      CustomerEmotions_55: 195706637957154568
+      CustomerEmotions_56: -3633712871016147676
+      CustomerEmotions_57: 8527012206002201133
+      CustomerEmotions_58: -7315520513622888953
+      CustomerEmotions_59: 9003844469287442519
+      CustomerEmotions_6: 5978105595639598121
+      CustomerEmotions_60: -7498284801966342733
+      CustomerEmotions_61: -6818893347898822099
+      CustomerEmotions_62: 8909666127952878945
+      CustomerEmotions_63: 8168653399812561564
+      CustomerEmotions_64: -2136378553032963400
+      CustomerEmotions_65: 1840435593271496133
+      CustomerEmotions_7: -5329774625663459013
+      CustomerEmotions_8: -6797625851910133502
+      CustomerEmotions_9: 8713090361654410952
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

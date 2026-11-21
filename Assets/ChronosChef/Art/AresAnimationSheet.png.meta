@@ -1,0 +1,494 @@
+fileFormatVersion: 2
+guid: 11896bf3f7baabc449601d7e61b0b564
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7189403536377515955
+    second: AresAnimationSheet_0
+  - first:
+      213: -353290985011544003
+    second: AresAnimationSheet_1
+  - first:
+      213: -2223762224848401702
+    second: AresAnimationSheet_2
+  - first:
+      213: 5638714405276638704
+    second: AresAnimationSheet_3
+  - first:
+      213: 8911754796887221571
+    second: AresAnimationSheet_4
+  - first:
+      213: -2184042886723263358
+    second: AresAnimationSheet_5
+  - first:
+      213: -3840274958602142968
+    second: AresAnimationSheet_6
+  - first:
+      213: -8766835772620430737
+    second: AresAnimationSheet_7
+  - first:
+      213: -490368339489895339
+    second: AresAnimationSheet_8
+  - first:
+      213: 7064602675992501745
+    second: AresAnimationSheet_9
+  - first:
+      213: -2928797706426128772
+    second: AresAnimationSheet_10
+  - first:
+      213: 8269423306127577969
+    second: AresAnimationSheet_11
+  - first:
+      213: 5995057860346645011
+    second: AresAnimationSheet_12
+  - first:
+      213: -3688529820724333878
+    second: AresAnimationSheet_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 50
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: AresAnimationSheet_0
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 461
+        width: 312
+        height: 417
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d40f743239b1a3c90800000000000000
+      internalID: -7189403536377515955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_1
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 462
+        width: 331
+        height: 425
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d300a0098bbd81bf0800000000000000
+      internalID: -353290985011544003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_2
+      rect:
+        serializedVersion: 2
+        x: 812
+        y: 773
+        width: 28
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ada8afad90c9321e0800000000000000
+      internalID: -2223762224848401702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_3
+      rect:
+        serializedVersion: 2
+        x: 847
+        y: 426
+        width: 406
+        height: 446
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fd546c50ecb04e40800000000000000
+      internalID: 5638714405276638704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_4
+      rect:
+        serializedVersion: 2
+        x: 1288
+        y: 450
+        width: 447
+        height: 424
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 345a8d175c9ecab70800000000000000
+      internalID: 8911754796887221571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_5
+      rect:
+        serializedVersion: 2
+        x: 1328
+        y: 457
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28424aae098b0b1e0800000000000000
+      internalID: -2184042886723263358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_6
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 19
+        width: 245
+        height: 415
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80bf0b4954a94bac0800000000000000
+      internalID: -3840274958602142968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_7
+      rect:
+        serializedVersion: 2
+        x: 441
+        y: 433
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f62a5c04051f55680800000000000000
+      internalID: -8766835772620430737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_8
+      rect:
+        serializedVersion: 2
+        x: 992
+        y: 17
+        width: 251
+        height: 419
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55c4b93e79cd139f0800000000000000
+      internalID: -490368339489895339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_9
+      rect:
+        serializedVersion: 2
+        x: 1310
+        y: 418
+        width: 30
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fd9ec534b28a0260800000000000000
+      internalID: 7064602675992501745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_10
+      rect:
+        serializedVersion: 2
+        x: 1435
+        y: 16
+        width: 261
+        height: 419
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c76ed71e002da57d0800000000000000
+      internalID: -2928797706426128772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_11
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 420
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17312130fa4e2c270800000000000000
+      internalID: 8269423306127577969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_12
+      rect:
+        serializedVersion: 2
+        x: 462
+        y: 16
+        width: 472
+        height: 416
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31a00ed5c59b23350800000000000000
+      internalID: 5995057860346645011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AresAnimationSheet_13
+      rect:
+        serializedVersion: 2
+        x: 1328
+        y: 420
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac27a44bba5bfccc0800000000000000
+      internalID: -3688529820724333878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      AresAnimationSheet_0: -7189403536377515955
+      AresAnimationSheet_1: -353290985011544003
+      AresAnimationSheet_10: -2928797706426128772
+      AresAnimationSheet_11: 8269423306127577969
+      AresAnimationSheet_12: 5995057860346645011
+      AresAnimationSheet_13: -3688529820724333878
+      AresAnimationSheet_2: -2223762224848401702
+      AresAnimationSheet_3: 5638714405276638704
+      AresAnimationSheet_4: 8911754796887221571
+      AresAnimationSheet_5: -2184042886723263358
+      AresAnimationSheet_6: -3840274958602142968
+      AresAnimationSheet_7: -8766835772620430737
+      AresAnimationSheet_8: -490368339489895339
+      AresAnimationSheet_9: 7064602675992501745
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

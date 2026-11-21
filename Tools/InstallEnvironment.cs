@@ -1,0 +1,10 @@
+var path = "Assets/ChronosChef/Art/ChronosKitchenEnvironment.png";
+var importer = (UnityEditor.TextureImporter)UnityEditor.AssetImporter.GetAtPath(path);
+importer.textureType = UnityEditor.TextureImporterType.Default; importer.mipmapEnabled = false; importer.maxTextureSize = 2048;
+importer.textureCompression = UnityEditor.TextureImporterCompression.Uncompressed; importer.wrapMode = UnityEngine.TextureWrapMode.Clamp; importer.SaveAndReimport();
+var view = new UnityEditor.SerializedObject(UnityEngine.Object.FindFirstObjectByType<ChronosChef.KitchenView>());
+view.FindProperty("environmentArt").objectReferenceValue = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Texture2D>(path);
+view.ApplyModifiedPropertiesWithoutUndo();
+UnityEditor.SceneManagement.EditorSceneManager.SaveScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+UnityEditor.AssetDatabase.SaveAssets();
+return "Reference-inspired kitchen assigned and scene saved";

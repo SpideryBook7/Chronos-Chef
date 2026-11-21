@@ -1,4 +1,4 @@
-# Chronos Chef — primera beta 0.3.0-beta.1
+# Chronos Chef — candidata 0.4.0-beta.1
 
 Unity 6000.3.28f1 · 2D URP · horizontal · sin conexión.
 Escena inicial: Assets/ChronosChef/Scenes/ChronosKitchen.unity.
@@ -7,19 +7,21 @@ Escena inicial: Assets/ChronosChef/Scenes/ChronosKitchen.unity.
 
 Pulsa Play. La portada tiene JUGAR, CONTINUAR TURNO (cuando hay guardado), ENTRENAMIENTO, AJUSTES y CRÉDITOS. JUGAR abre el portal de niveles y mejoras. La primera entrada al nivel 1 inicia el entrenamiento; después se puede repetir con ENTRENAMIENTO.
 
-El tutorial enseña ambas recetas en once pasos, señala la estación siguiente y detiene la presión del reloj, la paciencia y el quemado. No concede monedas, estrellas ni desbloqueos de campaña.
+El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente y detiene la presión del reloj, la paciencia y el quemado. No concede monedas, estrellas ni desbloqueos de campaña.
 
-- Burger: DODO → CORTE → PLASMA → esperar LISTO → PLASMA para retirar → MONTAJE → cliente que pida burger.
+- Burger: DODO → dejar en CORTE → recoger de CORTE → PLASMA → esperar LISTO → retirar → añadir PAN en MONTAJE → cliente que pida burger.
 - Sopa: RAÍCES dos veces → PLASMA → esperar LISTO → PLASMA para retirar el bol → cliente que pida sopa.
+- Tostada mutante desde el nivel 3: una RAÍZ → dejar en CORTE → recoger los cubos → PAN → cliente que pida tostada. Puedes montarla mientras otro plato ocupa el fogón.
+- CONGELAR concede cinco segundos de reloj y paciencia detenidos. La cocina sigue funcionando. Cuesta 25 de anomalía y se recarga en 32 segundos de juego.
 - Toca la estación o su icono inferior para caminar e interactuar al llegar.
 - Toca cuerpo, cabeza o tarjeta del cliente para entregar.
-- Durante el corte puedes indicar la estación siguiente: se visitará cuando termine.
+- La cuchilla trabaja sola. Puedes ir a otra estación y volver con las manos libres. La mesa también corta raíces y conserva el ingrediente al guardar la partida.
 - La comida transportada se muestra en las manos. BASURA descarta ese objeto.
-- RECETAS pausa y abre el recetario. PAUSA permite continuar, reiniciar o volver al portal. Escape/volver cierra ventanas o pausa.
+- La registradora abre el recetario ilustrado y pausa el turno. ENTENDIDO lo reanuda directamente. Puedes elegir receta y paso o dejar que la demostración avance sola.
 
 ## Campaña y mecánicas
 
-Diez turnos configurados individualmente, dos recetas y cuatro especies en tres puestos. Grog ruge y reduce la paciencia de vecinos, BIP-08 tiembla al impacientarse, Rex penaliza más la reputación al arañar la barra y Zorg levita. Los clientes entran y salen detrás de ventanas de recorte fijas: la barra oculta el cuerpo que queda por debajo de su borde.
+Diez turnos, tres recetas y cuatro especies en tres puestos. KitchenRecipe reúne la ilustración, ingredientes, instrucciones y mensajes que usan la comanda y el recetario de cada plato. Grog ruge y reduce la paciencia de vecinos, BIP-08 tiembla al impacientarse, Rex penaliza más la reputación al arañar la barra y Zorg levita. Los clientes entran y salen detrás de ventanas fijas en el borde de la barra.
 
 Cocción y margen de quemado independientes, basura, combos, propinas, reputación, estrellas y derrota por tiempo/reputación. El fogón funciona mientras Ares hace otras tareas. Las rutas evitan las estaciones con margen para sus pies. El clon aparece durante 15 segundos al alcanzar 100% de anomalía y no ocupa puntos de servicio. PARADOX ALERT solo es visible durante esa anomalía; el medidor permanece visible.
 
@@ -54,7 +56,8 @@ La escena referencia los recursos. Las pantallas y capas interactivas se constru
 
 ## Pruebas y validación
 
-- ChronosBetaPlaytest.Start(): tutorial, encolado de acción, recuperación de comida/cocción, diez turnos completos, economía, ajustes y guardado corrupto.
+- ChronosLivingPlaytest.Start(): tabla, verduras, guardado, recetario, reanudación, máscaras y zonas de toque del mapa.
+- ChronosBetaPlaytest.Start(): tutorial, recogida de la tabla, recuperación de comida/cocción, diez turnos completos, economía, ajustes y guardado corrupto.
 - ChronosExpansionPlaytest.Start(): ambas recetas y entregas por EventSystem en cabeza, cuerpo y tarjeta.
 - ChronosPlaytest.Start(): quemado, basura, clon, pausa, final y reinicio.
 - Tools/VerifyNavigation.cs: 1.764 recorridos y segmentos sin atravesar estaciones.
@@ -63,11 +66,11 @@ La escena referencia los recursos. Las pantallas y capas interactivas se constru
 
 Resultados en Tests/. Las pruebas de campaña usan perfiles aislados y restauran el progreso normal. Ejecutar pruebas de juego solo en Play Mode. No tomar capturas durante simulaciones de puntero: la herramienta puede cambiar temporalmente la superficie de render del Editor.
 
-Compilación de validación de Windows: Builds/BetaValidation/ChronosChef.exe (requiere también su carpeta de datos y DLLs). Es una comprobación fuera del Editor, no un APK.
+Con Android activo, el menú **Chronos Chef → Android** genera un App Bundle de validación o de subida. El de subida requiere configurar la clave privada de carga en Publishing Settings. El objetivo Android es API 36 con IL2CPP y ARM64. Los archivos de firma y compilaciones se conservan fuera de Git.
 
 ## Estado de la beta
 
-Las mecánicas de esta primera beta están implementadas y verificadas en Editor y mediante compilación de Windows. El equilibrio se comprobó con un jugador automático; todavía requiere valoración humana. El contenido visual usa animación básica por cuadros y efectos procedurales.
+En el Editor se verificaron el entrenamiento, la progresión, la entrega de los tres platos y la recuperación de un turno con tiempo prestado. La campaña automática alcanzó el objetivo de los diez niveles. El ritmo y la dificultad siguen pendientes de evaluación con jugadores.
 
 La siguiente validación es en teléfonos físicos: rendimiento sostenido, audio, muescas/área segura, controles y restauración tras suspensión real de Android. No se ha generado APK ni probado en teléfono, de acuerdo con la indicación de terminar primero el juego. No se ha publicado en tiendas.
 

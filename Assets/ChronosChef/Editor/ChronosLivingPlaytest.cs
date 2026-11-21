@@ -91,7 +91,9 @@ public static class ChronosLivingPlaytest
                 case 11:
                     if (game.StoveFood != Food.Soup) return;
                     game.Interact(Station.Stove); Assert(game.Carry == Food.Soup, "Chopped vegetables did not make soup");
-                    game.GoToMenu(); AuditMap();
+                    game.GoToMenu(); step++; break;
+                case 12:
+                    AuditMap();
                     Assert(Stage.Find("Assembly/BreadSupply").GetComponent<Image>().sprite != Stage.Find("Hotbar0/FoodIcon/FoodIllustration_RawDodo").GetComponent<Image>().sprite, "Bread illustration missing");
                     Complete("PASS: automatic cutting frees hands; leave station mid-job; meat persists; occupied board rejects overwrite; manual pickup; mid-cut and prepared-vegetable saves; cut one/two vegetables and cook soup; recipe pauses timer and Entendido resumes directly; customer expression change with bar clipping; ten map portal hit targets and bread art."); break;
             }
@@ -107,7 +109,7 @@ public static class ChronosLivingPlaytest
             var portal = map.Find("Level" + i); var hits = new List<RaycastResult>();
             var pointer = new PointerEventData(EventSystem.current) { position = RectTransformUtility.WorldToScreenPoint(null, portal.position) };
             EventSystem.current.RaycastAll(pointer, hits);
-            Assert(hits.Count > 0 && hits[0].gameObject.GetComponentInParent<Button>()?.name == portal.name, "Blocked portal " + i);
+            Assert(hits.Count > 0 && hits[0].gameObject.GetComponentInParent<Button>()?.name == portal.name, $"Blocked portal {i}, pointer {pointer.position}, screen {Screen.width}x{Screen.height}, first hit {(hits.Count > 0 ? hits[0].gameObject.name : "none")}");
         }
     }
     static void Complete(string result)

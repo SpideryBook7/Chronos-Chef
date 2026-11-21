@@ -179,7 +179,7 @@ namespace ChronosChef
                     else { ChefPosition = Vector2.MoveTowards(ChefPosition, waypoint, distanceBudget); distanceBudget = 0; }
                 }
             }
-            else if (destination.HasValue) { var s = destination.Value; destination = null; DestinationLabel = ""; Interact(s); }
+            if (route.Count == 0 && destination.HasValue) { var s = destination.Value; destination = null; DestinationLabel = ""; Interact(s); }
             if (Remaining <= 0 || Reputation <= 0) EndShift();
             view.Refresh(this);
         }

@@ -54,6 +54,8 @@ Editor/: creadores originales y pruebas automáticas; no se incluyen en el jugad
 
 La escena referencia los recursos. Las pantallas y capas interactivas se construyen al ejecutar; edita sus parámetros en los scripts de vista. Las herramientas de configuración están en Tools/.
 
+Los ingredientes de las manos, la tabla y el fogón se dibujan con geometría tridimensional. BIP-08 tiene cabeza articulada y sigue al chef. En el recetario se puede arrastrar el plato para inspeccionarlo. Los modelos editables se encuentran en `ArtSource/KitchenModels.blend`. El generador `ArtSource/build_kitchen_models.py` reconstruye tanto el taller de Blender como la biblioteca de triángulos que usa Unity. El juego proyecta las mallas en el mismo Canvas que las estaciones y conserva las máscaras de la barra.
+
 ## Pruebas y validación
 
 - ChronosLivingPlaytest.Start(): tabla, verduras, guardado, recetario, reanudación, máscaras y zonas de toque del mapa.

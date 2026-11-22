@@ -21,6 +21,9 @@
 *.aab
 *.apk
 local.properties
+__pycache__/
+*.blend1
+/.utmp/
 *.csproj
 *.sln
 *.slnx

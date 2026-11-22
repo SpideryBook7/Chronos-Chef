@@ -11,6 +11,9 @@ namespace ChronosChef
         Sprite[,] customerPoses;
         UnityEngine.UI.Image[,] customerPictures;
         RectTransform[] prepIcons;
+        KitchenModelGraphic[] handModels, tableModels, stoveModels;
+        KitchenModelGraphic breadModel;
+        readonly KitchenModelGraphic[] robotModels = new KitchenModelGraphic[3];
         RectTransform prepLaser;
         GameObject prepReadout;
         TMP_Text prepCaption;
@@ -68,7 +71,11 @@ namespace ChronosChef
             // Bread is the assembly ingredient; a completed burger only appears after mounting.
             var tray = Dot(stations[3].transform, "AssemblyPlate", 0, 10, 150, C("382C43")); tray.sizeDelta = new Vector2(150, 96);
             Dot(tray, "PlateInset", 0, 0, 139, C("706078")).sizeDelta = new Vector2(139, 85);
-            FoodPicture(stations[3].transform, "BreadSupply", Food.Bread, new Vector2(0, 18), new Vector2(138, 120));
+            var bread = FoodPicture(stations[3].transform, "BreadSupply", Food.Bread, new Vector2(0, 18), new Vector2(138, 120));
+            breadModel = ReplacePictureWithMesh(bread, Food.Bread);
+            handModels = BuildFoodModels(carriedFood);
+            tableModels = BuildFoodModels(prepIcons);
+            stoveModels = BuildFoodModels(stoveFoods);
             var caption = stations[3].transform.Find("StationCaption"); if (caption) caption.GetComponentInChildren<TMP_Text>().text = "PAN · MONTAJE";
             if (customerEmotionAtlas)
             {
@@ -84,6 +91,11 @@ namespace ChronosChef
                 for (int i = 0; i < 3; i++) for (int species = 0; species < 4; species++)
                 {
                     var picture = customerArt[i][species].Find("IllustratedCharacter").GetComponent<UnityEngine.UI.Image>(); customerPictures[i, species] = picture; picture.rectTransform.sizeDelta = new Vector2(165, 190);
+                    if (species == 1)
+                    {
+                        robotModels[i] = KitchenModelGraphic.Attach(picture.rectTransform, "BipIdle");
+                        if (robotModels[i]) picture.enabled = false;
+                    }
                 }
             }
             comicSounds = new TMP_Text[3];
@@ -114,9 +126,50 @@ namespace ChronosChef
             receiptAge = 0;
             receipt.gameObject.SetActive(true);
         }
+        static KitchenModelGraphic ReplacePictureWithMesh(UnityEngine.UI.Image art, Food food, bool canInspect = false)
+        {
+            var model = KitchenModelGraphic.Attach(art.rectTransform, food, canInspect);
+            if (model) art.enabled = false;
+            return model;
+        }
+        static KitchenModelGraphic[] BuildFoodModels(RectTransform[] holders)
+        {
+            var result = new KitchenModelGraphic[holders.Length];
+            for (int i = 1; i < holders.Length; i++)
+            {
+                var art = holders[i].Find("FoodIllustration_" + (Food)i);
+                if (art) result[i] = ReplacePictureWithMesh(art.GetComponent<UnityEngine.UI.Image>(), (Food)i);
+            }
+            return result;
+        }
+        float nextMeshPose;
+        void PoseFoodModels(KitchenGame g)
+        {
+            if (Time.unscaledTime < nextMeshPose || !g.Running || g.Paused) return;
+            nextMeshPose = Time.unscaledTime + 1f / 12;
+            float t = ReducedMotion ? 0 : Time.time;
+            var hand = handModels[(int)g.Carry];
+            if (hand) hand.Pose(-18 + Mathf.Sin(t * (g.IsMoving ? 7 : 1.2f)) * (g.IsMoving ? 15 : 5));
+            var board = tableModels[(int)g.PrepFood];
+            if (board) board.Pose(g.IsWorking ? -14 + Mathf.Sin(t * 14) * 16 : -14);
+            var stove = stoveModels[(int)g.StoveFood];
+            if (stove) stove.Pose(-20 + Mathf.Sin(t * 2) * 9);
+            if (breadModel) breadModel.Pose(-12);
+            for (int slot = 0; slot < robotModels.Length; slot++)
+            {
+                var robot = robotModels[slot];
+                if (!robot || g.Species[slot] != 1 || !g.Customers[slot]) continue;
+                bool alarm = g.Patience[slot] < 20;
+                robot.Show(alarm ? "BipAlarm" : "BipIdle");
+                robot.Pose(-5);
+                float lookAtChef = Mathf.Clamp((g.ChefPosition.x - 630 - slot*270)*.045f, -22, 22);
+                robot.Look(ReducedMotion ? 0 : lookAtChef + Mathf.Sin(t * (alarm ? 12 : 1.7f)) * (alarm ? 9 : 4));
+            }
+        }
         void RefreshLivingKitchen(KitchenGame g)
         {
             if (prepIcons == null) return;
+            PoseFoodModels(g);
             if (receipt.gameObject.activeSelf)
             {
                 if (!g.Paused) receiptAge += Time.deltaTime;

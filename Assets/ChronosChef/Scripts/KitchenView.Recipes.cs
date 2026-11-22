@@ -12,6 +12,7 @@ namespace ChronosChef
         TMP_Text[] recipeCardLabels;
         TMP_Text recipeName, recipeDetail, recipeJoke, recipeAutoLabel;
         UnityEngine.UI.Image recipeHero;
+        KitchenModelGraphic recipeDisplay;
         RectTransform registerHalo;
         KitchenRecipe CurrentRecipe => KitchenRecipe.All[bookRecipe];
         void BuildRecipeTerminal()
@@ -34,6 +35,8 @@ namespace ChronosChef
             Panel(recipes.transform,"RecipeHeroDock",-525,-5,360,470,C("1D3049"));
             recipeName=Label(recipes.transform,"",-695,168,340,60,28,Gold,FontStyles.Bold);
             recipeHero=FoodPicture(recipes.transform,"RecipeFinishedDish",Food.Burger,new Vector2(-525,20),new Vector2(240,210));
+            recipeDisplay = ReplacePictureWithMesh(recipeHero, Food.Burger, true);
+            if (recipeDisplay) Label(recipes.transform,"ARRASTRA PARA GIRAR",-690,-92,330,27,15,Cyan);
             var joke=Panel(recipes.transform,"ChefComment",-525,-175,335,126,C("2D2947"));recipeJoke=Label(joke,"",-157,0,314,115,19,C("E3D3EA"));
             recipeCards=new UnityEngine.UI.Button[6];recipeCardIcons=new UnityEngine.UI.Image[6];recipeCardLabels=new TMP_Text[6];
             for(int i=0;i<6;i++)
@@ -77,6 +80,7 @@ namespace ChronosChef
             if(recipeCards==null)return;bookStep=Mathf.Clamp(bookStep,0,CurrentRecipe.Steps.Length-1);
             recipeName.text=CurrentRecipe.Card;
             recipeHero.sprite=DishSprite(CurrentRecipe.Dish);
+            if (recipeDisplay) recipeDisplay.Show(CurrentRecipe.Dish);
             recipeDetail.text="PASO "+(bookStep+1)+" · "+CurrentRecipe.Steps[bookStep].Instruction;recipeJoke.text=CurrentRecipe.Steps[bookStep].Joke;recipeAutoLabel.text=bookAuto?"ANIMACIÓN: ACTIVADA":"ANIMACIÓN: PAUSADA";
             for(int i=0;i<recipeCards.Length;i++)
             {
@@ -91,7 +95,7 @@ namespace ChronosChef
             if(recipeCards==null||!recipes.activeSelf)return;
             bookClock+=Time.unscaledDeltaTime;if(bookAuto&&bookClock>4){bookClock=0;bookStep=(bookStep+1)%CurrentRecipe.Steps.Length;RenderRecipe();}
             for(int i=0;i<recipeCardIcons.Length;i++)recipeCardIcons[i].rectTransform.localScale=Vector3.one*(ReducedMotion||i!=bookStep?1:1+Mathf.Sin(Time.unscaledTime*4)*.07f);
-            recipeHero.rectTransform.localEulerAngles=new Vector3(0,0,ReducedMotion?0:Mathf.Sin(Time.unscaledTime*1.4f)*3);
+            if (recipeDisplay) recipeDisplay.Pose(ReducedMotion || !bookAuto ? -16 : -16 + Mathf.Sin(Time.unscaledTime*.5f)*24);
         }
     }
 }

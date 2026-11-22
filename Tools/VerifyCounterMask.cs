@@ -10,7 +10,8 @@ for (int i = 0; i < 3; i++)
         if (visitor.GetComponent<UnityEngine.UI.RectMask2D>()) throw new System.Exception("Mask incorrectly follows visitor movement");
         if (!visitor.gameObject.activeInHierarchy) continue;
         var picture = visitor.Find("IllustratedCharacter").GetComponent<UnityEngine.UI.Image>();
-        if (!picture.canvasRenderer.hasRectClipping) throw new System.Exception("Visitor is not clipped by the bar mask");
+        var graphic = picture.enabled ? (UnityEngine.UI.MaskableGraphic)picture : picture.GetComponentInChildren<ChronosChef.KitchenModelGraphic>();
+        if (!graphic || !graphic.canvasRenderer.hasRectClipping) throw new System.Exception("Visible visitor artwork is not clipped by the bar mask");
     }
 }
 var result = "PASS: three fixed mask windows at the bar edge; active visitor images are clipped; arrival/levitation cannot move the mask.";

@@ -3,6 +3,8 @@ var view = UnityEngine.Object.FindFirstObjectByType<ChronosChef.KitchenView>();
 view.ShowHome();
 UnityEngine.GameObject.Find("HomeOptions").GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
 UnityEngine.GameObject.Find("SettingsRecipes").GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
+// Graphic depth and hit ordering are assigned during the first rendered frame.
+await System.Threading.Tasks.Task.Delay(150);
 var hero = UnityEngine.GameObject.Find("RecipeFinishedDish").GetComponentInChildren<ChronosChef.KitchenModelGraphic>();
 if (!hero) throw new System.Exception("Recipe hero has no 3D model");
 var results = new System.Collections.Generic.List<string>();
@@ -18,7 +20,16 @@ try
         results.Add(food + ":" + mesh.vertexCount/3);
     }
     var oldVertices = hero.canvasRenderer.GetMesh().vertices;
-    hero.OnDrag(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current){ delta = new UnityEngine.Vector2(90,0) });
+    var events = UnityEngine.EventSystems.EventSystem.current;
+    var pointer = new UnityEngine.EventSystems.PointerEventData(events) {
+        position = UnityEngine.RectTransformUtility.WorldToScreenPoint(null, hero.rectTransform.TransformPoint(hero.rectTransform.rect.center)),
+        delta = new UnityEngine.Vector2(90,0)
+    };
+    var hits = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
+    events.RaycastAll(pointer, hits);
+    var drag = hits.Count > 0 ? UnityEngine.EventSystems.ExecuteEvents.GetEventHandler<UnityEngine.EventSystems.IDragHandler>(hits[0].gameObject) : null;
+    if (drag != hero.gameObject) throw new System.Exception("Recipe plate drag missed at " + pointer.position + ", first hit: " + (hits.Count == 0 ? "none" : hits[0].gameObject.name) + ", depth: " + hero.depth);
+    UnityEngine.EventSystems.ExecuteEvents.Execute(drag, pointer, UnityEngine.EventSystems.ExecuteEvents.dragHandler);
     UnityEngine.Canvas.ForceUpdateCanvases();
     var turned = hero.canvasRenderer.GetMesh().vertices;
     if (oldVertices.Length == turned.Length && UnityEngine.Vector3.Distance(oldVertices[0],turned[0]) < .01f) throw new System.Exception("Drag did not rotate geometry");

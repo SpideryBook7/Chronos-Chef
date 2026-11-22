@@ -3,6 +3,10 @@
 Unity 6000.3.28f1 · 2D URP · horizontal · sin conexión.
 Escena inicial: Assets/ChronosChef/Scenes/ChronosKitchen.unity.
 
+![Ares lleva dodo crudo mientras BIP-08 espera detrás de la barra](Docs/media/cocina-3d.png)
+
+[Ver la tostada mutante en el recetario 3D](Docs/media/recetario-3d.png)
+
 ## Empezar
 
 Pulsa Play. La portada tiene JUGAR, CONTINUAR TURNO (cuando hay guardado), ENTRENAMIENTO, AJUSTES y CRÉDITOS. JUGAR abre el portal de niveles y mejoras. La primera entrada al nivel 1 inicia el entrenamiento; después se puede repetir con ENTRENAMIENTO.

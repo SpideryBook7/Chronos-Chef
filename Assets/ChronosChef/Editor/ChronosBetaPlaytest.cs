@@ -89,7 +89,7 @@ public static class ChronosBetaPlaytest
                     }
                     DriveCook(); break;
                 case 8:
-                    if (game.CloneRemaining > 0) { Assert(FindStage("ParadoxBadge").activeSelf, "Active anomaly alert hidden"); return; }
+                    if (game.CloneRemaining > 0) { if (game.CloneRemaining < 10) Assert(!FindStage("ParadoxBadge").activeSelf, "Onset alert lingered"); return; }
                     Assert(!FindStage("ParadoxBadge").activeSelf, "Expired anomaly alert still visible");
                     game.GoToMenu(); game.Progress.ClearSession(); view.ShowHome(); Click("HomeOptions");
                     Assert(FindStage("Settings").activeSelf, "Home settings did not open");

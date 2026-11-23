@@ -68,7 +68,8 @@ namespace ChronosChef
         int[] vertexMap;
         float yaw, dragYaw, headYaw;
         bool inspectable;
-        const float TiltSin = .52f, TiltCos = .854166f;
+        // Orthographic view pitched 23 degrees above the work surface.
+        const float TiltSin = .3907311f, TiltCos = .9205049f;
 
         static Corner ReadCorner(BinaryReader reader) => new Corner {
             point = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle()),

@@ -45,7 +45,7 @@ namespace ChronosChef
             clone.gameObject.SetActive(g.CloneRemaining > 0);
             clone.anchoredPosition = g.ClonePosition;
             cloneLabel.text = "ECO TEMPORAL  /  " + Mathf.CeilToInt(g.CloneRemaining) + " s";
-            cloneLabel.gameObject.SetActive(g.CloneRemaining > 0);
+            cloneLabel.gameObject.SetActive(false);
             timer.text = $"{Mathf.FloorToInt(g.Remaining / 60):00}:{Mathf.FloorToInt(g.Remaining % 60):00}";
             timer.color = g.Remaining < 20 ? Pink : Color.white;
             message.text = g.TutorialActive ? g.TutorialInstruction : g.Paused ? "EN PAUSA · Toca CONTINUAR para volver a la cocina." : g.Message;

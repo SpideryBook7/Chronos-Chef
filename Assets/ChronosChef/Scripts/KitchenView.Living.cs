@@ -107,10 +107,6 @@ namespace ChronosChef
             var borrowRect = (RectTransform)borrowButton.transform;
             borrowRect.anchoredPosition = new Vector2(288,77);
             borrowRect.localScale = Vector3.one * .70f;
-            var alertFace = paradoxRim.rectTransform;
-            var alertBorder = (RectTransform)paradoxBorder.transform;
-            alertFace.anchoredPosition = alertBorder.anchoredPosition = borrowRect.anchoredPosition;
-            alertFace.localScale = alertBorder.localScale = borrowRect.localScale;
             BuildCastControls();
             receipt = Panel(stage, "DeliveryReceipt", 0, 0, 140, 42, C("163444"));
             receipt.SetSiblingIndex(menu.transform.GetSiblingIndex());

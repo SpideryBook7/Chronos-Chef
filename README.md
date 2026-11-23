@@ -30,7 +30,7 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 
 Diez turnos, tres recetas y cuatro especies en tres puestos. KitchenRecipe reúne la ilustración, ingredientes, instrucciones y mensajes que usan la comanda y el recetario de cada plato. Grog ruge y reduce la paciencia de vecinos, BIP-08 tiembla al impacientarse, Rex penaliza más la reputación al arañar la barra y Zorg levita. Los clientes entran y salen detrás de ventanas fijas en el borde de la barra.
 
-Cocción y margen de quemado independientes, basura, combos, propinas, reputación, estrellas y derrota por tiempo/reputación. El fogón funciona mientras Ares hace otras tareas. Las rutas evitan las estaciones con margen para sus pies. El clon aparece durante 15 segundos al alcanzar 100% de anomalía y no ocupa puntos de servicio. PARADOX ALERT solo es visible durante esa anomalía; el medidor permanece visible.
+Cocción y margen de quemado independientes, basura, combos, propinas, reputación, estrellas y derrota por tiempo/reputación. El fogón funciona mientras Ares hace otras tareas. Las rutas evitan las estaciones con margen para sus pies. El clon aparece durante 15 segundos al alcanzar 100% de anomalía y no ocupa puntos de servicio. Un aviso translúcido aparece durante los primeros 3,2 segundos de la anomalía.
 
 Cinco turnos jurásicos y cinco Steampunk, con entornos ilustrados propios. Comparten distribución física para conservar rutas e interacciones. Completar un nivel abre el siguiente; tres gemas abren la segunda era. Cada nivel da una gema solo la primera vez que obtiene tres estrellas. Botas y plasma tienen tres mejoras compradas con créditos ganados en juego.
 

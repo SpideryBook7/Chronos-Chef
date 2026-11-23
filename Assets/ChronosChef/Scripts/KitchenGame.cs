@@ -12,6 +12,7 @@ namespace ChronosChef
         public Food PrepFood { get; private set; }
         public float Remaining { get; private set; }
         public float Anomaly { get; private set; }
+        public const float ParadoxSeconds = 15;
         public float CloneRemaining { get; private set; }
         public const float BorrowDuration = 5, BorrowRecharge = 32, BorrowAnomaly = 25;
         public float BorrowRemaining { get; private set; }
@@ -270,7 +271,7 @@ namespace ChronosChef
         {
             Anomaly = Mathf.Min(100, Anomaly + amount);
             if (Anomaly < 100 || CloneRemaining > 0) return;
-            Anomaly = 0; CloneRemaining = 15;
+            Anomaly = 0; CloneRemaining = ParadoxSeconds;
             var candidates = new List<Vector2Int>();
             for (int x = 2; x < 10; x++) for (int y = 1; y < 3; y++)
             { var p = new Vector2Int(x, y); if (p != cell && (KitchenRules.Position(p) - ChefPosition).sqrMagnitude > 80*80 && KitchenRules.IsWalkable(p, blocked) && !KitchenRules.IsStationApproach(p) && !route.Contains(p)) candidates.Add(p); }

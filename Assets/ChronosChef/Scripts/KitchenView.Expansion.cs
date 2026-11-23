@@ -195,8 +195,9 @@ namespace ChronosChef
         }
         void Cue(string cue)
         {
+            if (cue == "paradox") announcing = true;
             pop = .3f; if (cue == "click") return;
-            pulse = .8f; feedbackLabel.text = cue == "serve" ? "¡PEDIDO ENTREGADO!" : cue == "paradox" ? "¡PARADOX ALERT!" : cue == "ready" ? "¡COMIDA LISTA!" : cue == "bad" ? "¡CUIDADO!" : "";
+            pulse = .8f; feedbackLabel.text = cue == "serve" ? "¡PEDIDO ENTREGADO!" : cue == "ready" ? "¡COMIDA LISTA!" : cue == "bad" ? "¡CUIDADO!" : "";
             feedbackLabel.color = cue == "bad" || cue == "paradox" ? Pink : Gold;
         }
         void RefreshExpansion(KitchenGame g)

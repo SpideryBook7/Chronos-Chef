@@ -10,7 +10,9 @@ namespace ChronosChef
         UnityEngine.UI.RawImage environmentLayer, counterLayer;
         bool fixedCustomerWindows;
         RectTransform clockHand;
-        TMP_Text paradoxCaption;
+        CanvasGroup alertCanvas, borderCanvas;
+        bool announcing;
+        internal const float NoticeSeconds = 3.2f;
         UnityEngine.UI.Image paradoxRim;
         GameObject paradoxBorder;
         UnityEngine.UI.Image clockSweep;
@@ -90,13 +92,22 @@ namespace ChronosChef
             Panel(stage, "MessageStrip", 820, 159, 990, 45, new Color(.025f, .04f, .10f, .85f)).SetSiblingIndex(message.transform.GetSiblingIndex());
             bottom.GetComponent<UnityEngine.UI.Image>().enabled = false;
             inventory.gameObject.SetActive(false);
-            paradoxBorder = Panel(stage, "ParadoxBadgeRim", 192, 77, 295, 113, Pink).gameObject;
-            var face = Panel(stage, "ParadoxBadge", 192, 77, 289, 107, C("331B3D")); paradoxRim = face.GetComponent<UnityEngine.UI.Image>();
-            var clock = Dot(face, "ClockFace", -93, 0, 86, Cyan); Dot(clock, "ClockInner", 0, 0, 75, C("DBE8EC"));
-            for (int i = 0; i < 12; i++) { float a = i * Mathf.PI / 6; Dot(clock, "Tick", Mathf.Sin(a) * 31, Mathf.Cos(a) * 31, 4, Ink); }
-            clockHand = Panel(clock, "ClockHand", 0, 10, 5, 25, Ink); clockHand.pivot = new Vector2(.5f, 0); clockHand.anchoredPosition = Vector2.zero;
-            var shortHand = Panel(clock, "HourHand", -8, 2, 22, 5, Ink); shortHand.localEulerAngles = new Vector3(0, 0, -45);
-            paradoxCaption = Label(face, "PARADOX\nALERT", -34, 0, 170, 85, 27, Color.white, FontStyles.Bold);
+            stage.Find("AnomalyPanel").gameObject.SetActive(false);
+            anomalyLabel.gameObject.SetActive(false);
+            anomalyFill.transform.parent.gameObject.SetActive(false);
+            stage.Find("Text_ERRORES = CAOS TEMPORAL").gameObject.SetActive(false);
+            paradoxBorder = Panel(stage,"ParadoxBadgeRim",68,583,4,73,Pink).gameObject;
+            var face = Panel(stage,"ParadoxBadge",239,583,336,73,new Color(.09f,.055f,.16f,.72f));
+            paradoxRim = face.GetComponent<UnityEngine.UI.Image>();
+            var watch = Dot(face,"FracturedClock",-132,0,41,Pink);
+            Dot(watch,"Dial",0,0,35,C("29243D"));
+            clockHand = Panel(watch,"Hand",0,6,3,13,Color.white);
+            clockHand.pivot = new Vector2(.5f,0);
+            clockHand.anchoredPosition = Vector2.zero;
+            Label(face,"¡ANOMALÍA!",-101,13,247,33,22,Color.white,FontStyles.Bold,TextAlignmentOptions.Left);
+            Label(face,"Tu eco bloquea el paso",-101,-15,247,27,17,C("F9CDE7"),FontStyles.Normal,TextAlignmentOptions.Left);
+            alertCanvas = face.gameObject.AddComponent<CanvasGroup>();
+            borderCanvas = paradoxBorder.AddComponent<CanvasGroup>();
             SetParadoxVisible(false);
             InstallShiftClock();
             cloneLabel.rectTransform.anchoredPosition = new Vector2(830, 206);
@@ -108,11 +119,15 @@ namespace ChronosChef
             if (!clockHand) return;
             var texture = g.Level > 5 && steampunkArt ? steampunkArt : environmentArt;
             if (environmentLayer.texture != texture) { environmentLayer.texture = texture; counterLayer.texture = texture; }
-            SetParadoxVisible(g.Running && g.CloneRemaining > 0);
-            float t = g.Running && !g.Paused ? Time.time : 0;
-            clockHand.localEulerAngles = new Vector3(0, 0, -t * (g.CloneRemaining > 0 ? 600 : 40));
-            paradoxCaption.text = g.CloneRemaining > 0 ? "PARADOX\n" + Mathf.CeilToInt(g.CloneRemaining) + " s" : "PARADOX\nALERT";
-            paradoxRim.color = g.CloneRemaining > 0 ? ReducedMotion ? C("7A2853") : Color.Lerp(C("331B3D"), C("9C275E"), Mathf.Abs(Mathf.Sin(t * 10))) : C("331B3D");
+            float age = KitchenGame.ParadoxSeconds - g.CloneRemaining;
+            bool visible = announcing && g.Running && g.CloneRemaining > 0 && age < NoticeSeconds;
+            if (!visible) announcing = false;
+            SetParadoxVisible(visible && !g.Paused);
+            if (visible)
+            {
+                alertCanvas.alpha = borderCanvas.alpha = ReducedMotion ? 1 : Mathf.Clamp01((NoticeSeconds-age)/.45f);
+                clockHand.localEulerAngles = new Vector3(0,0,ReducedMotion ? -30 : -age*155);
+            }
             clockSweep.fillAmount = Mathf.Clamp01(g.Remaining / g.LevelRules.Seconds);
             clockSweep.color = g.Remaining < 20 ? Pink : Cyan;
         }

@@ -3,6 +3,9 @@ var view = UnityEngine.Object.FindFirstObjectByType<ChronosChef.KitchenView>();
 var stage = view.transform.Find("SafeArea/LandscapeFrame/KitchenStage");
 var alert = stage.Find("ParadoxBadge").gameObject;
 var border = stage.Find("ParadoxBadgeRim").gameObject;
+var original = game.Progress;
+var isolated = new ChronosChef.KitchenProgress("ChronosChef.AlertQA.");
+game.Progress = isolated;
 float speed = UnityEngine.Time.timeScale;
 try
 {
@@ -11,6 +14,9 @@ try
     game.AddAnomaly(100);
     await System.Threading.Tasks.Task.Delay(150);
     if (!alert.activeSelf || !border.activeSelf || game.CloneRemaining <= 0) throw new System.Exception("Alert missing during paradox.");
+    UnityEngine.Time.timeScale = 4;
+    await System.Threading.Tasks.Task.Delay(1050);
+    if (game.CloneRemaining <= 0 || alert.activeSelf || border.activeSelf) throw new System.Exception("Notice lingered after onset.");
     UnityEngine.Time.timeScale = 20;
     await System.Threading.Tasks.Task.Delay(1400);
     if (game.CloneRemaining > 0 || alert.activeSelf || border.activeSelf) throw new System.Exception("Alert did not hide when paradox expired.");
@@ -21,5 +27,5 @@ try
 finally
 {
     UnityEngine.Time.timeScale = speed;
-    game.ResetShift(); game.GoToMenu();
+    game.GoToMenu(); isolated.ClearSession(); game.Progress = original; view.ShowHome();
 }

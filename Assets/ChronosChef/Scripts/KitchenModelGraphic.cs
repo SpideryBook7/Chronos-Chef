@@ -10,7 +10,7 @@ namespace ChronosChef
 {
     // Orthographic mesh projection inside the same masked uGUI space as the stations.
     // Uses one shared model library and the existing UI material, without extra cameras.
-    public sealed class KitchenModelGraphic : MaskableGraphic, IDragHandler
+    public sealed partial class KitchenModelGraphic : MaskableGraphic, IDragHandler
     {
         struct Corner
         {
@@ -145,6 +145,9 @@ namespace ChronosChef
         {
             if (!models.TryGetValue(name, out var next) || next == model) return;
             model = next;
+            useSkin = name == "Ares";
+            if (useSkin) LoadSkin();
+            SetMaterialDirty();
             if (order == null || order.Length < model.faces.Length) order = new DrawFace[model.faces.Length];
             if (vertexMap == null || vertexMap.Length < model.corners.Length) vertexMap = new int[model.corners.Length];
             dragYaw = 0; SetVerticesDirty();
@@ -172,8 +175,8 @@ namespace ChronosChef
         public Vector2 GripCenter()
         {
             PrepareTransforms();
-            var left = transforms[(int)Joint.ForeL].MultiplyPoint3x4(new Vector3(-.72f,-.18f,.86f));
-            var right = transforms[(int)Joint.ForeR].MultiplyPoint3x4(new Vector3(.72f,-.18f,.86f));
+            var left = transforms[(int)Joint.ForeL].MultiplyPoint3x4(useSkin ? skinPivots[10] : new Vector3(-.72f,-.18f,.86f));
+            var right = transforms[(int)Joint.ForeR].MultiplyPoint3x4(useSkin ? skinPivots[11] : new Vector3(.72f,-.18f,.86f));
             var p = (left + right) * .5f;
             var rect = rectTransform.rect;
             float scale = Mathf.Min(rect.width, rect.height) * model.fit;
@@ -200,7 +203,7 @@ namespace ChronosChef
                 if (i == 1 || i == 2 || i == 3) parent = transforms[0];
                 else if (i >= (int)Joint.Knife) parent = transforms[(int)Joint.ForeR];
                 else if (i >= (int)Joint.ForeL) parent = transforms[i - 4];
-                var pivot = pivots[i];
+                var pivot = useSkin ? skinPivots[i] : pivots[i];
                 var rotation = rotations[i];
                 var transform = parent * Matrix4x4.TRS(pivot - rotation * pivot, rotation, Vector3.one);
                 transforms[i] = transform;
@@ -212,10 +215,16 @@ namespace ChronosChef
         {
             vh.Clear(); if (model == null) return;
             PrepareTransforms();
+            if (useSkin)
+            {
+                DrawSkin(vh);
+                if (pose.tool == HandTool.None) return;
+            }
             int visible = 0;
             for (int i = 0; i < model.faces.Length; i++)
             {
                 var f = model.faces[i];
+                if (useSkin && f.joint < (int)Joint.Knife) continue;
                 if (f.joint == (int)Joint.Knife && pose.tool != HandTool.Knife ||
                     f.joint == (int)Joint.Ladle && pose.tool != HandTool.Ladle) continue;
                 var direction = viewDirections[f.joint];
@@ -236,7 +245,7 @@ namespace ChronosChef
             {
                 if (vertexMap[index] > 0) return vertexMap[index] - 1;
                 var corner = model.corners[index];
-                var p = transforms[corner.joint].MultiplyPoint3x4(corner.point);
+                var p = transforms[corner.joint].MultiplyPoint3x4(useSkin ? corner.point + skinPivots[11] - pivots[(int)Joint.Knife] : corner.point);
                 float x = p.x, y = p.y;
                 var normal = transforms[corner.joint].MultiplyVector(corner.normal);
                 float nx = normal.x, ny = normal.y;
@@ -249,7 +258,7 @@ namespace ChronosChef
                 float gloss = highlight * highlight * .16f;
                 var shade = new Color(pigment.r*light + gloss, pigment.g*light + gloss*.91f, pigment.b*(light+.035f) + gloss*.8f, 1);
                 vertexMap[index] = vh.currentVertCount + 1;
-                vh.AddVert(new Vector3(x*scale+rect.center.x,(y*TiltSin+(p.z-model.middle)*TiltCos)*scale+rect.center.y),shade * tint, Vector2.zero);
+                vh.AddVert(new Vector3(x*scale+rect.center.x,(y*TiltSin+(p.z-model.middle)*TiltCos)*scale+rect.center.y),shade * tint, useSkin ? new Vector2(.003f,.003f) : Vector2.zero);
                 return vertexMap[index] - 1;
             }
         }

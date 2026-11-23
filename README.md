@@ -63,6 +63,8 @@ La escena referencia los recursos. Las pantallas y capas interactivas se constru
 
 Los ingredientes de las manos, la tabla y el fogón se dibujan con geometría tridimensional. BIP-08 tiene cabeza articulada y sigue al chef. En el recetario se puede arrastrar el plato para inspeccionarlo. Los modelos editables se encuentran en `ArtSource/KitchenModels.blend`. El generador `ArtSource/build_kitchen_models.py` reconstruye tanto el taller de Blender como la biblioteca de triángulos que usa Unity. El juego proyecta las mallas en el mismo Canvas que las estaciones y conserva las máscaras de la barra.
 
+El Ares jugable y su eco usan el diseño de `Assets/Ares-personaje.fbx`. Para regenerar su malla y textura desde la raíz del proyecto, ejecuta `blender --background --factory-startup --python ArtSource/import_ares.py`. Añade `-- --save-rig` para regenerar también `ArtSource/Ares-rig.blend`, con los huesos y pesos editables. Unity aplica las poses de marcha, transporte, corte y servicio durante la partida. Para otro diseño, ajusta los pivotes, las regiones de influencia y los puntos de agarre a sus proporciones antes de reutilizar estas poses.
+
 ## Pruebas y validación
 
 - ChronosLivingPlaytest.Start(): tabla, verduras, guardado, recetario, reanudación, máscaras y zonas de toque del mapa.

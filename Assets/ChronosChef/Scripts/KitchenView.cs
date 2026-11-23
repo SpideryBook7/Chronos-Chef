@@ -62,7 +62,8 @@ namespace ChronosChef
             for (int i = 0; i < 3; i++)
             {
                 patienceFills[i].fillAmount = g.Customers[i] ? g.Patience[i] / Mathf.Max(1, g.MaxPatience[i]) : 0;
-                patienceFills[i].color = g.Patience[i] < 20 ? Pink : Green;
+                patienceFills[i].transform.parent.gameObject.SetActive(g.Customers[i]);
+                patienceFills[i].color = Color.Lerp(new Color(1,.29f,.12f),new Color(1,.68f,.19f),patienceFills[i].fillAmount);
                 customerLabels[i].text = g.Customers[i] ? KitchenRecipe.All[KitchenRecipe.Index(g.Orders[i])].Card : "VIAJERO\nEN CAMINO...";
             }
             RefreshExpansion(g);

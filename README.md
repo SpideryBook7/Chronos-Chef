@@ -19,7 +19,7 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 - Sopa: RAÍCES dos veces → PLASMA → esperar LISTO → PLASMA para retirar el bol → cliente que pida sopa.
 - Tostada mutante desde el nivel 3: una RAÍZ → dejar en CORTE → recoger los cubos → PAN → cliente que pida tostada. Puedes montarla mientras otro plato ocupa el fogón.
 - CONGELAR concede cinco segundos de reloj y paciencia detenidos. La cocina sigue funcionando. Cuesta 25 de anomalía y se recarga en 32 segundos de juego.
-- La palanca izquierda mueve a Ares. Al acercarte se ilumina la estación y el botón derecho indica qué puedes usar. En el Editor puedes caminar con WASD o las flechas y usar la estación con E.
+- Toca una zona libre de la mitad derecha y arrastra para mover a Ares. La palanca aparece bajo el dedo y desaparece al soltar. Toca una estación o cliente para interactuar. En el Editor puedes caminar con WASD o las flechas y usar la estación con E.
 - También puedes tocar una estación para caminar e interactuar al llegar. Mover la palanca recupera el control manual durante el trayecto.
 - Toca cuerpo, cabeza o tarjeta del cliente para entregar.
 - La cuchilla trabaja sola. Puedes ir a otra estación y volver con las manos libres. La mesa también corta raíces y conserva el ingrediente al guardar la partida.
@@ -70,7 +70,7 @@ Los ingredientes de las manos, la tabla y el fogón se dibujan con geometría tr
 - ChronosExpansionPlaytest.Start(): ambas recetas y entregas por EventSystem en cabeza, cuerpo y tarjeta.
 - ChronosPlaytest.Start(): quemado, basura, clon, pausa, final y reinicio.
 - Tools/VerifyNavigation.cs: 1.764 recorridos y segmentos sin atravesar estaciones.
-- Tools/VerifyChefControls.cs comprueba los controles de teclado y táctiles, la colisión con la mesa, la entrega de una hamburguesa con el botón contextual y la recuperación de la posición exacta.
+- Tools/VerifyChefControls.cs comprueba los controles de teclado y táctiles, la colisión con la mesa, la entrega de una hamburguesa tocando al cliente y la recuperación de la posición exacta.
 - Tools/VerifyCounterMask.cs: máscaras de clientes fijas en el borde de la barra.
 - Tools/AuditHomeTargets.cs: zonas de toque en varias proporciones.
 

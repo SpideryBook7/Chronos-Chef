@@ -98,7 +98,7 @@ namespace ChronosChef
             ChefPosition = KitchenRules.Position(cell); route.Clear(); destination = null;
             Running = true; Paused = false; TaskLabel = DestinationLabel = "";
             for (int i = 0; i < 3; i++) { SpawnCustomer(i); respawn[i] = 0; }
-            Say("Mueve a Ares con la palanca o WASD. Acércate y usa ACCIÓN o E. También puedes tocar la estación.");
+            Say("Desliza por el lado derecho para mover a Ares. Toca las estaciones para cocinar y a los clientes para entregar.");
             view.ShowMenu(false); view.ShowResults(false, this); view.Refresh(this);
         }
         public void GoToMenu() { if (Running) SaveCurrentSession(); Running = false; Paused = false; route.Clear(); destination = null; view.ShowResults(false, this); view.ShowMenu(true); }

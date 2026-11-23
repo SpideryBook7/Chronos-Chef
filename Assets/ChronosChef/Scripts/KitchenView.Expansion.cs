@@ -205,7 +205,7 @@ namespace ChronosChef
             RefreshEnvironment(g);
             pauseOverlay.SetActive(g.Running && g.Paused);
             if (recipes.activeSelf || settings.activeSelf) pauseOverlay.transform.SetSiblingIndex(Mathf.Min(pauseOverlay.transform.GetSiblingIndex(), recipes.transform.GetSiblingIndex() - 1));
-            wallet.text = $"GEMAS  {g.Progress.Gems}\nCRÉDITOS  {g.Credits}";
+            wallet.text = $"{g.Progress.Gems}\n{g.Credits}";
             goal.text = $"NIVEL {g.Level}  /  PEDIDOS {g.Served}/{g.Target}  /  REPUTACIÓN {g.Reputation}%";
             comboLabel.text = g.Combo > 1 ? "COMBO ×" + g.Combo : "";
             workFill.fillAmount = g.WorkProgress; workFill.transform.parent.gameObject.SetActive(g.TaskLabel == "CORTANDO");

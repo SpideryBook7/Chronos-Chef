@@ -15,7 +15,7 @@ namespace ChronosChef
         public int TutorialTotal => Training.Length;
         static readonly string[] Instructions =
         {
-            "1/12 · Palanca hasta DODO y pulsa TOMAR. También puedes tocar la nevera.", "2/12 · En CORTE pulsa CORTAR: la carne queda en la mesa mientras trabaja la cuchilla.",
+            "1/12 · Toca la nevera DODO para recoger carne.", "2/12 · Toca CORTE: la carne queda en la mesa mientras trabaja la cuchilla.",
             "3/12 · Espera el corte y toca CORTE otra vez para recoger la carne.",
             "4/12 · Toca PLASMA para colocar el dodo cortado.", "5/12 · Espera LISTO y vuelve a tocar PLASMA para retirar la carne.",
             "6/12 · Toca el PAN de MONTAJE para preparar la hamburguesa.", "7/12 · Toca a Grog o su tarjeta: pide hamburguesa.",

@@ -10,14 +10,18 @@ namespace ChronosChef
         int? owner;
         const float Radius = 43f;
 
-        public void Bind(KitchenGame kitchen, RectTransform thumb)
+        public void Bind(KitchenGame kitchen, RectTransform thumb, RectTransform visual)
         {
-            game = kitchen; knob = thumb; pad = (RectTransform)transform;
+            game = kitchen; knob = thumb; pad = visual; pad.gameObject.SetActive(false);
         }
         public void OnInitializePotentialDrag(PointerEventData e) => e.useDragThreshold = false;
         public void OnPointerDown(PointerEventData e)
         {
             if (owner.HasValue || e.button != PointerEventData.InputButton.Left) return;
+            var stage = (RectTransform)pad.parent;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(stage,e.position,e.pressEventCamera,out var origin)) return;
+            pad.anchoredPosition = origin - stage.rect.min;
+            pad.gameObject.SetActive(true);
             owner = e.pointerId;
             OnDrag(e);
         }
@@ -34,6 +38,7 @@ namespace ChronosChef
         void Release()
         {
             owner = null;
+            if (pad) pad.gameObject.SetActive(false);
             if (knob) knob.anchoredPosition = Vector2.zero;
             if (game) game.SetStick(Vector2.zero);
         }

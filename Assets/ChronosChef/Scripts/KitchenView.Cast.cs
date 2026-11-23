@@ -7,10 +7,7 @@ namespace ChronosChef
     {
         KitchenModelGraphic ares, echo;
         readonly KitchenModelGraphic[,] visitors = new KitchenModelGraphic[3,4];
-        RectTransform drivePad;
-        UnityEngine.UI.Button useButton;
-        TMP_Text useCaption, useTarget;
-        static readonly string[] StationCaptions = { "DODO", "CORTE", "PLASMA", "PAN", "BASURA", "CLIENTE 1", "CLIENTE 2", "CLIENTE 3", "RAÍCES" };
+        RectTransform stickZone;
         float castClock, angle, lastDistance, gait, carryBlend, nextChefFrame, nextVisitorFrame;
         static readonly string[] VisitorMeshes = { "Grog", "BipIdle", "Zorg", "Rex" };
 
@@ -23,8 +20,10 @@ namespace ChronosChef
             for (int kind = 0; kind < 4; kind++)
                 visitors[slot,kind] = MountCharacter(customerArt[slot][kind], VisitorMeshes[kind], new Vector2(190,190), 7);
 
-            drivePad = Dot(stage, "PilotStick", 113, 81, 148, C("42687A"));
-            drivePad.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
+            stickZone = Panel(stage,"MovementZone",1200,450,800,900,Color.clear,false);
+            stickZone.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
+            stickZone.SetAsFirstSibling(); // Stations and menu buttons receive taps first.
+            var drivePad = Dot(stage,"PilotStick",0,0,148,C("42687A"));
             Dot(drivePad, "Socket", 0, 0, 140, C("18283E"));
             for (int i = 0; i < 4; i++)
             {
@@ -34,13 +33,8 @@ namespace ChronosChef
             var knob = Dot(drivePad, "Thumb", 0, 0, 67, C("579F9F"));
             Dot(knob, "Grip", 0, 1, 57, C("304F65"));
             Dot(knob, "Locator", 0, 1, 16, Cyan);
-            drivePad.gameObject.AddComponent<ChefStick>().Bind(game, knob);
-            useButton = Button(stage, "ChefAction", 1475, 83, 142, 93, C("337267"));
-            useTarget = Label(useButton.transform, "ACÉRCATE", -69, 20, 138, 26, 14, Cyan, FontStyles.Bold);
-            useCaption = Label(useButton.transform, "ACCIÓN", -69, -9, 138, 40, 20, Color.white, FontStyles.Bold);
-            useButton.onClick.AddListener(game.UseNearbyStation);
+            stickZone.gameObject.AddComponent<ChefStick>().Bind(game, knob, drivePad);
             drivePad.SetSiblingIndex(borrowButton.transform.GetSiblingIndex() + 1);
-            useButton.transform.SetSiblingIndex(drivePad.GetSiblingIndex() + 1);
         }
         KitchenModelGraphic MountCharacter(RectTransform root, string mesh, Vector2 size, float height)
         {
@@ -54,34 +48,11 @@ namespace ChronosChef
             return model;
         }
 
-        static string ActionCaption(KitchenGame g)
-        {
-            switch (g.NearbyStation)
-            {
-                case Station.Supply:
-                case Station.Roots: return "TOMAR";
-                case Station.Cut:
-                    if (g.IsWorking) return "ESPERAR";
-                    if (g.PrepFood != Food.Empty) return "RECOGER";
-                    return g.Carry == Food.RawDodo || g.Carry == Food.Root || g.Carry == Food.Roots ? "CORTAR" : "DEJAR";
-                case Station.Stove:
-                    if (g.StoveFood == Food.Empty) return "COCINAR";
-                    return g.StoveFood == Food.ChoppedDodo || g.StoveFood == Food.Roots ? "ESPERAR" : "RETIRAR";
-                case Station.Assemble: return "MONTAR";
-                case Station.Trash: return "TIRAR";
-                case null: return "ACCIÓN";
-                default: return "ENTREGAR";
-            }
-        }
         void RefreshCastControls(KitchenGame g)
         {
             bool live = g.Running && !g.Paused;
-            drivePad.gameObject.SetActive(live);
-            useButton.gameObject.SetActive(live);
+            stickZone.gameObject.SetActive(live);
             if (!live) return;
-            useButton.interactable = g.NearbyStation.HasValue;
-            useTarget.text = g.NearbyStation.HasValue ? StationCaptions[(int)g.NearbyStation.Value] : "ACÉRCATE";
-            useCaption.text = ActionCaption(g);
             if (g.NearbyStation.HasValue && !g.TutorialActive && !g.HasDestination)
                 stations[(int)g.NearbyStation.Value].image.color = new Color(.36f,1,.84f,.14f);
             float dt = Time.deltaTime;

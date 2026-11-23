@@ -70,7 +70,12 @@ namespace ChronosChef
                 rim.GetComponent<UnityEngine.UI.Image>().color = C("67ADBD");
                 speciesLabels[i].rectTransform.anchoredPosition = new Vector2(44,25);
                 customerLabels[i].rectTransform.anchoredPosition = new Vector2(44,-7);
-                patienceFills[i].transform.parent.gameObject.SetActive(false);
+                var track = (RectTransform)patienceFills[i].transform.parent;
+                track.SetParent(cardRect,false);
+                track.anchorMin = track.anchorMax = new Vector2(.5f,.5f);
+                track.anchoredPosition = new Vector2(44,-32);
+                track.sizeDelta = new Vector2(132,8);
+                patienceFills[i].rectTransform.sizeDelta = track.sizeDelta;
             }
             stoveLabel.rectTransform.anchoredPosition = new Vector2(945, 428); stoveLabel.fontSize = 16;
             cookFill.transform.parent.GetComponent<RectTransform>().anchoredPosition = new Vector2(945, 446);
@@ -134,11 +139,10 @@ namespace ChronosChef
             var caption = stage.Find("Text_TIEMPO DEL TURNO").GetComponent<TMP_Text>();
             caption.rectTransform.anchoredPosition = new Vector2(161,757);
             caption.fontSize = 12;
-            var balance = Panel(stage,"ShiftBalance",161,667,198,62,new Color(.055f,.10f,.16f,.61f));
-            balance.SetSiblingIndex(wallet.transform.GetSiblingIndex());
-            wallet.rectTransform.anchoredPosition = balance.anchoredPosition;
-            wallet.rectTransform.sizeDelta = new Vector2(183,56);
-            wallet.fontSize = 18; wallet.alignment = TextAlignmentOptions.Center;
+            Label(stage,"GEMAS\nCRÉDITOS",66,667,120,56,18,Cyan,FontStyles.Bold,TextAlignmentOptions.Left);
+            wallet.rectTransform.anchoredPosition = new Vector2(218,667);
+            wallet.rectTransform.sizeDelta = new Vector2(96,56);
+            wallet.fontSize = 18; wallet.alignment = TextAlignmentOptions.Right;
             var menuRect = (RectTransform)pause.transform;
             menuRect.anchoredPosition = new Vector2(1526,835); menuRect.sizeDelta = new Vector2(86,86);
             pause.image.sprite = circle; pause.image.type = UnityEngine.UI.Image.Type.Simple;

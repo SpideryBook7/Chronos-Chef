@@ -26,6 +26,14 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 - La comida transportada se muestra en las manos. BASURA descarta ese objeto.
 - La registradora abre el recetario ilustrado y pausa el turno. ENTENDIDO lo reanuda directamente. Puedes elegir receta y paso o dejar que la demostración avance sola.
 
+## Cocina orbital de prueba
+
+En la portada, **PROBAR COCINA 3D** abre un turno con las reglas del nivel 1. La cubierta, la barra, las máquinas y Ares se renderizan con una cámara ortográfica a 23° sobre el suelo. Los pedidos, los clientes y los controles usan la interfaz de la cocina original. Para salir, usa **Pausa → Portal y mejoras**. Los créditos y el guardado de esta prueba usan su propio perfil.
+
+![Turno en la cocina orbital](Docs/media/cocina-orbital.png)
+
+El escenario editable está en `ArtSource/OrbitalGalley.blend`. El generador `ArtSource/build_orbital_kitchen.py` produce la geometría en metros, las normales y los colores que Unity carga al entrar en la prueba.
+
 ## Campaña y mecánicas
 
 Diez turnos, tres recetas y cuatro especies en tres puestos. KitchenRecipe reúne la ilustración, ingredientes, instrucciones y mensajes que usan la comanda y el recetario de cada plato. Grog ruge y reduce la paciencia de vecinos, BIP-08 tiembla al impacientarse, Rex penaliza más la reputación al arañar la barra y Zorg levita. Los clientes entran y salen detrás de ventanas fijas en el borde de la barra.

@@ -32,6 +32,9 @@ namespace ChronosChef
             homeTraining = HomeButton("HomeTraining", "ENTRENAMIENTO", -202, C("273D54"), Cyan, () => { home.SetActive(false); game.GoToMenu(); RequestLevel(1, true); });
             homeOptions = HomeButton("HomeOptions", "AJUSTES", -292, C("273D54"), Color.white, () => { settings.SetActive(true); settings.transform.SetAsLastSibling(); });
             homeCredits = HomeButton("HomeCredits", "CRÉDITOS", -382, C("273D54"), Color.white, () => { creditsPanel.SetActive(true); creditsPanel.transform.SetAsLastSibling(); });
+            var trial = Button(home.transform,"TryOrbitalGalley",475,-329,435,72,C("214751"));
+            Label(trial.transform,"PROBAR COCINA 3D",-208,0,416,60,23,Cyan,FontStyles.Bold);
+            trial.onClick.AddListener(() => ScreenTransition(StartGalleyTrial));
             Label(home.transform, "PRIMERA BETA · 0.4.0", 300, -403, 430, 30, 15, C("B6D1E6"), FontStyles.Bold, TextAlignmentOptions.Right);
             homeStars = new RectTransform[9];
             for (int i = 0; i < homeStars.Length; i++) homeStars[i] = Dot(home.transform, "ChronoSpark", -740 + i * 69, 350 - i * 67, 3 + i % 3, new Color(.3f, .9f, 1, .45f));

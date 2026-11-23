@@ -52,6 +52,29 @@ namespace ChronosChef
             skinOrder = new DrawFace[skinIndices.Length/3];
         }
 
+        Mesh worldSkin;
+        Vector3[] worldPoints, worldNormals;
+        internal float WorldScale => rectTransform.rect.height * model.fit / 100f;
+        internal void SetWorldSkin(Mesh target)
+        {
+            worldSkin = target;
+            if (target && target.vertexCount == 0)
+            {
+                int count = skinVertices.Length;
+                worldPoints = new Vector3[count]; worldNormals = new Vector3[count];
+                var uv = new Vector2[count]; var colours = new Color32[count];
+                for (int i=0;i<count;i++) { uv[i]=skinVertices[i].uv; colours[i]=Color.white; }
+                var triangles = new int[skinIndices.Length];
+                for (int i=0;i<triangles.Length;i+=3)
+                {
+                    triangles[i]=skinIndices[i]; triangles[i+1]=skinIndices[i+2]; triangles[i+2]=skinIndices[i+1];
+                }
+                target.vertices=worldPoints; target.uv=uv; target.colors32=colours; target.triangles=triangles;
+                target.bounds=new Bounds(new Vector3(0,1.5f,0),Vector3.one*5);
+            }
+            SetVerticesDirty();
+        }
+
         void DrawSkin(VertexHelper vh)
         {
             var rect = rectTransform.rect;
@@ -67,10 +90,22 @@ namespace ChronosChef
                 Blend(ref p,ref n,v,w.boneIndex1,w.weight1);
                 Blend(ref p,ref n,v,w.boneIndex2,w.weight2);
                 Blend(ref p,ref n,v,w.boneIndex3,w.weight3);
+                if (worldSkin)
+                {
+                    worldPoints[i]=new Vector3(p.x,p.z,p.y);
+                    worldNormals[i]=new Vector3(n.x,n.z,n.y);
+                    continue;
+                }
                 posedPoints[i]=p;
                 float light=.76f+.24f*Mathf.Clamp01(-.45f*n.x-.5f*n.y+.74f*n.z);
                 vh.AddVert(rect.center + new Vector2(p.x,p.y*TiltSin+(p.z-model.middle)*TiltCos)*scale,
                     new Color(tint.r*light,tint.g*light,tint.b*light,tint.a),v.uv);
+            }
+            if (worldSkin)
+            {
+                worldSkin.vertices=worldPoints;
+                worldSkin.normals=worldNormals;
+                return;
             }
             int count=0;
             for(int i=0;i<skinIndices.Length;i+=3)

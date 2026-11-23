@@ -16,6 +16,45 @@ namespace ChronosChef
         UnityEngine.UI.Image paradoxRim;
         GameObject paradoxBorder;
         UnityEngine.UI.Image clockSweep;
+        OrbitalGalley galley;
+        KitchenProgress campaignProgress;
+        bool InGalley => campaignProgress != null;
+
+        void StartGalleyTrial()
+        {
+            campaignProgress = game.Progress;
+            game.Progress = new KitchenProgress("ChronosChef.OrbitalTrial.");
+            if (!galley)
+            {
+                galley = new GameObject("Orbital Galley Trial").AddComponent<OrbitalGalley>();
+                galley.Build(ares);
+            }
+            galley.gameObject.SetActive(true);
+            galley.BindChef(ares);
+            counterLayer.gameObject.SetActive(false);
+            stations[2].transform.Find("LiveHotplate").gameObject.SetActive(false);
+            stations[3].transform.Find("AssemblyPlate").gameObject.SetActive(false);
+            stations[3].transform.Find("BreadSupply").gameObject.SetActive(false);
+            chef.Find("Shadow").gameObject.SetActive(false);
+            game.BeginLevel(1);
+        }
+
+        void LeaveGalleyTrial()
+        {
+            if (!InGalley) return;
+            ares.SetWorldSkin(null);
+            galley.gameObject.SetActive(false);
+            counterLayer.gameObject.SetActive(true);
+            stations[2].transform.Find("LiveHotplate").gameObject.SetActive(true);
+            stations[3].transform.Find("AssemblyPlate").gameObject.SetActive(true);
+            stations[3].transform.Find("BreadSupply").gameObject.SetActive(true);
+            chef.Find("Shadow").gameObject.SetActive(true);
+            environmentLayer.texture = game.Level > 5 && steampunkArt ? steampunkArt : environmentArt;
+            counterLayer.texture = environmentLayer.texture;
+            game.Progress.ClearSession();
+            game.Progress = campaignProgress;
+            campaignProgress = null;
+        }
         void InstallEnvironment()
         {
             if (!environmentArt) return;
@@ -118,7 +157,12 @@ namespace ChronosChef
         {
             if (!clockHand) return;
             var texture = g.Level > 5 && steampunkArt ? steampunkArt : environmentArt;
-            if (environmentLayer.texture != texture) { environmentLayer.texture = texture; counterLayer.texture = texture; }
+            if (InGalley)
+            {
+                environmentLayer.texture = galley.Image;
+                galley.UpdateService(g,ares.WorldScale);
+            }
+            else if (environmentLayer.texture != texture) { environmentLayer.texture = texture; counterLayer.texture = texture; }
             float age = KitchenGame.ParadoxSeconds - g.CloneRemaining;
             bool visible = announcing && g.Running && g.CloneRemaining > 0 && age < NoticeSeconds;
             if (!visible) announcing = false;

@@ -104,7 +104,7 @@ namespace ChronosChef
             results.transform.SetAsLastSibling();
             // Results now include navigation to the next unlocked level and the kitchen hub.
             var next = Button(results.transform, "NextLevel", 235, -280, 300, 52, Cyan); Label(next.transform, "SIGUIENTE NIVEL", -145, 0, 290, 45, 19, Ink, FontStyles.Bold);
-            next.onClick.AddListener(() => { if (game.IsTrainingResult) { game.BeginLevel(1); return; } if (game.Level == 10) { game.GoToMenu(); return; } int level = game.Level + 1; if (level > game.Progress.Unlocked || level > 5 && game.Progress.Era < 2) game.GoToMenu(); else game.BeginLevel(level); });
+            next.onClick.AddListener(() => { if (InGalley || game.IsTrainingResult) { game.BeginLevel(1); return; } if (game.Level == 10) { game.GoToMenu(); return; } int level = game.Level + 1; if (level > game.Progress.Unlocked || level > 5 && game.Progress.Era < 2) game.GoToMenu(); else game.BeginLevel(level); });
             var hub = Button(results.transform, "ResultsHub", -235, -280, 300, 52, C("34465D")); Label(hub.transform, "VOLVER AL PORTAL", -145, 0, 290, 45, 19, Color.white, FontStyles.Bold); hub.onClick.AddListener(game.GoToMenu);
             resultText.fontSize = 27; resultText.rectTransform.anchoredPosition = new Vector2(0, 60); resultText.rectTransform.sizeDelta = new Vector2(810, 365);
             restart.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -175);
@@ -180,7 +180,7 @@ namespace ChronosChef
             var handle = Dot(handleArea, "Handle", 0, 0, 38, Gold); handle.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
             var slider = track.gameObject.AddComponent<UnityEngine.UI.Slider>(); slider.fillRect = fill; slider.handleRect = handle; slider.targetGraphic = handle.GetComponent<UnityEngine.UI.Image>(); slider.minValue = 0; slider.maxValue = 1; slider.value = value; slider.onValueChanged.AddListener(changed);
         }
-        public void ShowMenu(bool show) { if (!menu) return; if (home) home.SetActive(false); menu.SetActive(show); if (show) { SetParadoxVisible(false); menu.transform.SetAsLastSibling(); RefreshHub(); } if (pauseOverlay) pauseOverlay.SetActive(false); if (!show) { recipes.SetActive(false); settings.SetActive(false); } }
+        public void ShowMenu(bool show) { if (!menu) return; if (home) home.SetActive(false); menu.SetActive(show); if (show) { LeaveGalleyTrial(); SetParadoxVisible(false); menu.transform.SetAsLastSibling(); RefreshHub(); } if (pauseOverlay) pauseOverlay.SetActive(false); if (!show) { recipes.SetActive(false); settings.SetActive(false); } }
         public void MenuNotice(string text) { if (menuMessage) menuMessage.text = text; audioFeedback?.Play("click"); }
         void RefreshHub()
         {
@@ -304,6 +304,6 @@ namespace ChronosChef
             if (parent == clone) art.color = new Color(1, .5f, 1, .85f);
             if (parent == chef) { carriedIcon.SetAsLastSibling(); taskLabel.transform.SetAsLastSibling(); }
         }
-        void OnDestroy() { foreach (var sprite in castSprites) if (sprite) Destroy(sprite); DestroyLivingAssets(); }
+        void OnDestroy() { if (galley) Destroy(galley.gameObject); foreach (var sprite in castSprites) if (sprite) Destroy(sprite); DestroyLivingAssets(); }
     }
 }

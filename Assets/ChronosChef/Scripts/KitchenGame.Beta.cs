@@ -8,14 +8,14 @@ namespace ChronosChef
         public bool TutorialActive { get; private set; }
         public bool IsTrainingResult { get; private set; }
         public int TutorialStep { get; private set; }
-        public bool IsMoving => route.Count > 0;
+        public bool IsMoving => route.Count > 0 || velocity.sqrMagnitude > 1;
         public bool IsWorking => work > 0;
         public bool HasDestination => destination.HasValue;
         static readonly Station[] Training = { Station.Supply, Station.Cut, Station.Cut, Station.Stove, Station.Stove, Station.Assemble, Station.Customer0, Station.Roots, Station.Roots, Station.Stove, Station.Stove, Station.Customer1 };
         public int TutorialTotal => Training.Length;
         static readonly string[] Instructions =
         {
-            "1/12 · Toca DODO para recoger carne.", "2/12 · Toca CORTE: la carne queda en la mesa mientras trabaja la cuchilla.",
+            "1/12 · Palanca hasta DODO y pulsa TOMAR. También puedes tocar la nevera.", "2/12 · En CORTE pulsa CORTAR: la carne queda en la mesa mientras trabaja la cuchilla.",
             "3/12 · Espera el corte y toca CORTE otra vez para recoger la carne.",
             "4/12 · Toca PLASMA para colocar el dodo cortado.", "5/12 · Espera LISTO y vuelve a tocar PLASMA para retirar la carne.",
             "6/12 · Toca el PAN de MONTAJE para preparar la hamburguesa.", "7/12 · Toca a Grog o su tarjeta: pide hamburguesa.",
@@ -48,6 +48,7 @@ namespace ChronosChef
                 borrowRemaining = BorrowRemaining, borrowCooldown = BorrowCooldown,
                 credits = Credits, served = Served, lost = Lost, reputation = Reputation, combo = Combo, arrivals = arrivals,
                 cell = cell, blocked = blocked, cookTime = CookTime, cookDuration = CookDuration, work = work,
+                hasExactPosition = true, position = ChefPosition, facing = Facing,
                 customers = (bool[])Customers.Clone(), special = (bool[])special.Clone(), orders = (Food[])Orders.Clone(), species = (int[])Species.Clone(),
                 patience = (float[])Patience.Clone(), maxPatience = (float[])MaxPatience.Clone(), respawn = (float[])respawn.Clone()
             };
@@ -56,11 +57,13 @@ namespace ChronosChef
         public bool ResumeSavedShift()
         {
             var s = Progress.LoadSession(); if (s == null) return false;
+            ResetMovement();
             TutorialActive = IsTrainingResult = false; Level = s.level;
             Carry = s.carry; StoveFood = s.stove; PrepFood = s.prep; Remaining = s.remaining; Anomaly = s.anomaly; CloneRemaining = s.cloneTime;
             BorrowRemaining = s.borrowRemaining; BorrowCooldown = s.borrowCooldown;
             Credits = s.credits; Served = s.served; Lost = s.lost; Reputation = s.reputation; Combo = s.combo; arrivals = s.arrivals;
             cell = s.cell; blocked = s.cloneTime > 0 ? s.blocked : new Vector2Int(-1, -1); ChefPosition = KitchenRules.Position(cell);
+            if (s.hasExactPosition) { ChefPosition = s.position; Facing = s.facing.sqrMagnitude > .01f ? s.facing.normalized : Vector2.down; }
             CookTime = s.cookTime; CookDuration = s.cookDuration; work = s.work; TaskLabel = work > 0 ? "CORTANDO" : ""; DestinationLabel = "";
             if (work > 0 && PrepFood == Food.Empty && Carry == Food.RawDodo) { PrepFood = Carry; Carry = Food.Empty; }
             Customers = s.customers; Orders = s.orders; Species = s.species; Patience = s.patience; MaxPatience = s.maxPatience;

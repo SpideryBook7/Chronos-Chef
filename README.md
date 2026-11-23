@@ -7,6 +7,8 @@ Escena inicial: Assets/ChronosChef/Scenes/ChronosKitchen.unity.
 
 [Ver la tostada mutante en el recetario 3D](Docs/media/recetario-3d.png)
 
+[Ver a Ares caminar, recoger y cocinar en una partida](Docs/media/ares-en-movimiento.webp)
+
 ## Empezar
 
 Pulsa Play. La portada tiene JUGAR, CONTINUAR TURNO (cuando hay guardado), ENTRENAMIENTO, AJUSTES y CRÉDITOS. JUGAR abre el portal de niveles y mejoras. La primera entrada al nivel 1 inicia el entrenamiento; después se puede repetir con ENTRENAMIENTO.
@@ -17,7 +19,8 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 - Sopa: RAÍCES dos veces → PLASMA → esperar LISTO → PLASMA para retirar el bol → cliente que pida sopa.
 - Tostada mutante desde el nivel 3: una RAÍZ → dejar en CORTE → recoger los cubos → PAN → cliente que pida tostada. Puedes montarla mientras otro plato ocupa el fogón.
 - CONGELAR concede cinco segundos de reloj y paciencia detenidos. La cocina sigue funcionando. Cuesta 25 de anomalía y se recarga en 32 segundos de juego.
-- Toca la estación o su icono inferior para caminar e interactuar al llegar.
+- La palanca izquierda mueve a Ares. Al acercarte se ilumina la estación y el botón derecho indica qué puedes usar. En el Editor puedes caminar con WASD o las flechas y usar la estación con E.
+- También puedes tocar una estación o su icono inferior para caminar e interactuar al llegar. Mover la palanca recupera el control manual durante el trayecto.
 - Toca cuerpo, cabeza o tarjeta del cliente para entregar.
 - La cuchilla trabaja sola. Puedes ir a otra estación y volver con las manos libres. La mesa también corta raíces y conserva el ingrediente al guardar la partida.
 - La comida transportada se muestra en las manos. BASURA descarta ese objeto.
@@ -39,7 +42,7 @@ Los guardados inválidos se descartan sin bloquear el inicio. No hay cuentas, se
 
 ## Arte, sonido y móvil
 
-Portada e icono propios, escenarios ilustrados, atlas de cinco personajes y ocho cuadros de Ares: reposo, carrera, trabajo y estrés. La comida al correr es una capa independiente. Llegadas, levitación, vapor, rutas, preparación, entrega y paradojas tienen señales visuales.
+Portada e icono propios y escenarios ilustrados. Ares, su eco y los cuatro comensales se dibujan con modelos de Blender. La distancia recorrida marca el ritmo de las piernas. Los brazos sostienen el ingrediente al caminar y cambian de postura al cortar, atender el fogón o entregar. Grog golpea la barra, BIP hace gestos mecánicos, Zorg cata el aroma y Rex olfatea.
 
 Música y efectos originales sintetizados; volúmenes separados y persistentes, música atenuada en pausa y audio suspendido al pasar al fondo. AJUSTES incluye movimiento reducido.
 
@@ -67,6 +70,7 @@ Los ingredientes de las manos, la tabla y el fogón se dibujan con geometría tr
 - ChronosExpansionPlaytest.Start(): ambas recetas y entregas por EventSystem en cabeza, cuerpo y tarjeta.
 - ChronosPlaytest.Start(): quemado, basura, clon, pausa, final y reinicio.
 - Tools/VerifyNavigation.cs: 1.764 recorridos y segmentos sin atravesar estaciones.
+- Tools/VerifyChefControls.cs comprueba los controles de teclado y táctiles, la colisión con la mesa, la entrega de una hamburguesa con el botón contextual y la recuperación de la posición exacta.
 - Tools/VerifyCounterMask.cs: máscaras de clientes fijas en el borde de la barra.
 - Tools/AuditHomeTargets.cs: zonas de toque en varias proporciones.
 

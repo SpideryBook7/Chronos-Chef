@@ -214,7 +214,7 @@ namespace ChronosChef
             if (shownCarry != (int)g.Carry) { shownCarry = (int)g.Carry; for (int i = 1; i < carriedFood.Length; i++) carriedFood[i].gameObject.SetActive(i == shownCarry); }
             pop = Mathf.Max(0, pop - Time.unscaledDeltaTime); pulse = Mathf.Max(0, pulse - Time.unscaledDeltaTime);
             float lean = Mathf.Clamp(g.ChefPosition.x - lastChef.x, -1, 1); lastChef = g.ChefPosition;
-            if (!g.Paused) { chef.localEulerAngles = new Vector3(0, 0, -lean * 6); chef.localScale *= 1 + pop * .25f; }
+            if (!ares && !g.Paused) { chef.localEulerAngles = new Vector3(0, 0, -lean * 6); chef.localScale *= 1 + pop * .25f; }
             feedbackLabel.gameObject.SetActive(pulse > 0); feedbackLabel.rectTransform.anchoredPosition = new Vector2(865, 410 + (1 - pulse) * 35); feedbackLabel.alpha = Mathf.Min(1, pulse * 3);
             for (int i = 0; i < workSparks.Length; i++) { workSparks[i].gameObject.SetActive(pulse > .25f); if (pulse > .25f) workSparks[i].anchoredPosition = g.ChefPosition + new Vector2(Mathf.Cos(i * 2.4f), Mathf.Sin(i * 2.4f)) * ((.85f - pulse) * 170 + 15); }
             for (int i = 0; i < routeDots.Length; i++) { bool visible = i < g.RoutePreview.Count; routeDots[i].gameObject.SetActive(visible); if (visible) routeDots[i].anchoredPosition = KitchenRules.Position(g.RoutePreview[i]); }

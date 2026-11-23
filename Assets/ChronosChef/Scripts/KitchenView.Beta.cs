@@ -106,7 +106,7 @@ namespace ChronosChef
                 stations[5 + i].interactable = g.Customers[i];
                 if (ReducedMotion) art.localEulerAngles = Vector3.zero;
             }
-            if (animatedChef && chefFrames != null)
+            if (!ares && animatedChef && chefFrames != null)
             {
                 bool cooking = g.IsWorking && !g.IsMoving && Vector2.Distance(g.ChefPosition, KitchenRules.Position(KitchenRules.Approach(Station.Cut))) < 2 || g.StoveFood != Food.Empty && !g.IsMoving && Vector2.Distance(g.ChefPosition, KitchenRules.Position(KitchenRules.Approach(Station.Stove))) < 2;
                 int pair = g.IsMoving ? 2 : cooking ? 4 : g.Anomaly >= 65 || g.Remaining < 20 ? 6 : 0;

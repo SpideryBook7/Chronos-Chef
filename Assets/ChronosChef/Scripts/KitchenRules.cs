@@ -56,6 +56,33 @@ namespace ChronosChef
         public static bool IsWalkable(Vector2Int cell, Vector2Int blocked)
             => cell.x >= 0 && cell.x < Columns && cell.y >= 0 && cell.y < Rows
             && cell != blocked && IsFloorPositionClear(Position(cell));
+        // Clip the whole movement segment against each expanded footprint, even on slow frames.
+        public static bool ClearSegment(Vector2 from, Vector2 to, Vector2Int blocked)
+        {
+            foreach (var r in SolidFixtures)
+                if (Intersects(from, to, r.min - Vector2.one * ChefRadius, r.max + Vector2.one * ChefRadius)) return false;
+            if (blocked.x < 0) return true;
+            Vector2 center = Position(blocked), radius = Vector2.one * 35;
+            return !Intersects(from, to, center - radius, center + radius);
+        }
+        static bool Intersects(Vector2 from, Vector2 to, Vector2 min, Vector2 max)
+        {
+            float enter = 0, leave = 1;
+            for (int axis = 0; axis < 2; axis++)
+            {
+                float delta = to[axis] - from[axis];
+                if (Mathf.Abs(delta) < .0001f)
+                {
+                    if (from[axis] <= min[axis] || from[axis] >= max[axis]) return false;
+                    continue;
+                }
+                float near = (min[axis] - from[axis]) / delta, far = (max[axis] - from[axis]) / delta;
+                enter = Mathf.Max(enter, Mathf.Min(near, far));
+                leave = Mathf.Min(leave, Mathf.Max(near, far));
+                if (enter >= leave) return false;
+            }
+            return true;
+        }
         public static bool IsStationApproach(Vector2Int cell)
         {
             for (int i = 0; i < 9; i++) if (Approach((Station)i) == cell) return true;

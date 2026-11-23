@@ -16,7 +16,7 @@ public static class ChronosLivingPlaytest
     static int step;
     static double deadline, heldSince;
     static float pausedRemaining;
-    static Sprite idlePose;
+    static Vector3[] idlePose;
     public static string Status = "Not run";
     public static void Start()
     {
@@ -32,7 +32,7 @@ public static class ChronosLivingPlaytest
     static void Click(string name) => GameObject.Find(name).GetComponent<Button>().onClick.Invoke();
     static Transform Stage => view.transform.Find("SafeArea/LandscapeFrame/KitchenStage");
     static GameObject Panel(string name) => Stage.Find(name).gameObject;
-    static Image Portrait => Stage.Find("CustomerWindow0/Visitor_0_0/IllustratedCharacter").GetComponent<Image>();
+    static KitchenModelGraphic Portrait => Stage.Find("CustomerWindow0/Visitor_0_0/IllustratedCharacter/Model3D").GetComponent<KitchenModelGraphic>();
     static void Tick()
     {
         try
@@ -57,13 +57,14 @@ public static class ChronosLivingPlaytest
                 case 3:
                     if (game.HasDestination) return;
                     Assert(game.Carry == Food.Root && game.PrepFood == Food.ChoppedDodo, "Occupied cutting board overwrote food");
-                    heldSince = EditorApplication.timeSinceStartup; idlePose = Portrait.sprite; step++; break;
+                    heldSince = EditorApplication.timeSinceStartup; idlePose = Portrait.canvasRenderer.GetMesh().vertices; step++; break;
                 case 4:
                     if (EditorApplication.timeSinceStartup - heldSince < 2) return;
                     Assert(game.PrepFood == Food.ChoppedDodo && game.Carry == Food.Root, "Prepared food vanished while left on board");
                     game.Patience[0] = 10; step++; break;
                 case 5:
-                    Assert(Portrait.sprite != idlePose, "Customer did not change expression when impatient");
+                    var current = Portrait.canvasRenderer.GetMesh().vertices;
+                    Assert(current.Length != idlePose.Length || !System.Linq.Enumerable.SequenceEqual(current,idlePose), "Customer mesh stayed in a single pose");
                     Assert(Portrait.canvasRenderer.hasRectClipping, "Animated customer is not clipped behind bar");
                     Click("QuantumBin"); step++; break;
                 case 6:

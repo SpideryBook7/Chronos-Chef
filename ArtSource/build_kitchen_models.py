@@ -7,6 +7,7 @@ bpy.ops.wm.read_factory_settings(use_empty=True)
 palette = {}
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from export_kitchen_meshes import export_library
+from kitchen_cast import sculpt, rig_character
 
 def material(hex_color):
     if hex_color not in palette:
@@ -104,9 +105,10 @@ def bip(alarm):
         cube("Charge light",(-.22+j*.145,-.462,1.04),(.095,.025,.09),"ffc368" if j==3 else "4ee9dc")
     for side in (-1,1):
         x=side*.69; z=1.04 if not alarm else 1.29
-        oval("Shoulder joint",(x,0,1.15),(.22,.25,.21),"443858")
-        oval("Elbow housing",(x+side*.10,-.08,z-.12),(.19,.21,.22),"bc86ac")
-        oval("Magnetic mitt",(x+side*.16,-.20,z-.26 if not alarm else z+.13),(.23,.22,.20),"82799c")
+        joint = "ArmL|" if side < 0 else "ArmR|"
+        oval(joint+"Shoulder joint",(x,0,1.15),(.22,.25,.21),"443858")
+        oval(joint+"Elbow housing",(x+side*.10,-.08,z-.12),(.19,.21,.22),"bc86ac")
+        oval(joint+"Magnetic mitt",(x+side*.16,-.20,z-.26 if not alarm else z+.13),(.23,.22,.20),"82799c")
     # The independently named head parts can turn as one around the neck at runtime.
     cube("Head|Porcelain housing",(0,0,1.94),(1.47,.86,.90),"bdb2c3")
     cube("Head|Violet gasket",(0,-.408,1.93),(1.34,.17,.74),"8c628b")
@@ -121,6 +123,7 @@ def bip(alarm):
 
 def make(name):
     if name.startswith("Bip"): bip(name=="BipAlarm")
+    elif name in ("Ares","Grog","Zorg","Rex"): sculpt(name,oval,cube)
     elif name=="Bread": bun(); bun(-.37,False)
     elif name=="Burger":
         bun(0,False); patty(.18)
@@ -161,8 +164,11 @@ def make(name):
         lathe("Charcoal",[(.63,0),(.90,.07),(.79,.29),(.44,.33)],"4c3b48",.06)
         eye(-.27,-.47,.28);eye(.20,-.50,.29)
 
-for idx,name in enumerate(("RawDodo","ChoppedDodo","CookedDodo","Burger","Burnt","Root","Roots","Soup","Bread","ChoppedRoot","ChoppedRoots","Toast","BipIdle","BipAlarm")):
+for idx,name in enumerate(("RawDodo","ChoppedDodo","CookedDodo","Burger","Burnt","Root","Roots","Soup","Bread","ChoppedRoot","ChoppedRoots","Toast","BipIdle","BipAlarm","Ares","Grog","Zorg","Rex")):
     old=set(bpy.data.objects); make(name); objects=set(bpy.data.objects)-old
+    if name in ("BipIdle","BipAlarm","Ares","Grog","Zorg","Rex"):
+        rig_character(name,objects)
+        objects=set(bpy.data.objects)-old
     collection=bpy.data.collections.new(name); bpy.context.scene.collection.children.link(collection)
     collection["chronos_origin"] = [(idx%4)*3.3,(idx//4)*3.3,0.]
     for obj in objects:

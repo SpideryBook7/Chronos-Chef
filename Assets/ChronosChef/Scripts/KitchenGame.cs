@@ -89,6 +89,7 @@ namespace ChronosChef
         public void ResetShift()
         {
             ResetBetaState();
+            ResetMovement();
             Carry = StoveFood = PrepFood = Food.Empty; Remaining = LevelRules.Seconds;
             Credits = Served = Lost = Combo = arrivals = 0; Reputation = 100;
             Anomaly = CloneRemaining = CookTime = work = 0; CookDuration = 5;
@@ -97,7 +98,7 @@ namespace ChronosChef
             ChefPosition = KitchenRules.Position(cell); route.Clear(); destination = null;
             Running = true; Paused = false; TaskLabel = DestinationLabel = "";
             for (int i = 0; i < 3; i++) { SpawnCustomer(i); respawn[i] = 0; }
-            Say("¡Turno abierto! Burger: dodo > corte > fogón > montaje. Sopa: 2 raíces > fogón.");
+            Say("Mueve a Ares con la palanca o WASD. Acércate y usa ACCIÓN o E. También puedes tocar la estación.");
             view.ShowMenu(false); view.ShowResults(false, this); view.Refresh(this);
         }
         public void GoToMenu() { if (Running) SaveCurrentSession(); Running = false; Paused = false; route.Clear(); destination = null; view.ShowResults(false, this); view.ShowMenu(true); }
@@ -123,8 +124,8 @@ namespace ChronosChef
             if (!Running || Paused || index < 0 || index > 8) return;
             if (TutorialActive && index != (int)TutorialStation) { Say(TutorialInstruction); Feedback?.Invoke("bad"); return; }
             var station = (Station)index;
-            Vector2Int start = route.Count > 0 ? route[0] : cell;
-            bool finishStep = route.Count > 0;
+            Vector2Int start = route.Count > 0 ? route[0] : RouteAnchor();
+            bool finishStep = ChefPosition != KitchenRules.Position(start);
             var next = KitchenRules.Route(start, KitchenRules.Approach(station), blocked);
             if (start != KitchenRules.Approach(station) && next.Count == 0) { Respond("Tu otro yo bloquea esa ruta.", "bad"); return; }
             destination = station; route.Clear(); if (finishStep) route.Add(start); route.AddRange(next);
@@ -188,17 +189,8 @@ namespace ChronosChef
                     Respond("¡Corte listo! La comida se queda en la mesa. Toca CORTE para recogerla.", "ready");
                 }
             }
-            TaskLabel = work > 0 && route.Count == 0 && Vector2.Distance(ChefPosition, KitchenRules.Position(KitchenRules.Approach(Station.Cut))) < 2 ? "CORTANDO" : "";
-            if (route.Count > 0)
-            {
-                float distanceBudget = (340 + (Progress?.Speed ?? 0) * 60) * dt;
-                while (route.Count > 0 && distanceBudget > 0)
-                {
-                    var waypoint = KitchenRules.Position(route[0]); float distance = Vector2.Distance(ChefPosition, waypoint);
-                    if (distance <= distanceBudget) { ChefPosition = waypoint; distanceBudget -= distance; cell = route[0]; route.RemoveAt(0); }
-                    else { ChefPosition = Vector2.MoveTowards(ChefPosition, waypoint, distanceBudget); distanceBudget = 0; }
-                }
-            }
+            MoveChef(dt);
+            TaskLabel = work > 0 && !IsMoving && NearbyStation == Station.Cut ? "CORTANDO" : "";
             if (route.Count == 0 && destination.HasValue) { var s = destination.Value; destination = null; DestinationLabel = ""; Interact(s); }
             if (Remaining <= 0 || Reputation <= 0) EndShift();
             view.Refresh(this);
@@ -215,6 +207,7 @@ namespace ChronosChef
         {
             if (!Running || Paused) return;
             if (TutorialActive && station != TutorialStation) { Say(TutorialInstruction); return; }
+            FaceStation(station);
             var previousCarry = Carry; var previousStove = StoveFood; var previousPrep = PrepFood; int previousServed = Served;
             switch (station)
             {
@@ -266,7 +259,12 @@ namespace ChronosChef
                     OrderServed?.Invoke(customer, Orders[customer], reward);
                     Respond("¡ENTREGADO! +" + reward + " créditos. Combo x" + Combo + ".", "serve"); break;
             }
-            if (TutorialActive && (previousCarry != Carry || previousStove != StoveFood || previousPrep != PrepFood || previousServed != Served)) AdvanceTutorial();
+            if (previousCarry != Carry || previousStove != StoveFood || previousPrep != PrepFood || previousServed != Served)
+            {
+                GestureRemaining = .46f;
+                ServingGesture = previousServed != Served;
+                if (TutorialActive) AdvanceTutorial();
+            }
         }
         public void AddAnomaly(float amount)
         {
@@ -275,7 +273,7 @@ namespace ChronosChef
             Anomaly = 0; CloneRemaining = 15;
             var candidates = new List<Vector2Int>();
             for (int x = 2; x < 10; x++) for (int y = 1; y < 3; y++)
-            { var p = new Vector2Int(x, y); if (p != cell && KitchenRules.IsWalkable(p, blocked) && !KitchenRules.IsStationApproach(p) && !route.Contains(p)) candidates.Add(p); }
+            { var p = new Vector2Int(x, y); if (p != cell && (KitchenRules.Position(p) - ChefPosition).sqrMagnitude > 80*80 && KitchenRules.IsWalkable(p, blocked) && !KitchenRules.IsStationApproach(p) && !route.Contains(p)) candidates.Add(p); }
             if (candidates.Count == 0) { CloneRemaining = 0; return; }
             blocked = candidates[UnityEngine.Random.Range(0, candidates.Count)];
             Respond("¡PARADOJA! Tu yo del futuro bloquea una casilla durante 15 s.", "paradox");

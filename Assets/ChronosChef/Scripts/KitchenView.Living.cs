@@ -13,7 +13,6 @@ namespace ChronosChef
         RectTransform[] prepIcons;
         KitchenModelGraphic[] handModels, tableModels, stoveModels;
         KitchenModelGraphic breadModel;
-        readonly KitchenModelGraphic[] robotModels = new KitchenModelGraphic[3];
         RectTransform prepLaser;
         GameObject prepReadout;
         TMP_Text prepCaption;
@@ -91,11 +90,6 @@ namespace ChronosChef
                 for (int i = 0; i < 3; i++) for (int species = 0; species < 4; species++)
                 {
                     var picture = customerArt[i][species].Find("IllustratedCharacter").GetComponent<UnityEngine.UI.Image>(); customerPictures[i, species] = picture; picture.rectTransform.sizeDelta = new Vector2(165, 190);
-                    if (species == 1)
-                    {
-                        robotModels[i] = KitchenModelGraphic.Attach(picture.rectTransform, "BipIdle");
-                        if (robotModels[i]) picture.enabled = false;
-                    }
                 }
             }
             comicSounds = new TMP_Text[3];
@@ -110,6 +104,14 @@ namespace ChronosChef
             borrowFill = Bar(borrowButton.transform, "Charge", 3, -40, 245, 6, Cyan);
             borrowButton.onClick.AddListener(() => game.BorrowTime());
             borrowButton.transform.SetSiblingIndex(stage.Find("BottomPanel").GetSiblingIndex() + 1);
+            var borrowRect = (RectTransform)borrowButton.transform;
+            borrowRect.anchoredPosition = new Vector2(288,77);
+            borrowRect.localScale = Vector3.one * .70f;
+            var alertFace = paradoxRim.rectTransform;
+            var alertBorder = (RectTransform)paradoxBorder.transform;
+            alertFace.anchoredPosition = alertBorder.anchoredPosition = borrowRect.anchoredPosition;
+            alertFace.localScale = alertBorder.localScale = borrowRect.localScale;
+            BuildCastControls();
             receipt = Panel(stage, "DeliveryReceipt", 0, 0, 140, 42, C("163444"));
             receipt.SetSiblingIndex(menu.transform.GetSiblingIndex());
             receiptDish = FoodPicture(receipt, "DeliveredDish", Food.Burger, new Vector2(-47, 0), new Vector2(45, 40));
@@ -155,21 +157,12 @@ namespace ChronosChef
             var stove = stoveModels[(int)g.StoveFood];
             if (stove) stove.Pose(-20 + Mathf.Sin(t * 2) * 9);
             if (breadModel) breadModel.Pose(-12);
-            for (int slot = 0; slot < robotModels.Length; slot++)
-            {
-                var robot = robotModels[slot];
-                if (!robot || g.Species[slot] != 1 || !g.Customers[slot]) continue;
-                bool alarm = g.Patience[slot] < 20;
-                robot.Show(alarm ? "BipAlarm" : "BipIdle");
-                robot.Pose(-5);
-                float lookAtChef = Mathf.Clamp((g.ChefPosition.x - 630 - slot*270)*.045f, -22, 22);
-                robot.Look(ReducedMotion ? 0 : lookAtChef + Mathf.Sin(t * (alarm ? 12 : 1.7f)) * (alarm ? 9 : 4));
-            }
         }
         void RefreshLivingKitchen(KitchenGame g)
         {
             if (prepIcons == null) return;
             PoseFoodModels(g);
+            RefreshCastControls(g);
             if (receipt.gameObject.activeSelf)
             {
                 if (!g.Paused) receiptAge += Time.deltaTime;
@@ -203,7 +196,7 @@ namespace ChronosChef
                 float phase = Mathf.Repeat(t + i * 1.7f, 6);
                 bool emote = phase > 3.8f && phase < 5.2f;
                 int pose = angry ? 2 : emote ? 1 : 0;
-                if (customerPictures != null)
+                if (customerPictures != null && !visitors[i,species])
                 {
                     var picture = customerPictures[i, species]; picture.sprite = customerPoses[species, pose];
                     if (!ReducedMotion && g.Customers[i])

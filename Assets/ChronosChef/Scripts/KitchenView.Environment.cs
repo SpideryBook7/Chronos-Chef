@@ -107,7 +107,9 @@ namespace ChronosChef
             var shortHand = Panel(clock, "HourHand", -8, 2, 22, 5, Ink); shortHand.localEulerAngles = new Vector3(0, 0, -45);
             paradoxCaption = Label(face, "PARADOX\nALERT", -34, 0, 170, 85, 27, Color.white, FontStyles.Bold);
             SetParadoxVisible(false);
-            timer.rectTransform.anchoredPosition = new Vector2(1430, 88); timer.rectTransform.sizeDelta = new Vector2(210, 65); timer.fontSize = 51;
+            timer.rectTransform.anchoredPosition = new Vector2(1463, 88); timer.rectTransform.sizeDelta = new Vector2(190, 65); timer.fontSize = 51;
+            var timerCaption = stage.Find("Text_TIEMPO DEL TURNO") as RectTransform;
+            if (timerCaption) timerCaption.anchoredPosition = new Vector2(1463,53);
             cloneLabel.rectTransform.anchoredPosition = new Vector2(830, 206);
             // Reference characters should remain above the environment and below the interaction overlays.
             chef.SetAsLastSibling(); clone.SetAsLastSibling(); feedbackLabel.transform.SetAsLastSibling();

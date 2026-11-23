@@ -17,7 +17,7 @@ try
         UnityEngine.Canvas.ForceUpdateCanvases();
         var mesh = hero.canvasRenderer.GetMesh();
         if (!mesh || mesh.vertexCount < 30 || mesh.bounds.size.x <= 0 || mesh.bounds.size.y <= 0) throw new System.Exception("Empty model: " + food);
-        results.Add(food + ":" + mesh.vertexCount/3);
+        results.Add(food + ":" + mesh.GetIndexCount(0)/3);
     }
     var oldVertices = hero.canvasRenderer.GetMesh().vertices;
     var events = UnityEngine.EventSystems.EventSystem.current;

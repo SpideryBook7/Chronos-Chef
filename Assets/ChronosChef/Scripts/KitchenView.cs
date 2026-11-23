@@ -41,7 +41,7 @@ namespace ChronosChef
         public void Refresh(KitchenGame g)
         {
             chef.anchoredPosition = g.ChefPosition;
-            chef.localScale = new Vector3(1, 1 + (g.Running && !g.Paused ? Mathf.Sin(Time.time * 7) * .025f : 0), 1);
+            if (!ares) chef.localScale = new Vector3(1, 1 + (g.Running && !g.Paused ? Mathf.Sin(Time.time * 7) * .025f : 0), 1);
             clone.gameObject.SetActive(g.CloneRemaining > 0);
             clone.anchoredPosition = g.ClonePosition;
             cloneLabel.text = "ECO TEMPORAL  /  " + Mathf.CeilToInt(g.CloneRemaining) + " s";

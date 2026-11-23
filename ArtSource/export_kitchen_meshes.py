@@ -2,7 +2,10 @@
 import bpy
 import os
 import struct
+import sys
 from mathutils import Vector
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from kitchen_cast import JOINTS
 
 
 def export_library(destination):
@@ -10,7 +13,11 @@ def export_library(destination):
     if not collections:
         raise ValueError("No kitchen model collections in this Blender file")
     deps = bpy.context.evaluated_depsgraph_get()
-    payload = bytearray(b"CCM2" + struct.pack("<i", len(collections)))
+    payload = bytearray(b"CCM3" + bytes([len(JOINTS)]))
+    for pivot in JOINTS.values():
+        payload.extend(struct.pack("<3f", *pivot))
+    payload.extend(struct.pack("<i", len(collections)))
+    joint_indices = {name: i for i, name in enumerate(JOINTS)}
     for collection in sorted(collections, key=lambda c: c.name):
         origin = Vector(collection["chronos_origin"])
         records = bytearray()
@@ -27,7 +34,7 @@ def export_library(destination):
                 for tri in mesh.loop_triangles:
                     mat = mesh.materials[tri.material_index]
                     records.extend(max(0, min(255, round(v*255))) for v in mat.diffuse_color[:3])
-                    records.append(obj.name.startswith("Head|"))
+                    records.append(joint_indices.get(obj.name.partition("|")[0], 0))
                     for index in tri.vertices:
                         vert = mesh.vertices[index]
                         pos = transform @ vert.co - origin

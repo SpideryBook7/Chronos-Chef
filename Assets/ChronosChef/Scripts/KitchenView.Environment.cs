@@ -13,7 +13,7 @@ namespace ChronosChef
         TMP_Text paradoxCaption;
         UnityEngine.UI.Image paradoxRim;
         GameObject paradoxBorder;
-        GameObject[][] ingredientRows;
+        UnityEngine.UI.Image clockSweep;
         void InstallEnvironment()
         {
             if (!environmentArt) return;
@@ -56,7 +56,6 @@ namespace ChronosChef
             var foreground = new GameObject("CounterForeground", typeof(RectTransform), typeof(UnityEngine.UI.RawImage));
             var foregroundRect = foreground.GetComponent<RectTransform>(); foregroundRect.SetParent(stage, false); foregroundRect.anchorMin = foregroundRect.anchorMax = Vector2.zero; foregroundRect.anchoredPosition = new Vector2(835, 612.5f); foregroundRect.sizeDelta = new Vector2(1070, 75);
             var foregroundImage = foreground.GetComponent<UnityEngine.UI.RawImage>(); foregroundImage.texture = environmentArt; foregroundImage.uvRect = new Rect(300f / 1600, 575f / 900, 1070f / 1600, 75f / 900); foregroundImage.raycastTarget = false; counterLayer = foregroundImage;
-            ingredientRows = new GameObject[3][];
             for (int i = 0; i < 3; i++)
             {
                 var card = customerLabels[i].transform.parent;
@@ -66,17 +65,12 @@ namespace ChronosChef
                 var hit = stations[5 + i].GetComponent<RectTransform>(); hit.anchoredPosition = new Vector2(630 + i * 270, 746); hit.sizeDelta = new Vector2(250, 232);
                 customerLabels[i].rectTransform.anchoredPosition = new Vector2(48, 6);
                 speciesLabels[i].rectTransform.anchoredPosition = new Vector2(0, 39); speciesLabels[i].rectTransform.sizeDelta = new Vector2(230, 18);
-                ingredientRows[i] = new GameObject[KitchenRecipe.All.Length];
-                for (int recipe = 0; recipe < ingredientRows[i].Length; recipe++)
-                {
-                    var row = new GameObject("RecipeIngredients" + recipe, typeof(RectTransform)); row.transform.SetParent(card, false); row.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -35); ingredientRows[i][recipe] = row;
-                    Food[] foods = KitchenRecipe.All[recipe].Ingredients;
-                    for (int item = 0; item < 4; item++)
-                    {
-                        var icon = new GameObject("Step" + item, typeof(RectTransform)).GetComponent<RectTransform>(); icon.SetParent(row.transform, false); icon.anchoredPosition = new Vector2(-87 + item * 58, 0); icon.localScale = Vector3.one * .3f; DrawFood(icon, foods[item]);
-                        if (item < 3) Label(row.transform, item == 0 && recipe == 1 ? "+" : ">", -66 + item * 58, 0, 20, 22, 15, Cyan, FontStyles.Bold);
-                    }
-                }
+                cardRect.sizeDelta = new Vector2(246,83);
+                rim.sizeDelta = new Vector2(250,87);
+                rim.GetComponent<UnityEngine.UI.Image>().color = C("67ADBD");
+                speciesLabels[i].rectTransform.anchoredPosition = new Vector2(44,25);
+                customerLabels[i].rectTransform.anchoredPosition = new Vector2(44,-7);
+                patienceFills[i].transform.parent.gameObject.SetActive(false);
             }
             stoveLabel.rectTransform.anchoredPosition = new Vector2(945, 428); stoveLabel.fontSize = 16;
             cookFill.transform.parent.GetComponent<RectTransform>().anchoredPosition = new Vector2(945, 446);
@@ -89,16 +83,8 @@ namespace ChronosChef
             inventory.rectTransform.anchoredPosition = new Vector2(820, 24); inventory.rectTransform.sizeDelta = new Vector2(740, 30); inventory.fontSize = 18; inventory.alignment = TextAlignmentOptions.Center;
             message.rectTransform.anchoredPosition = new Vector2(820, 159); message.rectTransform.sizeDelta = new Vector2(950, 44); message.fontSize = 19; message.alignment = TextAlignmentOptions.Center;
             Panel(stage, "MessageStrip", 820, 159, 990, 45, new Color(.025f, .04f, .10f, .85f)).SetSiblingIndex(message.transform.GetSiblingIndex());
-            var hotbarFoods = new[] { Food.RawDodo, Food.Roots, Food.ChoppedDodo, Food.CookedDodo, Food.Bread, Food.Soup };
-            int[] actions = { 0, 8, 1, 2, 3, 2 };
-            for (int i = 0; i < 6; i++)
-            {
-                int action = actions[i];
-                var b = Button(stage, "Hotbar" + i, 460 + i * 138, 85, 120, 94, C("25364C"));
-                Panel(b.transform, "IconRim", 0, 0, 114, 88, C("48637B")); Panel(b.transform, "IconFace", 0, 0, 109, 83, C("1A2B41"));
-                var icon = new GameObject("FoodIcon", typeof(RectTransform)).GetComponent<RectTransform>(); icon.SetParent(b.transform, false); icon.localScale = Vector3.one * .7f; DrawFood(icon, hotbarFoods[i]);
-                b.onClick.AddListener(() => game.SelectStation(action));
-            }
+            bottom.GetComponent<UnityEngine.UI.Image>().enabled = false;
+            inventory.gameObject.SetActive(false);
             paradoxBorder = Panel(stage, "ParadoxBadgeRim", 192, 77, 295, 113, Pink).gameObject;
             var face = Panel(stage, "ParadoxBadge", 192, 77, 289, 107, C("331B3D")); paradoxRim = face.GetComponent<UnityEngine.UI.Image>();
             var clock = Dot(face, "ClockFace", -93, 0, 86, Cyan); Dot(clock, "ClockInner", 0, 0, 75, C("DBE8EC"));
@@ -107,9 +93,7 @@ namespace ChronosChef
             var shortHand = Panel(clock, "HourHand", -8, 2, 22, 5, Ink); shortHand.localEulerAngles = new Vector3(0, 0, -45);
             paradoxCaption = Label(face, "PARADOX\nALERT", -34, 0, 170, 85, 27, Color.white, FontStyles.Bold);
             SetParadoxVisible(false);
-            timer.rectTransform.anchoredPosition = new Vector2(1463, 88); timer.rectTransform.sizeDelta = new Vector2(190, 65); timer.fontSize = 51;
-            var timerCaption = stage.Find("Text_TIEMPO DEL TURNO") as RectTransform;
-            if (timerCaption) timerCaption.anchoredPosition = new Vector2(1463,53);
+            InstallShiftClock();
             cloneLabel.rectTransform.anchoredPosition = new Vector2(830, 206);
             // Reference characters should remain above the environment and below the interaction overlays.
             chef.SetAsLastSibling(); clone.SetAsLastSibling(); feedbackLabel.transform.SetAsLastSibling();
@@ -124,10 +108,47 @@ namespace ChronosChef
             clockHand.localEulerAngles = new Vector3(0, 0, -t * (g.CloneRemaining > 0 ? 600 : 40));
             paradoxCaption.text = g.CloneRemaining > 0 ? "PARADOX\n" + Mathf.CeilToInt(g.CloneRemaining) + " s" : "PARADOX\nALERT";
             paradoxRim.color = g.CloneRemaining > 0 ? ReducedMotion ? C("7A2853") : Color.Lerp(C("331B3D"), C("9C275E"), Mathf.Abs(Mathf.Sin(t * 10))) : C("331B3D");
-            for (int i = 0; i < 3; i++)
+            clockSweep.fillAmount = Mathf.Clamp01(g.Remaining / g.LevelRules.Seconds);
+            clockSweep.color = g.Remaining < 20 ? Pink : Cyan;
+        }
+        void InstallShiftClock()
+        {
+            foreach (var title in stage.GetComponentsInChildren<TMP_Text>(true))
+                if (title.transform.parent == stage && (title.text == "CHRONOS" || title.text == "CHEF /" ||
+                    title.text == "COCINA FUERA DE TIEMPO" || title.text.Contains("PREHISTORIA NEÓN")))
+                    title.gameObject.SetActive(false);
+            stage.Find("EraBadge").gameObject.SetActive(false);
+            var dial = Dot(stage,"ShiftClock",161,795,171,C("365666"));
+            dial.SetSiblingIndex(timer.transform.GetSiblingIndex());
+            clockSweep = Dot(dial,"TimeRemaining",0,0,165,Cyan).GetComponent<UnityEngine.UI.Image>();
+            clockSweep.type = UnityEngine.UI.Image.Type.Filled;
+            clockSweep.fillMethod = UnityEngine.UI.Image.FillMethod.Radial360;
+            clockSweep.fillOrigin = (int)UnityEngine.UI.Image.Origin360.Top;
+            Dot(dial,"DialFace",0,0,156,C("142936"));
+            var watch = Dot(dial,"Chronometer",0,48,27,Cyan);
+            Dot(watch,"Inset",0,0,22,C("142936"));
+            Panel(watch,"Hand",1,4,3,11,Cyan);
+            Panel(watch,"Crown",0,16,10,4,Cyan);
+            timer.rectTransform.anchoredPosition = new Vector2(161,793);
+            timer.rectTransform.sizeDelta = new Vector2(151,57);
+            var caption = stage.Find("Text_TIEMPO DEL TURNO").GetComponent<TMP_Text>();
+            caption.rectTransform.anchoredPosition = new Vector2(161,757);
+            caption.fontSize = 12;
+            var balance = Panel(stage,"ShiftBalance",161,667,198,62,new Color(.055f,.10f,.16f,.61f));
+            balance.SetSiblingIndex(wallet.transform.GetSiblingIndex());
+            wallet.rectTransform.anchoredPosition = balance.anchoredPosition;
+            wallet.rectTransform.sizeDelta = new Vector2(183,56);
+            wallet.fontSize = 18; wallet.alignment = TextAlignmentOptions.Center;
+            var menuRect = (RectTransform)pause.transform;
+            menuRect.anchoredPosition = new Vector2(1526,835); menuRect.sizeDelta = new Vector2(86,86);
+            pause.image.sprite = circle; pause.image.type = UnityEngine.UI.Image.Type.Simple;
+            pauseLabel.gameObject.SetActive(false);
+            Dot(menuRect,"Outline",0,0,78,C("76CAD6"));
+            Dot(menuRect,"Face",0,0,72,C("1B3043"));
+            for (int i=-1;i<=1;i++)
             {
-                speciesLabels[i].fontSize = 11;
-                for (int recipe = 0; recipe < ingredientRows[i].Length; recipe++) ingredientRows[i][recipe].SetActive(g.Orders[i] == KitchenRecipe.All[recipe].Dish);
+                Dot(menuRect,"Bullet",-18,i*12,5,Cyan);
+                Panel(menuRect,"Line",5,i*12,29,4,Cyan);
             }
         }
         void SetParadoxVisible(bool visible)

@@ -170,7 +170,7 @@ namespace ChronosChef
                 else if (!ReducedMotion)
                 {
                     float flight = Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.25f, 1, receiptAge));
-                    receipt.anchoredPosition = Vector2.Lerp(receiptStart, new Vector2(1470, 769), flight) + Vector2.up * (Mathf.Sin(flight * Mathf.PI) * 38);
+                    receipt.anchoredPosition = Vector2.Lerp(receiptStart, wallet.rectTransform.anchoredPosition, flight) + Vector2.up * (Mathf.Sin(flight * Mathf.PI) * 38);
                 }
             }
             bool borrowed = g.BorrowRemaining > 0;

@@ -85,9 +85,9 @@ namespace ChronosChef
             }
             else
             {
-                timer.fontSize = 51;
+                timer.fontSize = 39;
                 goal.fontSize = 17;
-                goal.text = $"NIVEL {g.Level} · PEDIDOS {g.Served}/{g.Target} · REPUTACIÓN {g.Reputation}% · ESTRELLAS {g.Target}/{g.Target + 2}/{g.Target + 4}";
+                goal.text = $"NIVEL {g.Level} · PEDIDOS {g.Served}/{g.Target}";
             }
             if (environmentArt)
                 for (int i = 0; i < stations.Length; i++)

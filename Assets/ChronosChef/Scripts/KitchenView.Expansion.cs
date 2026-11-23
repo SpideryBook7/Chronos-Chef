@@ -26,7 +26,7 @@ namespace ChronosChef
         int shownCarry = -1, shownEra = -1;
         float pop, pulse;
         Vector2 lastChef;
-        readonly string[] speciesNames = { "GROG / CAVERNÍCOLA", "BIP-08 / ROBOT", "ZORG / GOURMET", "REX / RAPTOR" };
+        readonly string[] speciesNames = { "GROG", "BIP-08", "ZORG", "REX" };
 
         void SetupExpansion(KitchenGame owner)
         {
@@ -232,11 +232,11 @@ namespace ChronosChef
             if (g.CloneRemaining > 0) { clone.localEulerAngles = new Vector3(0, 0, Mathf.Sin(clock * 35) * 4); clone.GetComponent<CanvasGroup>().alpha = .35f + Mathf.Abs(Mathf.Sin(clock * 17)) * .35f; }
             for (int i = 0; i < 3; i++)
             {
-                burgers[i].gameObject.SetActive(g.Orders[i] == Food.Burger);
-                bowls[i].gameObject.SetActive(g.Orders[i] == Food.Soup);
-                toastOrders[i].gameObject.SetActive(g.Orders[i] == Food.Toast);
-                speciesLabels[i].text = string.IsNullOrEmpty(g.Speech[i]) ? speciesNames[g.Species[i]] : g.Speech[i];
-                speciesLabels[i].fontSize = environmentArt ? 11 : string.IsNullOrEmpty(g.Speech[i]) ? 14 : 12;
+                burgers[i].gameObject.SetActive(g.Customers[i] && g.Orders[i] == Food.Burger);
+                bowls[i].gameObject.SetActive(g.Customers[i] && g.Orders[i] == Food.Soup);
+                toastOrders[i].gameObject.SetActive(g.Customers[i] && g.Orders[i] == Food.Toast);
+                speciesLabels[i].text = g.Customers[i] ? speciesNames[g.Species[i]] : "";
+                speciesLabels[i].fontSize = 15;
                 speechLabels[i].gameObject.SetActive(false);
                 for (int j = 0; j < 4; j++)
                 {

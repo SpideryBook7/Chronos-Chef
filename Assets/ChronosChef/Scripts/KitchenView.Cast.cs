@@ -35,7 +35,7 @@ namespace ChronosChef
             Dot(knob, "Grip", 0, 1, 57, C("304F65"));
             Dot(knob, "Locator", 0, 1, 16, Cyan);
             drivePad.gameObject.AddComponent<ChefStick>().Bind(game, knob);
-            useButton = Button(stage, "ChefAction", 1287, 83, 142, 93, C("337267"));
+            useButton = Button(stage, "ChefAction", 1475, 83, 142, 93, C("337267"));
             useTarget = Label(useButton.transform, "ACÉRCATE", -69, 20, 138, 26, 14, Cyan, FontStyles.Bold);
             useCaption = Label(useButton.transform, "ACCIÓN", -69, -9, 138, 40, 20, Color.white, FontStyles.Bold);
             useButton.onClick.AddListener(game.UseNearbyStation);

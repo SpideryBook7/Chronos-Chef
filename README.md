@@ -20,7 +20,7 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 - Tostada mutante desde el nivel 3: una RAÍZ → dejar en CORTE → recoger los cubos → PAN → cliente que pida tostada. Puedes montarla mientras otro plato ocupa el fogón.
 - CONGELAR concede cinco segundos de reloj y paciencia detenidos. La cocina sigue funcionando. Cuesta 25 de anomalía y se recarga en 32 segundos de juego.
 - La palanca izquierda mueve a Ares. Al acercarte se ilumina la estación y el botón derecho indica qué puedes usar. En el Editor puedes caminar con WASD o las flechas y usar la estación con E.
-- También puedes tocar una estación o su icono inferior para caminar e interactuar al llegar. Mover la palanca recupera el control manual durante el trayecto.
+- También puedes tocar una estación para caminar e interactuar al llegar. Mover la palanca recupera el control manual durante el trayecto.
 - Toca cuerpo, cabeza o tarjeta del cliente para entregar.
 - La cuchilla trabaja sola. Puedes ir a otra estación y volver con las manos libres. La mesa también corta raíces y conserva el ingrediente al guardar la partida.
 - La comida transportada se muestra en las manos. BASURA descarta ese objeto.

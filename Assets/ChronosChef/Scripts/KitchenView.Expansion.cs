@@ -196,7 +196,7 @@ namespace ChronosChef
         }
         void Cue(string cue)
         {
-            if (cue == "paradox") announcing = true;
+
             pop = .3f; if (cue == "click") return;
             pulse = .8f; feedbackLabel.text = cue == "serve" ? "¡PEDIDO ENTREGADO!" : cue == "ready" ? "¡COMIDA LISTA!" : cue == "bad" ? "¡CUIDADO!" : "";
             feedbackLabel.color = cue == "bad" || cue == "paradox" ? Pink : Gold;
@@ -305,6 +305,6 @@ namespace ChronosChef
             if (parent == clone) art.color = new Color(1, .5f, 1, .85f);
             if (parent == chef) { carriedIcon.SetAsLastSibling(); taskLabel.transform.SetAsLastSibling(); }
         }
-        void OnDestroy() { if (flameMaterial) Destroy(flameMaterial); if (galley) Destroy(galley.gameObject); foreach (var sprite in castSprites) if (sprite) Destroy(sprite); DestroyLivingAssets(); }
+        void OnDestroy() { if(daylight) Destroy(daylight); if(driftingWorlds) Destroy(driftingWorlds); if (flameMaterial) Destroy(flameMaterial); if (galley) Destroy(galley.gameObject); foreach (var sprite in castSprites) if (sprite) Destroy(sprite); DestroyLivingAssets(); }
     }
 }

@@ -117,6 +117,11 @@ def bip(alarm):
         cube("Head|LED eye",(side*.30,-.577,2.00),(.20,.025,.078 if not alarm else .16),"6dffee" if not alarm else "ffb55b").rotation_euler.y=side*(.22 if not alarm else -.34)
         oval("Head|Side hinge",(side*.74,0,1.94),(.13,.20,.22),"766687")
         oval("Head|Cyan cap",(side*.84,0,1.94),(.052,.13,.13),"6cead7")
+    for side in (-1,1):
+        oval("Head|Brass fastener",(side*.61,-.51,2.19),(.045,.032,.045),"deb07a")
+        for k in range(3):
+            cube("Head|Cooling fin",(side*.75,-.03,1.80+k*.09),(.10,.39,.039),"48485e")
+    cube("Head|Visor reflection",(-.32,-.573,2.15),(.29,.022,.027),"698da0")
     cube("Head|Grin",(0,-.578,1.82),(.29,.025,.052),"75e8de")
     cube("Head|Aerial",(0,0,2.52),(.062,.062,.36),"867b9e")
     oval("Head|Beacon",(0,0,2.71),(.12,.12,.12),"ffac52" if alarm else "59efd4")

@@ -11,7 +11,7 @@ namespace ChronosChef
         bool fixedCustomerWindows;
         RectTransform clockHand;
         CanvasGroup alertCanvas, borderCanvas;
-        bool announcing;
+
         internal const float NoticeSeconds = 3.2f;
         UnityEngine.UI.Image paradoxRim;
         GameObject paradoxBorder;
@@ -180,8 +180,8 @@ namespace ChronosChef
             anomalyLabel.gameObject.SetActive(false);
             anomalyFill.transform.parent.gameObject.SetActive(false);
             stage.Find("Text_ERRORES = CAOS TEMPORAL").gameObject.SetActive(false);
-            paradoxBorder = Panel(stage,"ParadoxBadgeRim",68,583,4,73,Pink).gameObject;
-            var face = Panel(stage,"ParadoxBadge",239,583,336,73,new Color(.09f,.055f,.16f,.72f));
+            paradoxBorder = Panel(stage,"ParadoxBadgeRim",614,238,5,78,Pink).gameObject;
+            var face = Panel(stage,"ParadoxBadge",800,238,366,78,new Color(.09f,.055f,.16f,.72f));
             paradoxRim = face.GetComponent<UnityEngine.UI.Image>();
             var watch = Dot(face,"FracturedClock",-132,0,41,Pink);
             Dot(watch,"Dial",0,0,35,C("29243D"));
@@ -221,8 +221,8 @@ namespace ChronosChef
             }
             else if (environmentLayer.texture != texture) { environmentLayer.texture = texture; counterLayer.texture = texture; }
             float age = KitchenGame.ParadoxSeconds - g.CloneRemaining;
-            bool visible = announcing && g.Running && g.CloneRemaining > 0 && age < NoticeSeconds;
-            if (!visible) announcing = false;
+            bool visible = g.Running && g.CloneRemaining > 0 && age < NoticeSeconds;
+
             SetParadoxVisible(visible && !g.Paused);
             if (visible)
             {
@@ -273,6 +273,11 @@ namespace ChronosChef
         }
         void SetParadoxVisible(bool visible)
         {
+            if (visible && !paradoxBorder.activeSelf)
+            {
+                paradoxBorder.transform.SetAsLastSibling();
+                paradoxRim.transform.SetAsLastSibling();
+            }
             if (paradoxBorder) paradoxBorder.SetActive(visible);
             if (paradoxRim) paradoxRim.gameObject.SetActive(visible);
         }

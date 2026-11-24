@@ -55,7 +55,7 @@ def sculpt(name, oval, cube):
     }[name]
 
     def ball(joint, part, xyz, dimensions, col, tilt=0):
-        obj = oval(joint+"|"+part, xyz, dimensions, col, 10, 6)
+        obj = oval(joint+"|"+part, xyz, dimensions, col, 16 if joint=="Head" and not chef else 10, 8 if joint=="Head" and not chef else 6)
         obj.rotation_euler.y = tilt
         return obj
 
@@ -127,6 +127,10 @@ def sculpt(name, oval, cube):
             for sign in (-1,1):
                 ball("Body","Time cell",(sign*.21,.54,1.32),(.09,.07,.24),trim)
         else:
+            for side in (-1,1):
+                ball("Body","Leather baldric",(side*.14,-.48,1.26+side*.13),(.115,.048,.25),"724734",-.73)
+                ball("Body","Amber stud",(side*.14,-.535,1.26+side*.13),(.06,.027,.059),"f0b963")
+                ball("Head","Moustache",(side*.15,-.56,1.94),(.21,.11,.091),"875039",side*-.18)
             ball("Head","Beard",(0,-.26,1.86),(.58,.34,.34),hair)
             for i in range(5):
                 ball("Head","Beard lock",((i-2)*.19,-.42,1.72+.04*abs(i-2)),(.13,.17,.20),hair)
@@ -137,6 +141,10 @@ def sculpt(name, oval, cube):
             for i in range(3):
                 ball("Body","Pelt spots",((i-1)*.20,-.49,1.20+(.09 if i==1 else 0)),(.065,.038,.095),"613f3d",.4)
     elif rex:
+        for side in (-1,1):
+            ball("Head","Cheek scale",(side*.47,-.22,2.05),(.104,.08,.095),"9ed8a0")
+            ball("Body","Flight jacket lapel",(side*.23,-.44,1.39),(.105,.077,.25),"e5ca93",side*.38)
+        plate("Body","Flight badge",(.27,-.50,1.21),(.22,.055,.12),"e8ab66")
         ball("Head","Muzzle",(0,-.38,1.99),(.55,.49,.29),skin)
         ball("Head","Lower jaw",(0,-.40,1.82),(.46,.38,.12),"dade99")
         for sign in (-1,1):
@@ -148,6 +156,11 @@ def sculpt(name, oval, cube):
         for sign in (-1,1):
             ball("Head","Feeler",(sign*.30,.04,2.55),(.066,.068,.24),skin,sign*.30)
             ball("Head","Feeler lamp",(sign*.36,.04,2.75),(.12,.115,.12),trim)
+        for side in (-1,1):
+            ball("Head","Temple marking",(side*.40,-.28,2.31),(.075,.055,.10),"bada84",side*.35)
+        ball("Head","Monocle rim",(.235,-.472,2.15),(.18,.028,.18),"dbad5d")
+        ball("Head","Monocle lens",(.235,-.497,2.15),(.15,.021,.15),"719596")
+        ball("Body","Clasp stone",(0,-.548,1.43),(.065,.031,.06),"5ce0c5")
         ball("Body","Velvet lapel",(.22,-.39,1.39),(.13,.11,.29),"ae68a4",.48)
         plate("Body","Gold clasp",(0,-.50,1.43),(.18,.06,.16),trim)
     for sign in (-1,1):

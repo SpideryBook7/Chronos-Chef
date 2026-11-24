@@ -143,14 +143,14 @@ namespace ChronosChef
         {
             for(int i=0;i<3;i++) { seats[i].gameObject.SetActive(game.Customers[i]); diners[i].sprite=portraits[game.Species[i]]; }
             actor.localPosition = FloorPoint(game.ChefPosition);
-            actor.localScale = Vector3.one*chef.WorldScale;
+            actor.localScale = new Vector3(1.12f,1,1.08f)*chef.WorldScale;
             board.sharedMesh=foodMeshes[(int)game.PrepFood];
             burner.sharedMesh=foodMeshes[(int)game.StoveFood];
             hands.sharedMesh=foodMeshes[(int)game.Carry];
             if(game.Carry!=Food.Empty)
             {
                 var grip=chef.GripPoint();
-                hands.transform.localPosition=actor.localPosition+new Vector3(grip.x,grip.z,grip.y)*chef.WorldScale;
+                hands.transform.localPosition=actor.localPosition+Vector3.Scale(new Vector3(grip.x,grip.z,grip.y),actor.localScale);
             }
             var feet = actor.localPosition;
             galleySurface.SetVector(ChefFloor,new Vector4(feet.x,feet.z,0,0));
@@ -166,7 +166,7 @@ namespace ChronosChef
             return new Vector2(v.x*1600,v.y*900);
         }
         public float ScreenScale(Vector3 local) => (ScreenPoint(local+Vector3.right).x-ScreenPoint(local).x)/100f;
-        public Vector2 HandScreen(Vector3 point) => ScreenPoint(actor.localPosition + new Vector3(point.x,point.z,point.y)*actor.localScale.x);
+        public Vector2 HandScreen(Vector3 point) => ScreenPoint(actor.localPosition + Vector3.Scale(new Vector3(point.x,point.z,point.y),actor.localScale));
         Transform AddSurface(string title, Mesh mesh, Material mat)
         {
             var part = new GameObject(title,typeof(MeshFilter),typeof(MeshRenderer));

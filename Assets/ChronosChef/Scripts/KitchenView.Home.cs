@@ -15,7 +15,7 @@ namespace ChronosChef
         void BuildHome()
         {
             home = ScreenPanel("StartHome");
-            PageArt(home,"HomeStillLife");
+            AnimateArt(PageArt(home,"HomeStillLife"),false);
             Label(home.transform,"Chronos Chef",-695,200,740,130,88,C("373F35"),FontStyles.Bold,TextAlignmentOptions.Left);
             var play = HomeButton("HomePlay", "JUGAR", -22, C("475847"), Color.white, () => ScreenTransition(ShowPlanets));
             homeContinue = HomeButton("HomeContinue", "CONTINUAR TURNO", -112, C("EBDFCB"), C("343D34"), () => ScreenTransition(() => { if (!game.ResumeSavedShift()) ShowHome(); }));
@@ -53,6 +53,9 @@ namespace ChronosChef
         void UpdateHome()
         {
             AnimateArrival();
+            float phase=ReducedMotion ? 0 : Time.unscaledTime;
+            if(daylight && home.activeInHierarchy) daylight.SetFloat("_Phase",phase);
+            if(driftingWorlds && atlasPage.activeInHierarchy) driftingWorlds.SetFloat("_Phase",phase);
 
         }
         void ScreenTransition(Action next)

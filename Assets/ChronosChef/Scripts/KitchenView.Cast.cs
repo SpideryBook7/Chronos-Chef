@@ -13,8 +13,10 @@ namespace ChronosChef
 
         void BuildCastControls()
         {
-            ares = MountCharacter(chef, "Ares", new Vector2(233,233), 59);
-            echo = MountCharacter(clone, "Ares", new Vector2(233,233), 59);
+            ares = MountCharacter(chef, "Ares", new Vector2(250,250), 63);
+            echo = MountCharacter(clone, "Ares", new Vector2(250,250), 63);
+            if (ares) ares.rectTransform.localScale=new Vector3(1.12f,1,1);
+            if (echo) echo.rectTransform.localScale=new Vector3(1.12f,1,1);
             if (echo) echo.color = new Color(.73f,.46f,1);
             for (int slot = 0; slot < 3; slot++)
             for (int kind = 0; kind < 4; kind++)

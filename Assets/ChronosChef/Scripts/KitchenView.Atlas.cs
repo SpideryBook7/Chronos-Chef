@@ -23,6 +23,14 @@ namespace ChronosChef
             return image;
         }
 
+        Material daylight, driftingWorlds;
+        void AnimateArt(RawImage image, bool worlds)
+        {
+            var material = new Material(Resources.Load<Shader>("MenuAtmosphere"));
+            material.SetFloat("_Worlds",worlds ? 1 : 0);
+            image.material=material;
+            if(worlds) driftingWorlds=material; else daylight=material;
+        }
         void BuildAtlas()
         {
             arrivalPage = ScreenPanel("ArrivalPage");
@@ -34,7 +42,7 @@ namespace ChronosChef
             arrivalPage.SetActive(false);
 
             atlasPage=ScreenPanel("PlanetAtlas");
-            PageArt(atlasPage,"PlanetAtlas");
+            AnimateArt(PageArt(atlasPage,"PlanetAtlas"),true);
             for(int i=0;i<KitchenLevel.Worlds.Length;i++)
             {
                 int planet=i;

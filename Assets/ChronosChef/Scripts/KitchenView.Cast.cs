@@ -154,6 +154,7 @@ namespace ChronosChef
                 pose.bounce = Mathf.Sin(t*2.2f)*.027f;
             }
             model.Articulate(pose);
+            if(InGalley) galley.Seat(slot,model);
         }
     }
 }

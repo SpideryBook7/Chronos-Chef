@@ -11,7 +11,7 @@ namespace ChronosChef
         {
             void Place(RectTransform r,Vector2 screen,float scale)
             {
-                campaignLayout.Add(r,(r.anchoredPosition,r.localScale));
+                campaignLayout.TryAdd(r,(r.anchoredPosition,r.localScale));
                 r.anchoredPosition=screen;
                 r.localScale=Vector3.one*scale;
             }

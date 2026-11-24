@@ -36,7 +36,7 @@ namespace ChronosChef
             lens = new GameObject("Galley camera").AddComponent<Camera>();
             lens.transform.SetParent(transform,false);
             lens.transform.localRotation = Quaternion.Euler(10,0,0);
-            lens.transform.localPosition = new Vector3(0,3.25f,-15.8f);
+            lens.transform.localPosition = new Vector3(-.08f,3.96f,-15.67f);
             lens.orthographic = false;
             lens.fieldOfView = 50;
             lens.clearFlags = CameraClearFlags.SolidColor;
@@ -48,10 +48,32 @@ namespace ChronosChef
             Image.Create(); lens.targetTexture = Image; lens.aspect = 16f/9;
         }
 
+        readonly Transform[] seats=new Transform[3];
+        readonly Mesh[] guests=new Mesh[3];
+        Matrix4x4 projection;
+        public bool CameraMoved()
+        {
+            var next=lens.projectionMatrix*lens.worldToCameraMatrix;
+            if(next==projection) return false;
+            projection=next;
+            return true;
+        }
+        public void Seat(int slot, KitchenModelGraphic visitor)
+        {
+            if(!seats[slot])
+            {
+                guests[slot]=new Mesh();
+                guests[slot].MarkDynamic();
+                seats[slot]=AddSurface("Passenger "+(slot+1),guests[slot],galleySurface);
+                seats[slot].localPosition=new Vector3((slot-1)*3.9f,1.42f,3.7f);
+            }
+            visitor.PosePassenger(guests[slot]);
+        }
         public void BindChef(KitchenModelGraphic chef) => chef.SetWorldSkin(actorMesh);
 
         public void UpdateService(KitchenGame game, float modelScale)
         {
+            for(int i=0;i<3;i++) if(seats[i]) seats[i].gameObject.SetActive(game.Customers[i]);
             actor.localPosition = FloorPoint(game.ChefPosition);
             actor.localScale = Vector3.one*modelScale;
             var feet = actor.localPosition;
@@ -99,6 +121,7 @@ namespace ChronosChef
         void OnDestroy()
         {
             if(Image) { Image.Release(); Destroy(Image); }
+            foreach(var guest in guests) if(guest) Destroy(guest);
             Destroy(galleyMesh); Destroy(actorMesh); Destroy(galleySurface); Destroy(actorSurface);
         }
     }

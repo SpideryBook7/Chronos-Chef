@@ -36,6 +36,7 @@ namespace ChronosChef
             stations[3].transform.Find("AssemblyPlate").gameObject.SetActive(false);
             stations[3].transform.Find("BreadSupply").gameObject.SetActive(false);
             chef.Find("Shadow").gameObject.SetActive(false);
+            for(int i=0;i<3;i++) stage.Find("CustomerWindow"+i).gameObject.SetActive(false);
             ApplyRearLayout();
             angle = 180;
             game.BeginLevel(1);
@@ -45,6 +46,7 @@ namespace ChronosChef
         {
             if (!InGalley) return;
             RestoreRearLayout();
+            for(int i=0;i<3;i++) stage.Find("CustomerWindow"+i).gameObject.SetActive(true);
             ares.SetWorldSkin(null);
             galley.gameObject.SetActive(false);
             counterLayer.gameObject.SetActive(true);
@@ -163,6 +165,7 @@ namespace ChronosChef
             if (InGalley)
             {
                 environmentLayer.texture = galley.Image;
+                if(galley.CameraMoved()) ApplyRearLayout();
                 galley.UpdateService(g,ares.WorldScale);
                 chef.anchoredPosition = galley.FloorScreen(g.ChefPosition);
                 clone.anchoredPosition = galley.FloorScreen(g.ClonePosition);

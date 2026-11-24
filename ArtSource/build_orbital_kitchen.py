@@ -147,6 +147,31 @@ for j in range(3):
     pipe=cyl("Heat exchanger",-7.23+j*.27,5.71,1.18,.10,.10,2.36,copper)
     for z in (.34,1.55):cyl("Pipe collar",pipe.location.x,5.71,z,.14,.14,.09,navy)
 
+# Pressure shell, maintenance galleries and illuminated vaulted ceiling.
+box("Overhead shell",0,-2,6.2,18,22,.28,"39374D")
+box("Aft crown",0,6.65,5.25,18.2,.48,2.2,"474157")
+box("Forward apron",0,-9.6,-.24,19,6,.4,steel)
+for j in range(13):
+    box("Apron tread",0,-7.3-j*.38,-.035,18,.06,.018,"354452")
+for side in (-1,1):
+    box("Pressure liner",side*8.36,-2,3.1,.38,19,6.4,"49465E")
+    for j in range(7):
+        y=5-j*2.35
+        box("Recess",side*8.08,y,3.25,.18,2.06,2.65,navy)
+        box("Inspection lamp",side*7.96,y,4.28,.09,1.56,.075,mint)
+        box("Copper conduit",side*7.94,y,2.13,.14,2.35,.1,copper)
+for j in range(6):
+    y=5-j*3.05
+    box("Ceiling spar",0,y,5.98,16.6,.31,.33,steel)
+    for side in (-1,1):
+        box("Galley strip",side*3.8,y,5.78,3.1,.22,.09,"FFE0A4")
+for x in (-2.4,-2.05,2.05,2.4):
+    box("Thermal trunk",x,-2,5.91,.19,18,.23,copper)
+for j in range(13):
+    x=-7.8+j*1.3
+    box("Aft grille",x,6.31,4.58,1.14,.16,.63,navy)
+    for k in range(3): box("Louvre",x,6.19,4.39+k*.16,.95,.08,.045,steel)
+
 # Bake bevel normals and palette to one indexed, vertex-coloured runtime mesh.
 bpy.context.view_layer.update()
 verts={}; triangles=[]; data=bytearray()

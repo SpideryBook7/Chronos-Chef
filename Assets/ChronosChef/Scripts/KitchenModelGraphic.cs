@@ -145,6 +145,7 @@ namespace ChronosChef
         public void Show(string name)
         {
             if (!models.TryGetValue(name, out var next) || next == model) return;
+            modelName3D=name;
             model = next;
             useSkin = name == "Ares";
             if (useSkin) LoadSkin();
@@ -216,6 +217,46 @@ namespace ChronosChef
                 depthOffsets[i] = Vector3.Dot(transform.GetColumn(3), cameraDirection);
             }
         }
+        Vector3[] positions3D, normals3D;
+        Model bakedModel;
+        internal void PosePassenger(Mesh mesh)
+        {
+            PrepareTransforms();
+            bool rebuild=bakedModel!=model || mesh.name!=modelName3D;
+            if(rebuild)
+            {
+                bakedModel=model;
+                mesh.Clear();
+                positions3D=new Vector3[model.corners.Length];
+                normals3D=new Vector3[positions3D.Length];
+            }
+            for(int i=0;i<positions3D.Length;i++)
+            {
+                var c=model.corners[i];
+                var p=transforms[c.joint].MultiplyPoint3x4(c.point);
+                var n=transforms[c.joint].MultiplyVector(c.normal);
+                positions3D[i]=new Vector3(p.x,p.z-model.middle,p.y)*model.fit*2.65f;
+                normals3D[i]=new Vector3(n.x,n.z,n.y);
+            }
+            mesh.vertices=positions3D;
+            mesh.normals=normals3D;
+            if(rebuild)
+            {
+                int[] indices=new int[model.faces.Length*3];
+                for(int i=0;i<model.faces.Length;i++)
+                {
+                    var f=model.faces[i];
+                    indices[3*i]=f.a;
+                    indices[3*i+1]=f.c;
+                    indices[3*i+2]=f.b;
+                }
+                mesh.triangles=indices;
+                mesh.colors32=Array.ConvertAll(model.corners,c=>(Color32)c.pigment);
+                mesh.name=modelName3D;
+            }
+            mesh.RecalculateBounds();
+        }
+        string modelName3D;
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear(); if (model == null) return;

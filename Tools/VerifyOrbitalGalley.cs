@@ -40,8 +40,19 @@ try
     var camera = room.GetComponentInChildren<UnityEngine.Camera>();
     var cameraPosition = camera.transform.position;
     var cameraRotation = camera.transform.rotation;
-    if (camera.orthographic || game.Facing != UnityEngine.Vector2.up || UnityEngine.Mathf.Abs(camera.transform.localPosition.x) > .001f)
+    if (camera.orthographic || game.Facing != UnityEngine.Vector2.up || UnityEngine.Mathf.Abs(camera.transform.localPosition.x+.08f) > .001f)
         throw new System.Exception("Trial did not open with a centered rear perspective");
+    await Wait(()=>room.transform.Find("Passenger 1")!=null,"Missing world passenger");
+    var passenger=room.transform.Find("Passenger 1");
+    var seat=passenger.position;
+    var projected=camera.WorldToViewportPoint(seat);
+    camera.transform.position+=UnityEngine.Vector3.right;
+    await System.Threading.Tasks.Task.Delay(160);
+    if(passenger.position!=seat || camera.WorldToViewportPoint(seat)==projected ||
+        passenger.GetComponent<UnityEngine.MeshFilter>().sharedMesh.vertexCount==0)
+        throw new System.Exception("Passenger is not seated in world space");
+    camera.transform.position=cameraPosition;
+    await System.Threading.Tasks.Task.Delay(160);
     var actor=room.transform.Find("Ares");
     var start=actor.localPosition;
     game.SetStick(UnityEngine.Vector2.left);

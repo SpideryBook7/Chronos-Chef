@@ -181,7 +181,7 @@ namespace ChronosChef
             var handle = Dot(handleArea, "Handle", 0, 0, 38, Gold); handle.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
             var slider = track.gameObject.AddComponent<UnityEngine.UI.Slider>(); slider.fillRect = fill; slider.handleRect = handle; slider.targetGraphic = handle.GetComponent<UnityEngine.UI.Image>(); slider.minValue = 0; slider.maxValue = 1; slider.value = value; slider.onValueChanged.AddListener(changed);
         }
-        public void ShowMenu(bool show) { if (!menu) return; if (home) home.SetActive(false); menu.SetActive(show); if (show) { LeaveGalleyTrial(); SetParadoxVisible(false); menu.transform.SetAsLastSibling(); RefreshHub(); } if (pauseOverlay) pauseOverlay.SetActive(false); if (!show) { recipes.SetActive(false); settings.SetActive(false); } }
+        public void ShowMenu(bool show) { if (!menu) return; if (home) home.SetActive(false); menu.SetActive(show); if (show) { selectedPlanet = game.Level>5 ? 1 : 0; LeaveGalleyTrial(); SetParadoxVisible(false); menu.transform.SetAsLastSibling(); RefreshHub(); } if (pauseOverlay) pauseOverlay.SetActive(false); if (!show) { recipes.SetActive(false); settings.SetActive(false); } }
         public void MenuNotice(string text) { if (menuMessage) menuMessage.text = text; audioFeedback?.Play("click"); }
         void RefreshHub()
         {

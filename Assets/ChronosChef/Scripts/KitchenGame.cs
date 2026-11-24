@@ -79,7 +79,7 @@ namespace ChronosChef
             Application.runInBackground = true; Progress ??= new KitchenProgress();
             AudioListener.pause = false;
             if (Application.isMobilePlatform) { Application.targetFrameRate = 60; QualitySettings.vSyncCount = 0; }
-            booting = true; view.Bind(this); ResetShift(); GoToMenu(); view.ShowHome(); booting = false;
+            booting = true; view.Bind(this); ResetShift(); GoToMenu(); view.ShowArrival(); booting = false;
         }
         public void BeginLevel(int level, bool guided = false)
         {

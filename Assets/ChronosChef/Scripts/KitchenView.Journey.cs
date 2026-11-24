@@ -12,8 +12,8 @@ namespace ChronosChef
         UnityEngine.UI.Image[,] routeStars;
         static readonly Vector2[] RouteNodes =
         {
-            new Vector2(180,410), new Vector2(310,575), new Vector2(500,510), new Vector2(650,635), new Vector2(720,405),
-            new Vector2(900,410), new Vector2(1010,590), new Vector2(1200,510), new Vector2(1360,635), new Vector2(1430,400)
+            new Vector2(205,385), new Vector2(495,520), new Vector2(795,390), new Vector2(1090,540), new Vector2(1385,405),
+            new Vector2(205,385), new Vector2(495,520), new Vector2(795,390), new Vector2(1090,540), new Vector2(1385,405)
         };
         void BuildJourneyMap()
         {
@@ -24,10 +24,7 @@ namespace ChronosChef
                 var image = background.GetComponent<UnityEngine.UI.RawImage>(); image.texture = journeyArt; image.raycastTarget = false;
             }
             Panel(menu.transform, "RouteHeader", 0, 370, 1560, 145, new Color(.025f,.035f,.10f,.78f));
-            Label(menu.transform, "RUTAS DEL ESPACIO-TIEMPO", -480, 385, 960, 70, 46, Cyan, FontStyles.Bold);
-            Label(menu.transform, "Elige un portal. Evita servirle el almuerzo a tu abuelo.", -500, 330, 1000, 35, 18, C("BED8EC"));
-            Label(menu.transform, "MUNDO 1 / TIERRA", -690, 270, 590, 42, 24, Gold, FontStyles.Bold);
-            Label(menu.transform, "II / VAPOR Y PARADOJAS", 110, 270, 590, 42, 24, Cyan, FontStyles.Bold);
+            planetTitle=Label(menu.transform, "TIERRA", -340, 365, 680, 72, 46, Cyan, FontStyles.Bold);
             menuBank.rectTransform.anchoredPosition = new Vector2(610,365); menuBank.rectTransform.sizeDelta = new Vector2(280,80); menuBank.alignment = TextAlignmentOptions.Right; menuBank.fontSize = 18;
             routeLines = new UnityEngine.UI.Image[9];
             for (int i = 0; i < 9; i++)
@@ -68,10 +65,11 @@ namespace ChronosChef
         void RefreshJourneyMap()
         {
             if(portalAuras==null)return;var p=game.Progress;
+            ApplyPlanet();
             menuBank.text=$"CRÉDITOS {p.Bank}\nGEMAS {p.Gems}";
             for(int i=0;i<10;i++)
             {
-                bool open=i+1<=p.Unlocked&&(i<5||p.Era==2);levelTexts[i].text=(i+1).ToString();
+                bool open=i+1<=p.Unlocked&&(i<5||p.Era==2);levelTexts[i].text=(i%5+1).ToString();
                 levelTexts[i].color=open?Color.white:C("7A8BA6");routeNames[i].color=open?Color.white:C("90A1BC");
                 portalAuras[i].GetComponent<UnityEngine.UI.Image>().color=open?(i<5?Gold:Cyan):C("3A4662");
                 for(int star=0;star<3;star++)routeStars[i,star].color=star<p.BestStars(i+1)?Gold:C("42516B");

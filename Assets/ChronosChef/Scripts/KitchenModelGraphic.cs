@@ -30,6 +30,7 @@ namespace ChronosChef
             public Corner[] corners;
             public float fit, middle;
             public int jointCount = 1;
+            public int[] neighbours;
         }
         struct DrawFace : IComparable<DrawFace>
         {
@@ -75,6 +76,31 @@ namespace ChronosChef
             point = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle()),
             normal = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle())
         };
+        // Match geometry across colour and normal seams so only exposed contours get coverage.
+        static void BuildAdjacency(Model source)
+        {
+            var edges=new Dictionary<(Vector3,Vector3,byte),int>();
+            source.neighbours=new int[source.faces.Length*3];
+            Array.Fill(source.neighbours,-1);
+            for(int i=0;i<source.faces.Length;i++)
+            {
+                var face=source.faces[i];
+                Match(i*3,face.a,face.b,face.joint);
+                Match(i*3+1,face.b,face.c,face.joint);
+                Match(i*3+2,face.c,face.a,face.joint);
+            }
+            void Match(int edge,int start,int end,byte joint)
+            {
+                var a=source.corners[start].point;
+                var b=source.corners[end].point;
+                if(edges.TryGetValue((b,a,joint),out int other))
+                {
+                    source.neighbours[edge]=other/3;
+                    source.neighbours[other]=edge/3;
+                }
+                else edges[(a,b,joint)]=edge;
+            }
+        }
         static void LoadLibrary()
         {
             if (models != null) return;
@@ -107,6 +133,7 @@ namespace ChronosChef
                     entry.faces[i] = face;
                 }
                 entry.corners = corners.ToArray();
+                BuildAdjacency(entry);
                 int IndexCorner(Color32 pigment, byte joint)
                 {
                     var corner = ReadCorner(reader);
@@ -303,10 +330,38 @@ namespace ChronosChef
             float scale = Mathf.Min(rect.width, rect.height) * model.fit;
             Array.Clear(vertexMap, 0, model.corners.Length);
             var tint = color;
+            float feather=.85f/Mathf.Max(.1f,rectTransform.lossyScale.x);
             for (int i = 0; i < visible; i++)
             {
                 var face = model.faces[order[i].index];
-                vh.AddTriangle(VertexIndex(face.a), VertexIndex(face.b), VertexIndex(face.c));
+                int a=VertexIndex(face.a), b=VertexIndex(face.b), c=VertexIndex(face.c);
+                vh.AddTriangle(a,b,c);
+                int edge=order[i].index*3;
+                SmoothEdge(edge,a,b,c);
+                SmoothEdge(edge+1,b,c,a);
+                SmoothEdge(edge+2,c,a,b);
+            }
+            void SmoothEdge(int edge,int a,int b,int inside)
+            {
+                int neighbour=model.neighbours[edge];
+                if(neighbour>=0)
+                {
+                    var face=model.faces[neighbour];
+                    if(Vector3.Dot(face.normal,viewDirections[face.joint])>0) return;
+                }
+                UIVertex start=default,end=default,third=default;
+                vh.PopulateUIVertex(ref start,a);
+                vh.PopulateUIVertex(ref end,b);
+                vh.PopulateUIVertex(ref third,inside);
+                var delta=end.position-start.position;
+                var offset=new Vector3(-delta.y,delta.x,0).normalized*feather;
+                if(Vector3.Dot(offset,third.position-start.position)>0) offset=-offset;
+                start.position+=offset; end.position+=offset;
+                start.color.a=0; end.color.a=0;
+                int outer=vh.currentVertCount;
+                vh.AddVert(start); vh.AddVert(end);
+                vh.AddTriangle(a,b,outer+1); vh.AddTriangle(a,outer+1,outer);
+
             }
             int VertexIndex(int index)
             {

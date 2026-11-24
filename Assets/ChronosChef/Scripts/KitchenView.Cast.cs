@@ -67,7 +67,7 @@ namespace ChronosChef
             if (ares && castClock >= nextChefFrame)
             {
                 nextChefFrame = castClock + 1f/30;
-                float phase = g.Travelled * .053f;
+                float phase = g.Travelled * .032f;
                 float swing = Mathf.Sin(phase) * gait;
                 float left = Mathf.Max(0, Mathf.Cos(phase)) * gait, right = Mathf.Max(0, -Mathf.Cos(phase)) * gait;
                 float reach = Mathf.Sin(Mathf.PI * Mathf.Clamp01(g.GestureRemaining / .46f));
@@ -84,7 +84,7 @@ namespace ChronosChef
                     rightElbow = -13 - carryBlend*38 - (chopping ? 38-chop*26 : 0),
                     nod = breath*2 + reach*7 + chop*7, lean = gait*6 + reach*6,
                     twist = swing * (ReducedMotion ? 0 : 5),
-                    bounce = ReducedMotion ? 0 : .018f*breath + Mathf.Abs(swing)*.095f
+                    bounce = ReducedMotion ? 0 : .018f*breath + Mathf.Abs(swing)*.055f
                 };
                 if (g.ServingGesture) pose.leftElbow -= reach*22;
                 if (tending)
@@ -93,7 +93,7 @@ namespace ChronosChef
                     pose.rightElbow -= 29 + Mathf.Cos(castClock*5)*12;
                     pose.twist += Mathf.Sin(castClock*5)*5;
                 }
-                pose.gather = carryBlend*17 + reach*6;
+                pose.gather = Mathf.Lerp(27f - gait*5f + breath*.8f,17f,carryBlend) + reach*6;
                 pose.tool = chopping ? KitchenModelGraphic.HandTool.Knife : tending ? KitchenModelGraphic.HandTool.Ladle : KitchenModelGraphic.HandTool.None;
                 ares.Pose(angle); ares.Articulate(pose);
                 chef.localScale = Vector3.one; chef.localEulerAngles = Vector3.zero;

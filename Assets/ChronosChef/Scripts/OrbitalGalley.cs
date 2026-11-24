@@ -27,6 +27,7 @@ namespace ChronosChef
             galleyMesh = LoadGeometry();
             AddSurface("Orbital service deck", galleyMesh, galleySurface);
 
+            BuildFoodDisplays();
             actorSurface = new Material(shader) { mainTexture = chef.mainTexture };
             actorMesh = new Mesh { name = "Posed Ares" };
             actorMesh.MarkDynamic();
@@ -69,13 +70,50 @@ namespace ChronosChef
             }
             visitor.PosePassenger(guests[slot]);
         }
+        readonly Mesh[] foodMeshes=new Mesh[System.Enum.GetValues(typeof(Food)).Length];
+        MeshFilter board, burner, hands;
+        Material foodMaterial;
+
+        MeshFilter FoodDisplay(string title, Food food, Vector3 position, float size)
+        {
+            var part=AddSurface(title,foodMeshes[(int)food],foodMaterial);
+            part.localPosition=position;
+            part.localScale=Vector3.one*size;
+            return part.GetComponent<MeshFilter>();
+        }
+
+        void BuildFoodDisplays()
+        {
+            foodMaterial=new Material(galleySurface);
+            for(int i=1;i<foodMeshes.Length;i++) foodMeshes[i]=KitchenModelGraphic.CreateFoodMesh((Food)i);
+            for(int i=0;i<3;i++)
+            {
+                float offset=(i-1)*.43f;
+                float stagger=i==1 ? .34f : -.24f;
+                FoodDisplay("Marbled dodo",Food.RawDodo,new Vector3(-6.15f+offset,.75f,-3.90f+stagger),.40f);
+                FoodDisplay("Quantum radish",Food.Root,new Vector3(-5.93f+offset,.76f,-.50f+stagger),.48f);
+                FoodDisplay("Brioche",Food.Bread,new Vector3(6.43f+offset,1.00f,-1.27f+stagger),.46f);
+            }
+            board=FoodDisplay("Preparation",Food.Empty,new Vector3(-1.30f,.86f,.08f),.61f);
+            burner=FoodDisplay("Cooking",Food.Empty,new Vector3(1.45f,1.04f,.03f),.63f);
+            hands=FoodDisplay("In hand",Food.Empty,Vector3.zero,.43f);
+        }
+
         public void BindChef(KitchenModelGraphic chef) => chef.SetWorldSkin(actorMesh);
 
-        public void UpdateService(KitchenGame game, float modelScale)
+        public void UpdateService(KitchenGame game, KitchenModelGraphic chef)
         {
             for(int i=0;i<3;i++) if(seats[i]) seats[i].gameObject.SetActive(game.Customers[i]);
             actor.localPosition = FloorPoint(game.ChefPosition);
-            actor.localScale = Vector3.one*modelScale;
+            actor.localScale = Vector3.one*chef.WorldScale;
+            board.sharedMesh=foodMeshes[(int)game.PrepFood];
+            burner.sharedMesh=foodMeshes[(int)game.StoveFood];
+            hands.sharedMesh=foodMeshes[(int)game.Carry];
+            if(game.Carry!=Food.Empty)
+            {
+                var grip=chef.GripPoint();
+                hands.transform.localPosition=actor.localPosition+new Vector3(grip.x,grip.z,grip.y)*chef.WorldScale;
+            }
             var feet = actor.localPosition;
             galleySurface.SetVector(ChefFloor,new Vector4(feet.x,feet.z,0,0));
             if (game.Running && !game.Paused) burnerPhase += Time.deltaTime;
@@ -122,6 +160,8 @@ namespace ChronosChef
         {
             if(Image) { Image.Release(); Destroy(Image); }
             foreach(var guest in guests) if(guest) Destroy(guest);
+            foreach(var food in foodMeshes) if(food) Destroy(food);
+            Destroy(foodMaterial);
             Destroy(galleyMesh); Destroy(actorMesh); Destroy(galleySurface); Destroy(actorSurface);
         }
     }

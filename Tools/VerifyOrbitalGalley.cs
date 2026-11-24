@@ -28,7 +28,12 @@ void Tap(string name)
 try
 {
     game.Progress = isolated;
-    game.BeginLevel(1); game.Interact(ChronosChef.Station.Roots); game.GoToMenu(); view.ShowHome();
+    game.BeginLevel(1);
+    var kitchen=UnityEngine.Object.FindFirstObjectByType<ChronosChef.OrbitalGalley>();
+    if(!kitchen || game.Progress!=isolated) throw new System.Exception("Campaign kitchen missing");
+    var stock=kitchen.transform.Find("Brioche").GetComponent<UnityEngine.MeshFilter>().sharedMesh;
+    if(stock.name!="Bread" || stock.vertexCount<100) throw new System.Exception("Bakery model missing");
+    game.Interact(ChronosChef.Station.Roots); game.GoToMenu(); view.ShowHome();
     saved=UnityEngine.JsonUtility.ToJson(isolated.LoadSession());
     await System.Threading.Tasks.Task.Delay(180);
     Tap("TryOrbitalGalley");
@@ -64,6 +69,7 @@ try
     Tap("PlasmaStove"); await Wait(()=>game.StoveFood==ChronosChef.Food.CookedDodo,"Cook");
     Tap("PlasmaStove"); await Wait(()=>game.Carry==ChronosChef.Food.CookedDodo,"Plate");
     Tap("Assembly"); await Wait(()=>game.Carry==ChronosChef.Food.Burger,"Assemble");
+    await Wait(()=>room.transform.Find("In hand").GetComponent<UnityEngine.MeshFilter>().sharedMesh?.name=="Burger","Missing 3D burger");
     Tap("ServeCustomer0"); await Wait(()=>game.Served==1,"Serve");
     if (camera.transform.position != cameraPosition || camera.transform.rotation != cameraRotation)
         throw new System.Exception("Camera moved with chef");

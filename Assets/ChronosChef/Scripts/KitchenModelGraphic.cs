@@ -217,6 +217,27 @@ namespace ChronosChef
                 depthOffsets[i] = Vector3.Dot(transform.GetColumn(3), cameraDirection);
             }
         }
+        internal static Mesh CreateFoodMesh(Food food)
+        {
+            LoadLibrary();
+            var source=models[food.ToString()];
+            var mesh=new Mesh { name=food.ToString() };
+            mesh.vertices=Array.ConvertAll(source.corners,c=>new Vector3(c.point.x,c.point.z,c.point.y));
+            mesh.normals=Array.ConvertAll(source.corners,c=>new Vector3(c.normal.x,c.normal.z,c.normal.y));
+            mesh.colors32=Array.ConvertAll(source.corners,c=>(Color32)c.pigment);
+            var indices=new int[source.faces.Length*3];
+            for(int i=0;i<source.faces.Length;i++)
+            {
+                var face=source.faces[i];
+                indices[i*3]=face.a;
+                indices[i*3+1]=face.c;
+                indices[i*3+2]=face.b;
+            }
+            mesh.triangles=indices;
+            mesh.UploadMeshData(true);
+            return mesh;
+        }
+
         Vector3[] positions3D, normals3D;
         Model bakedModel;
         internal void PosePassenger(Mesh mesh)

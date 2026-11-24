@@ -18,12 +18,19 @@ namespace ChronosChef
         UnityEngine.UI.Image clockSweep;
         OrbitalGalley galley;
         KitchenProgress campaignProgress;
-        internal bool InGalley => campaignProgress != null;
+        internal bool IsTrial => campaignProgress != null;
+        internal bool InGalley => galley && galley.gameObject.activeSelf;
 
         void StartGalleyTrial()
         {
             campaignProgress = game.Progress;
             game.Progress = new KitchenProgress("ChronosChef.OrbitalTrial.");
+            game.BeginLevel(1);
+        }
+        internal void SetLevelEnvironment(int level)
+        {
+            if(level!=1) { LeaveGalleyTrial(); return; }
+            if(InGalley) return;
             if (!galley)
             {
                 galley = new GameObject("Orbital Galley Trial").AddComponent<OrbitalGalley>();
@@ -39,7 +46,6 @@ namespace ChronosChef
             for(int i=0;i<3;i++) stage.Find("CustomerWindow"+i).gameObject.SetActive(false);
             ApplyRearLayout();
             angle = 180;
-            game.BeginLevel(1);
         }
 
         void LeaveGalleyTrial()
@@ -56,6 +62,7 @@ namespace ChronosChef
             chef.Find("Shadow").gameObject.SetActive(true);
             environmentLayer.texture = game.Level > 5 && steampunkArt ? steampunkArt : environmentArt;
             counterLayer.texture = environmentLayer.texture;
+            if(!IsTrial) return;
             game.Progress.ClearSession();
             game.Progress = campaignProgress;
             campaignProgress = null;
@@ -166,7 +173,7 @@ namespace ChronosChef
             {
                 environmentLayer.texture = galley.Image;
                 if(galley.CameraMoved()) ApplyRearLayout();
-                galley.UpdateService(g,ares.WorldScale);
+                galley.UpdateService(g,ares);
                 chef.anchoredPosition = galley.FloorScreen(g.ChefPosition);
                 clone.anchoredPosition = galley.FloorScreen(g.ClonePosition);
             }

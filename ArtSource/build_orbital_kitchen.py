@@ -87,19 +87,18 @@ for k in range(4):
 for x,y,label,accent in [(-6.15,-3.90,"Dodo","E98078"),(-5.93,-.50,"Roots",mint)]:
     top=bench(label+" chiller",x,y,1.96,1.75,.58,accent)
     box("Cold well",x,y,top+.03,1.63,1.38,.075,navy)
-    for j in range(4):
-        xx=x-.43+(j%2)*.72; yy=y-.34+(j//2)*.60
-        if label=="Dodo":
-            orb("Cutlet",xx,yy,top+.13,.43,.27,.12,"C8656B")
-            orb("Bone",xx+.14,yy,top+.23,.08,.065,.025,"FADAB0")
-        else:
-            orb("Radish",xx,yy,top+.19,.23,.22,.25,"B465AC")
-            for side in (-1,1):
-                leaf=orb("Leaf",xx+side*.09,yy,top+.44,.08,.11,.18,"70AE70");leaf.rotation_euler.y=side*.45
+    for side in (-1,1):
+        box("Chiller frost rail",x+side*.85,y,top+.12,.055,1.42,.10,"70CDC8")
 top=bench("Bakery",6.43,-1.27,2.05,2.15,.70,amber)
-for j in range(3):
-    orb("Brioche",6.0+j*.38,-1.22+j%2*.37,top+.19,.39,.32,.24,"E7A754")
-    for k in range(3): orb("Sesame",5.90+j*.38+k*.065,-1.22+j%2*.37,top+.41,.033,.018,.018,"F7D797")
+box("Baker tray",6.43,-1.27,top+.06,1.88,1.75,.12,"AE7355")
+for j in range(8):
+    box("Cooling rack",5.64+j*.22,-1.27,top+.14,.046,1.52,.05,"E5C395")
+box("Extractor canopy",1.45,.1,4.5,2.12,1.52,.31,steel,.12)
+box("Extractor intake",1.45,.1,4.32,1.85,1.27,.10,navy)
+for j in range(7):
+    box("Extractor filter",.78+j*.22,.1,4.25,.07,.99,.045,"7BB4B1")
+cyl("Extractor flue",1.45,.1,5.25,.28,.28,1.38,copper)
+for h in (4.78,5.18,5.59): cyl("Flue collar",1.45,.1,h,.31,.31,.08,steel)
 binTop=bench("Reclaimer",-6.52,-6.28,1.64,1.65,.54,mint)
 cyl("Waste chute",-6.52,-6.28,binTop+.026,.62,.65,.07,navy)
 top=bench("Cashier",6.5,-5.92,1.94,1.55,.63,copper)

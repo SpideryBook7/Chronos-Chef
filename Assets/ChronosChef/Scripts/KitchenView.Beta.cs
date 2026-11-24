@@ -73,7 +73,7 @@ namespace ChronosChef
         {
             var next = results.transform.Find("NextLevel"); if (!next) return;
             var caption = next.GetComponentInChildren<TMP_Text>();
-            caption.text = InGalley ? "REPETIR PRUEBA" : g.IsTrainingResult ? "INICIAR TURNO" : g.Level == 10 ? "CAMPAÑA COMPLETA" : g.Level + 1 > g.Progress.Unlocked || g.Level == 5 && g.Progress.Era < 2 ? "VOLVER AL PORTAL" : "SIGUIENTE NIVEL";
+            caption.text = IsTrial ? "REPETIR PRUEBA" : g.IsTrainingResult ? "INICIAR TURNO" : g.Level == 10 ? "CAMPAÑA COMPLETA" : g.Level + 1 > g.Progress.Unlocked || g.Level == 5 && g.Progress.Era < 2 ? "VOLVER AL PORTAL" : "SIGUIENTE NIVEL";
         }
         void RefreshBeta(KitchenGame g)
         {

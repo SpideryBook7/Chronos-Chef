@@ -50,7 +50,7 @@ namespace ChronosChef
             timer.color = g.Remaining < 20 ? Pink : Color.white;
             message.text = g.TutorialActive ? g.TutorialInstruction : g.Paused ? "EN PAUSA · Toca CONTINUAR para volver a la cocina." : g.Message;
             inventory.text = KitchenRules.FoodNames[(int)g.Carry];
-            carriedIcon.gameObject.SetActive(g.Carry != Food.Empty);
+            carriedIcon.gameObject.SetActive(!InGalley && g.Carry != Food.Empty);
             anomalyFill.fillAmount = g.Anomaly / 100;
             anomalyLabel.text = $"ANOMALÍA  {g.Anomaly:0}%";
             cookFill.fillAmount = g.StoveFood == Food.Empty ? 0 : Mathf.Clamp01(g.CookTime / g.CookDuration);

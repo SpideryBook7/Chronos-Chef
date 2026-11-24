@@ -104,7 +104,7 @@ namespace ChronosChef
             results.transform.SetAsLastSibling();
             // Results now include navigation to the next unlocked level and the kitchen hub.
             var next = Button(results.transform, "NextLevel", 235, -280, 300, 52, Cyan); Label(next.transform, "SIGUIENTE NIVEL", -145, 0, 290, 45, 19, Ink, FontStyles.Bold);
-            next.onClick.AddListener(() => { if (InGalley || game.IsTrainingResult) { game.BeginLevel(1); return; } if (game.Level == 10) { game.GoToMenu(); return; } int level = game.Level + 1; if (level > game.Progress.Unlocked || level > 5 && game.Progress.Era < 2) game.GoToMenu(); else game.BeginLevel(level); });
+            next.onClick.AddListener(() => { if (IsTrial || game.IsTrainingResult) { game.BeginLevel(1); return; } if (game.Level == 10) { game.GoToMenu(); return; } int level = game.Level + 1; if (level > game.Progress.Unlocked || level > 5 && game.Progress.Era < 2) game.GoToMenu(); else game.BeginLevel(level); });
             var hub = Button(results.transform, "ResultsHub", -235, -280, 300, 52, C("34465D")); Label(hub.transform, "VOLVER AL PORTAL", -145, 0, 290, 45, 19, Color.white, FontStyles.Bold); hub.onClick.AddListener(game.GoToMenu);
             resultText.fontSize = 27; resultText.rectTransform.anchoredPosition = new Vector2(0, 60); resultText.rectTransform.sizeDelta = new Vector2(810, 365);
             restart.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -175);
@@ -219,7 +219,7 @@ namespace ChronosChef
             feedbackLabel.gameObject.SetActive(pulse > 0); feedbackLabel.rectTransform.anchoredPosition = new Vector2(865, 410 + (1 - pulse) * 35); feedbackLabel.alpha = Mathf.Min(1, pulse * 3);
             for (int i = 0; i < workSparks.Length; i++) { workSparks[i].gameObject.SetActive(pulse > .25f); if (pulse > .25f) workSparks[i].anchoredPosition = chef.anchoredPosition + new Vector2(Mathf.Cos(i * 2.4f), Mathf.Sin(i * 2.4f)) * ((.85f - pulse) * 170 + 15); }
             for (int i = 0; i < routeDots.Length; i++) { bool visible = i < g.RoutePreview.Count; routeDots[i].gameObject.SetActive(visible); if (visible) routeDots[i].anchoredPosition = InGalley ? galley.FloorScreen(KitchenRules.Position(g.RoutePreview[i])) : KitchenRules.Position(g.RoutePreview[i]); }
-            for (int i = 1; i < stoveFoods.Length; i++) stoveFoods[i].gameObject.SetActive((int)g.StoveFood == i);
+            for (int i = 1; i < stoveFoods.Length; i++) stoveFoods[i].gameObject.SetActive(!InGalley && (int)g.StoveFood == i);
             float clock = g.Running && !g.Paused ? Time.time : 0;
             for (int i = 0; i < steam.Length; i++)
             {

@@ -176,7 +176,7 @@ namespace ChronosChef
             borrowFill.fillAmount = 1 - g.BorrowCooldown / KitchenGame.BorrowRecharge;
             borrowDial.localEulerAngles = new Vector3(0, 0, ReducedMotion ? -30 : -360 * borrowFill.fillAmount - 30);
             if (borrowed) timer.color = Cyan;
-            for (int i = 1; i < prepIcons.Length; i++) prepIcons[i].gameObject.SetActive((int)g.PrepFood == i);
+            for (int i = 1; i < prepIcons.Length; i++) prepIcons[i].gameObject.SetActive(!InGalley && (int)g.PrepFood == i);
             prepReadout.SetActive(g.PrepFood != Food.Empty);
             prepFill.transform.parent.gameObject.SetActive(g.PrepFood != Food.Empty);
             prepFill.fillAmount = g.IsWorking ? g.WorkProgress : g.PrepFood == Food.Empty ? 0 : 1;

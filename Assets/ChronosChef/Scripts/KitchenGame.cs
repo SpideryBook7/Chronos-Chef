@@ -83,7 +83,7 @@ namespace ChronosChef
         public void BeginLevel(int level, bool guided = false)
         {
             if (level < 1 || level > Progress.Unlocked || level > 5 && Progress.Era < 2) { view.MenuNotice("Este portal todavía está cerrado."); return; }
-            Level = level; ResetShift(); view.ShowMenu(false);
+            Level = level; view.SetLevelEnvironment(level); ResetShift(); view.ShowMenu(false);
             if (level == 3) Say("¡TOSTADA MUTANTE! Una raíz > corte > recoger > pan. El ojo es comestible.");
             if (guided) { TutorialActive = true; TutorialStep = 0; view.Refresh(this); }
         }

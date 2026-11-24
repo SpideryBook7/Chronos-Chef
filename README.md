@@ -26,9 +26,9 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 - La comida transportada se muestra en las manos. BASURA descarta ese objeto.
 - La registradora abre el recetario ilustrado y pausa el turno. ENTENDIDO lo reanuda directamente. Puedes elegir receta y paso o dejar que la demostración avance sola.
 
-## Cocina orbital de prueba
+## Cocina orbital del nivel 1
 
-En la portada, **PROBAR COCINA 3D** abre un turno con las reglas del nivel 1. La cubierta, la barra, las máquinas y Ares se renderizan con una cámara fija en perspectiva, centrada detrás del punto de inicio de Ares y con una inclinación de 10° hacia la barra. Los pedidos, los clientes y los controles usan la interfaz de la cocina original. Para salir, usa **Pausa → Portal y mejoras**. Los créditos y el guardado de esta prueba usan su propio perfil.
+En **Jugar → Nivel 1**, Ares atiende el turno de campaña en la cubierta orbital. Los clientes y los alimentos ocupan posiciones en el mundo 3D. La mesa de corte, el fogón y las manos de Ares muestran la malla del ingrediente según su preparación. **Probar cocina 3D** abre el mismo escenario con un guardado de práctica independiente.
 
 ![Turno en la cocina orbital](Docs/media/cocina-orbital.png)
 

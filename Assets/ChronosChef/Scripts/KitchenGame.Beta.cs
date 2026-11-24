@@ -58,7 +58,7 @@ namespace ChronosChef
         {
             var s = Progress.LoadSession(); if (s == null) return false;
             ResetMovement();
-            TutorialActive = IsTrainingResult = false; Level = s.level;
+            TutorialActive = IsTrainingResult = false; Level = s.level; view.SetLevelEnvironment(Level);
             Carry = s.carry; StoveFood = s.stove; PrepFood = s.prep; Remaining = s.remaining; Anomaly = s.anomaly; CloneRemaining = s.cloneTime;
             BorrowRemaining = s.borrowRemaining; BorrowCooldown = s.borrowCooldown;
             Credits = s.credits; Served = s.served; Lost = s.lost; Reputation = s.reputation; Combo = s.combo; arrivals = s.arrivals;

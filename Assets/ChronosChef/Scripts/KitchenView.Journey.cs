@@ -26,7 +26,7 @@ namespace ChronosChef
             Panel(menu.transform, "RouteHeader", 0, 370, 1560, 145, new Color(.025f,.035f,.10f,.78f));
             Label(menu.transform, "RUTAS DEL ESPACIO-TIEMPO", -480, 385, 960, 70, 46, Cyan, FontStyles.Bold);
             Label(menu.transform, "Elige un portal. Evita servirle el almuerzo a tu abuelo.", -500, 330, 1000, 35, 18, C("BED8EC"));
-            Label(menu.transform, "I / PREHISTORIA NEÓN", -690, 270, 590, 42, 24, Gold, FontStyles.Bold);
+            Label(menu.transform, "MUNDO 1 / TIERRA", -690, 270, 590, 42, 24, Gold, FontStyles.Bold);
             Label(menu.transform, "II / VAPOR Y PARADOJAS", 110, 270, 590, 42, 24, Cyan, FontStyles.Bold);
             menuBank.rectTransform.anchoredPosition = new Vector2(610,365); menuBank.rectTransform.sizeDelta = new Vector2(280,80); menuBank.alignment = TextAlignmentOptions.Right; menuBank.fontSize = 18;
             routeLines = new UnityEngine.UI.Image[9];

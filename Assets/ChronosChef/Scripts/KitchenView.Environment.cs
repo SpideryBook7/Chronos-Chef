@@ -29,7 +29,7 @@ namespace ChronosChef
         }
         internal void SetLevelEnvironment(int level)
         {
-            if(level!=1) { LeaveGalleyTrial(); return; }
+            if(level>5) { LeaveGalleyTrial(); return; }
             if(InGalley) return;
             if (!galley)
             {

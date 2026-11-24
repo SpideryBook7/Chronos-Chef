@@ -50,6 +50,7 @@ namespace ChronosChef
         readonly float[] respawn = new float[3], speechTime = new float[3];
         readonly float[] banterCountdown = new float[3];
         readonly int[] banterLine = new int[3];
+        static readonly string[] EarthBanter = { "Yo construí esa barra. Aguanta dos postres.", "Esa lechuga la conozco de semilla.", "La receta secreta es repetir plato.", "¡Vine en bici para pedir doble!" };
         static readonly string[][] Banter =
         {
             new[]{"Grog inventó la propina. Mañana.", "¿Sin gluten? Grog no conocer Gluten.", "¡Mi club de lectura se comió el libro!"},
@@ -121,7 +122,7 @@ namespace ChronosChef
             MaxPatience[slot] = LevelRules.Patience + slot * 8;
             Patience[slot] = MaxPatience[slot]; special[slot] = false; speechTime[slot] = 3;
             banterCountdown[slot] = 8 + slot * 2; banterLine[slot] = 0;
-            Speech[slot] = new[] { "¡Algo que no se haya extinguido!", "ERROR 404: comida no encontrada", "Exijo una estrella... de neutrones", "¡Rápido, tengo brazos cortos!" }[Species[slot]];
+            Speech[slot] = Level<=5 ? "¡Mesa para uno!" : new[] { "¡Algo que no se haya extinguido!", "ERROR 404: comida no encontrada", "Exijo una estrella... de neutrones", "¡Rápido, tengo brazos cortos!" }[Species[slot]];
         }
         public void SelectStation(int index)
         {
@@ -155,13 +156,13 @@ namespace ChronosChef
                     banterCountdown[i] -= dt;
                     if (banterCountdown[i] <= 0 && speechTime[i] <= 0 && Patience[i] >= 20)
                     {
-                        Speech[i] = Banter[Species[i]][banterLine[i]++ % 3]; speechTime[i] = 3.5f; banterCountdown[i] = 10 + i;
+                        Speech[i] = Level<=5 ? EarthBanter[Species[i]] : Banter[Species[i]][banterLine[i]++ % 3]; speechTime[i] = 3.5f; banterCountdown[i] = 10 + i;
                     }
                     Patience[i] -= pressure;
                     if (!special[i] && Patience[i] < 20)
                     {
                         special[i] = true; speechTime[i] = 4;
-                        Speech[i] = new[] { "¡GROOAR!", "¡BIP! ¡BIP! ¡ERROR!", "Mi reseña será devastadora", "¡GRRR! ¡Esta barra es mía!" }[Species[i]];
+                        Speech[i] = Level<=5 ? "¡Se me acaba el descanso!" : new[] { "¡GROOAR!", "¡BIP! ¡BIP! ¡ERROR!", "Mi reseña será devastadora", "¡GRRR! ¡Esta barra es mía!" }[Species[i]];
                         if (Species[i] == 0) for (int j = Mathf.Max(0, i - 1); j <= Mathf.Min(2, i + 1); j++) if (j != i && Customers[j]) Patience[j] = Mathf.Max(1, Patience[j] - 7);
                         Feedback?.Invoke("warn");
                     }
@@ -169,7 +170,7 @@ namespace ChronosChef
                     {
                         Customers[i] = false; respawn[i] = 4; Lost++; Combo = 0;
                         Reputation = Mathf.Max(0, Reputation - (Species[i] == 3 ? 22 : 12));
-                        AddAnomaly(25); Respond("Cliente perdido. " + (Species[i] == 3 ? "¡El raptor arañó el mostrador!" : "El tiempo también se come."), "bad");
+                        AddAnomaly(25); Respond("Cliente perdido. " + (Level>5 && Species[i] == 3 ? "¡El raptor arañó el mostrador!" : "El tiempo también se come."), "bad");
                     }
                 }
                 else { respawn[i] -= dt; if (respawn[i] <= 0) SpawnCustomer(i); }

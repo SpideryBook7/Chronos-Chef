@@ -24,9 +24,6 @@ namespace ChronosChef
             transform.position = new Vector3(4000,0,4000);
             var shader = Resources.Load<Shader>("GalleySurface");
             galleySurface = new Material(shader);
-            galleyMesh = LoadGeometry();
-            AddSurface("Orbital service deck", galleyMesh, galleySurface);
-
             BuildFoodDisplays();
             actorSurface = new Material(shader) { mainTexture = chef.mainTexture };
             actorMesh = new Mesh { name = "Posed Ares" };
@@ -47,6 +44,7 @@ namespace ChronosChef
             lens.allowHDR = false;
             Image = new RenderTexture(1280,720,24,RenderTextureFormat.ARGB32) { name="Orbital galley view" };
             Image.Create(); lens.targetTexture = Image; lens.aspect = 16f/9;
+            DressEarthKitchen();
         }
 
         readonly Transform[] seats=new Transform[3];
@@ -59,16 +57,48 @@ namespace ChronosChef
             projection=next;
             return true;
         }
-        public void Seat(int slot, KitchenModelGraphic visitor)
+        Sprite backdrop;
+        readonly Sprite[] portraits=new Sprite[4];
+        readonly SpriteRenderer[] diners=new SpriteRenderer[3];
+
+        void DressEarthKitchen()
         {
-            if(!seats[slot])
+            var texture=Resources.Load<Texture2D>("EarthKitchen");
+            backdrop=Sprite.Create(texture,new Rect(0,0,texture.width,texture.height),new Vector2(.5f,.5f),100,0,SpriteMeshType.FullRect);
+            var wall=new GameObject("Earth restaurant");
+            wall.layer=SceneLayer;
+            wall.transform.SetParent(transform,false);
+            wall.transform.position=lens.ViewportToWorldPoint(new Vector3(.5f,.5f,36));
+            wall.transform.rotation=lens.transform.rotation;
+            float height=72*Mathf.Tan(lens.fieldOfView*Mathf.Deg2Rad*.5f);
+            wall.transform.localScale=new Vector3(height*lens.aspect/backdrop.bounds.size.x,height/backdrop.bounds.size.y,1);
+            var plate=wall.AddComponent<SpriteRenderer>();
+            plate.sprite=backdrop;
+            plate.sortingOrder=-10;
+            var sheet=Resources.Load<Texture2D>("EarthGuests");
+            float[] cuts={0,.284f,.493f,.753f,1};
+            for(int i=0;i<4;i++)
             {
-                guests[slot]=new Mesh();
-                guests[slot].MarkDynamic();
-                seats[slot]=AddSurface("Passenger "+(slot+1),guests[slot],galleySurface);
-                seats[slot].localPosition=new Vector3((slot-1)*3.9f,1.42f,3.7f);
+                int left=Mathf.RoundToInt(sheet.width*cuts[i]);
+                int right=Mathf.RoundToInt(sheet.width*cuts[i+1]);
+                portraits[i]=Sprite.Create(sheet,new Rect(left,0,right-left,sheet.height),new Vector2(.5f,0),sheet.height/1.72f,0,SpriteMeshType.FullRect);
             }
-            visitor.PosePassenger(guests[slot]);
+            for(int i=0;i<3;i++)
+            {
+                var guest=new GameObject("Passenger "+(i+1));
+                guest.layer=SceneLayer;
+                seats[i]=guest.transform;
+                seats[i].SetParent(transform,false);
+                seats[i].position=lens.ViewportToWorldPoint(new Vector3(.38f+i*.12f,.516f,19));
+                seats[i].rotation=lens.transform.rotation;
+                diners[i]=guest.AddComponent<SpriteRenderer>();
+            }
+        }
+
+        public void Seat(int slot,int kind,float phase)
+        {
+            diners[slot].sprite=portraits[kind];
+            seats[slot].localRotation=lens.transform.localRotation*Quaternion.Euler(0,0,Mathf.Sin(phase)*1.7f);
         }
         readonly Mesh[] foodMeshes=new Mesh[System.Enum.GetValues(typeof(Food)).Length];
         MeshFilter board, burner, hands;
@@ -103,7 +133,7 @@ namespace ChronosChef
 
         public void UpdateService(KitchenGame game, KitchenModelGraphic chef)
         {
-            for(int i=0;i<3;i++) if(seats[i]) seats[i].gameObject.SetActive(game.Customers[i]);
+            for(int i=0;i<3;i++) { seats[i].gameObject.SetActive(game.Customers[i]); diners[i].sprite=portraits[game.Species[i]]; }
             actor.localPosition = FloorPoint(game.ChefPosition);
             actor.localScale = Vector3.one*chef.WorldScale;
             board.sharedMesh=foodMeshes[(int)game.PrepFood];
@@ -159,7 +189,8 @@ namespace ChronosChef
         void OnDestroy()
         {
             if(Image) { Image.Release(); Destroy(Image); }
-            foreach(var guest in guests) if(guest) Destroy(guest);
+            Destroy(backdrop);
+            foreach(var portrait in portraits) Destroy(portrait);
             foreach(var food in foodMeshes) if(food) Destroy(food);
             Destroy(foodMaterial);
             Destroy(galleyMesh); Destroy(actorMesh); Destroy(galleySurface); Destroy(actorSurface);

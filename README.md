@@ -26,13 +26,11 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 - La comida transportada se muestra en las manos. BASURA descarta ese objeto.
 - La registradora abre el recetario ilustrado y pausa el turno. ENTENDIDO lo reanuda directamente. Puedes elegir receta y paso o dejar que la demostración avance sola.
 
-## Cocina orbital del nivel 1
+## Mundo 1 · Tierra
 
-En **Jugar → Nivel 1**, Ares atiende el turno de campaña en la cubierta orbital. Los clientes y los alimentos ocupan posiciones en el mundo 3D. La mesa de corte, el fogón y las manos de Ares muestran la malla del ingrediente según su preparación. **Probar cocina 3D** abre el mismo escenario con un guardado de práctica independiente.
+En **Jugar → Primer servicio**, Ares atiende un restaurante de barrio. El escenario ilustrado y los cuatro retratos de clientes se combinan con Ares y los alimentos en 3D. Los cinco turnos de Tierra comparten el restaurante y conservan sus metas y desbloqueos. **Practicar en la Tierra** usa un guardado independiente.
 
-![Turno en la cocina orbital](Docs/media/cocina-orbital.png)
-
-El escenario editable está en `ArtSource/OrbitalGalley.blend`. El generador `ArtSource/build_orbital_kitchen.py` produce la geometría en metros, las normales y los colores que Unity carga al entrar en la prueba.
+![Primer servicio en la Tierra](Docs/media/tierra-nivel-1.png)
 
 ## Campaña y mecánicas
 

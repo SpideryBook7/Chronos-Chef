@@ -18,7 +18,7 @@ namespace ChronosChef
             "1/12 · Toca la nevera DODO para recoger carne.", "2/12 · Toca CORTE: la carne queda en la mesa mientras trabaja la cuchilla.",
             "3/12 · Espera el corte y toca CORTE otra vez para recoger la carne.",
             "4/12 · Toca PLASMA para colocar el dodo cortado.", "5/12 · Espera LISTO y vuelve a tocar PLASMA para retirar la carne.",
-            "6/12 · Toca el PAN de MONTAJE para preparar la hamburguesa.", "7/12 · Toca a Grog o su tarjeta: pide hamburguesa.",
+            "6/12 · Toca el PAN de MONTAJE para preparar la hamburguesa.", "7/12 · Toca a Bruno o su tarjeta: pide hamburguesa.",
             "8/12 · Ahora la sopa: toca RAÍCES para recoger la primera.", "9/12 · Toca RAÍCES otra vez: necesitas dos.",
             "10/12 · Toca PLASMA: las raíces se cocinan sin cortar, o puedes prepararlas en la mesa.", "11/12 · Espera LISTO y toca PLASMA para retirar el bol.",
             "12/12 · Entrega la sopa al robot: toca su cuerpo o su pedido."

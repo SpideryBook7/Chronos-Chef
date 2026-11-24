@@ -54,7 +54,7 @@ try
     camera.transform.position+=UnityEngine.Vector3.right;
     await System.Threading.Tasks.Task.Delay(160);
     if(passenger.position!=seat || camera.WorldToViewportPoint(seat)==projected ||
-        passenger.GetComponent<UnityEngine.MeshFilter>().sharedMesh.vertexCount==0)
+        passenger.GetComponent<UnityEngine.SpriteRenderer>().sprite==null)
         throw new System.Exception("Passenger is not seated in world space");
     camera.transform.position=cameraPosition;
     await System.Threading.Tasks.Task.Delay(160);

@@ -121,6 +121,7 @@ namespace ChronosChef
         void PoseVisitor(int slot, KitchenGame g)
         {
             int kind = g.Species[slot];
+            if(InGalley) { galley.Seat(slot,kind,ReducedMotion ? 0 : castClock*(1.6f+kind*.3f)+slot); return; }
             var model = visitors[slot,kind];
             if (!model || !g.Customers[slot]) return;
             bool impatient = g.Patience[slot] < 20;
@@ -154,7 +155,7 @@ namespace ChronosChef
                 pose.bounce = Mathf.Sin(t*2.2f)*.027f;
             }
             model.Articulate(pose);
-            if(InGalley) galley.Seat(slot,model);
+
         }
     }
 }

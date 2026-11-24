@@ -26,6 +26,7 @@ namespace ChronosChef
         int shownCarry = -1, shownEra = -1;
         float pop, pulse;
         Vector2 lastChef;
+        static readonly string[] earthNames = { "BRUNO", "FLORA", "INES", "NICO" };
         readonly string[] speciesNames = { "GROG", "BIP-08", "ZORG", "REX" };
 
         void SetupExpansion(KitchenGame owner)
@@ -115,7 +116,7 @@ namespace ChronosChef
             Label(menu.transform, "CHRONOS CHEF", -600, 300, 1200, 80, 65, Cyan, FontStyles.Bold);
             Label(menu.transform, "EL TIEMPO SE ACABA. LA COCINA NO PERDONA.", -600, 235, 1200, 40, 22, Pink, FontStyles.Bold);
             menuBank = Label(menu.transform, "", -600, 185, 1200, 45, 25, Gold, FontStyles.Bold);
-            Label(menu.transform, "ELIGE UN TURNO / PREHISTORIA → STEAMPUNK", -600, 130, 1200, 35, 20, Cyan);
+            Label(menu.transform, "ELIGE UN TURNO / TIERRA → STEAMPUNK", -600, 130, 1200, 35, 20, Cyan);
             levelButtons = new UnityEngine.UI.Button[10]; levelTexts = new TMP_Text[10];
             for (int i = 0; i < 10; i++)
             {
@@ -186,7 +187,7 @@ namespace ChronosChef
         {
             var p = game.Progress; if (p == null) return;
             menuBank.text = $"{p.Bank} CRÉDITOS    /    {p.Gems} GEMAS    /    PROGRESO GUARDADO";
-            for (int i = 0; i < 10; i++) { bool open = i + 1 <= p.Unlocked && (i < 5 || p.Era == 2); levelButtons[i].interactable = open; levelTexts[i].text = $"{(i < 5 ? "JURÁSICO" : "STEAMPUNK")} {i % 5 + 1}\n" + (open ? p.BestStars(i + 1) + "/3 ESTRELLAS" : "BLOQUEADO"); }
+            for (int i = 0; i < 10; i++) { bool open = i + 1 <= p.Unlocked && (i < 5 || p.Era == 2); levelButtons[i].interactable = open; levelTexts[i].text = $"{(i < 5 ? "TIERRA" : "STEAMPUNK")} {i % 5 + 1}\n" + (open ? p.BestStars(i + 1) + "/3 ESTRELLAS" : "BLOQUEADO"); }
             speedText.text = $"BOTAS {p.Speed}/3  /  " + (p.Speed >= 3 ? "MÁXIMO" : 300 * (p.Speed + 1) + " CRÉDITOS");
             heatText.text = $"PLASMA {p.Heat}/3  /  " + (p.Heat >= 3 ? "MÁXIMO" : 300 * (p.Heat + 1) + " CRÉDITOS");
             eraText.text = p.Era == 2 ? "PORTAL STEAMPUNK ABIERTO" : "ABRIR STEAMPUNK / 3 GEMAS";
@@ -236,7 +237,7 @@ namespace ChronosChef
                 burgers[i].gameObject.SetActive(g.Customers[i] && g.Orders[i] == Food.Burger);
                 bowls[i].gameObject.SetActive(g.Customers[i] && g.Orders[i] == Food.Soup);
                 toastOrders[i].gameObject.SetActive(g.Customers[i] && g.Orders[i] == Food.Toast);
-                speciesLabels[i].text = g.Customers[i] ? speciesNames[g.Species[i]] : "";
+                speciesLabels[i].text = g.Customers[i] ? (InGalley ? earthNames : speciesNames)[g.Species[i]] : "";
                 speciesLabels[i].fontSize = 15;
                 speechLabels[i].gameObject.SetActive(false);
                 for (int j = 0; j < 4; j++)
@@ -257,7 +258,7 @@ namespace ChronosChef
                 shownEra = g.Level > 5 ? 2 : 1;
                 stage.Find("KitchenBorder").GetComponent<UnityEngine.UI.Image>().color = shownEra == 2 ? Gold : Cyan;
                 stage.Find("KitchenFloor").GetComponent<UnityEngine.UI.Image>().color = shownEra == 2 ? C("493747") : C("202C42");
-                var badge = stage.GetComponentsInChildren<TMP_Text>(true).First(t => t.text.Contains("PREHISTORIA") || t.text.Contains("VICTORIANA")); badge.text = shownEra == 2 ? "02 / VICTORIANA STEAMPUNK" : "01 / PREHISTORIA NEÓN";
+                var badge = stage.GetComponentsInChildren<TMP_Text>(true).First(t => t.text.Contains("PREHISTORIA") || t.text.Contains("VICTORIANA") || t.text=="01 / TIERRA"); badge.text = shownEra == 2 ? "02 / VICTORIANA STEAMPUNK" : "01 / TIERRA";
             }
             RefreshBeta(g);
             RefreshLivingKitchen(g);

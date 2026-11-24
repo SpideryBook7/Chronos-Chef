@@ -204,6 +204,7 @@ namespace ChronosChef
                     else { picture.rectTransform.localEulerAngles = Vector3.zero; picture.rectTransform.localScale = Vector3.one; }
                 }
                 comicSounds[i].text = !g.Customers[i] || !emote && !angry ? "" : species == 0 ? angry ? "¡GROOOAR!" : "¡PUM!" : species == 1 ? angry ? "¡ERROR 404!" : "¡BIP-BUP!" : species == 2 ? angry ? "¿PERDÓN?" : "Mmm..." : angry ? "¡ÑAM-GRR!" : "¡CRUNCH!";
+                if (InGalley) comicSounds[i].text = angry ? "¿Falta mucho?" : emote ? "¡Qué aroma!" : "";
                 comicSounds[i].color = angry ? Pink : Gold;
             }
         }

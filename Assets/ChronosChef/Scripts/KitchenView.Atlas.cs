@@ -35,13 +35,13 @@ namespace ChronosChef
 
             atlasPage=ScreenPanel("PlanetAtlas");
             PageArt(atlasPage,"PlanetAtlas");
-            for(int i=0;i<2;i++)
+            for(int i=0;i<KitchenLevel.Worlds.Length;i++)
             {
                 int planet=i;
-                int x=i==0 ? -365 : 365;
-                var button=Button(atlasPage.transform,"Planet"+i,x,0,570,680,Color.clear);
-                var plaque=Panel(button.transform,"Nameplate",0,-280,330,65,C("142639"));
-                Label(plaque,i==0?"TIERRA":"FERRUM",-155,0,310,59,32,i==0?Cyan:Gold,FontStyles.Bold);
+                int x=-600+i*400;
+                var button=Button(atlasPage.transform,"Planet"+i,x,20,385,650,Color.clear);
+                var plaque=Panel(button.transform,"Nameplate",0,-232,260,65,C("142639"));
+                Label(plaque,KitchenLevel.Worlds[i],-155,0,310,59,32,Color.white,FontStyles.Bold);
                 button.onClick.AddListener(()=>ScreenTransition(()=>{
                     atlasPage.SetActive(false);
                     game.GoToMenu();
@@ -75,15 +75,15 @@ namespace ChronosChef
         void ApplyPlanet()
         {
             if(!planetTitle) return;
-            planetTitle.text=selectedPlanet==0?"TIERRA":"FERRUM";
+            planetTitle.text=KitchenLevel.Worlds[selectedPlanet];
             var background=menu.transform.Find("ChronoCartography");
-            if(background) background.GetComponent<RawImage>().texture=selectedPlanet==0?earthLevels:journeyArt;
-            for(int i=0;i<10;i++)
+            if(background) background.GetComponent<RawImage>().texture=selectedPlanet==0?earthLevels:selectedPlanet==1?journeyArt:WorldKitchen(selectedPlanet);
+            for(int i=0;i<KitchenLevel.Count;i++)
             {
                 bool visible=i/5==selectedPlanet;
                 levelButtons[i].gameObject.SetActive(visible);
                 portalAuras[i].gameObject.SetActive(visible);
-                if(i<9) routeLines[i].gameObject.SetActive(visible && i%5!=4);
+                if(i<KitchenLevel.Count-1) routeLines[i].gameObject.SetActive(visible && i%5!=4);
             }
         }
 

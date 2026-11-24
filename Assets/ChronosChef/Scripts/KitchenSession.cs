@@ -18,7 +18,7 @@ namespace ChronosChef
         public float[] patience, maxPatience, respawn;
         public bool IsValid()
         {
-            if (version != 1 || level < 1 || level > 10 || remaining <= 0 || remaining > KitchenLevel.For(level).Seconds || !Finite(remaining)) return false;
+            if (version != 1 || level < 1 || level > KitchenLevel.Count || remaining <= 0 || remaining > KitchenLevel.For(level).Seconds || !Finite(remaining)) return false;
             if (!Enum.IsDefined(typeof(Food), carry) || !Enum.IsDefined(typeof(Food), stove) || !Enum.IsDefined(typeof(Food), prep)) return false;
             if (!Finite(borrowRemaining) || !Finite(borrowCooldown) || borrowRemaining < 0 || borrowRemaining > KitchenGame.BorrowDuration || borrowCooldown < borrowRemaining || borrowCooldown > KitchenGame.BorrowRecharge) return false;
             if (customers?.Length != 3 || orders?.Length != 3 || species?.Length != 3 || patience?.Length != 3 || maxPatience?.Length != 3 || respawn?.Length != 3 || special?.Length != 3) return false;

@@ -105,7 +105,7 @@ namespace ChronosChef
             results.transform.SetAsLastSibling();
             // Results now include navigation to the next unlocked level and the kitchen hub.
             var next = Button(results.transform, "NextLevel", 235, -280, 300, 52, Cyan); Label(next.transform, "SIGUIENTE NIVEL", -145, 0, 290, 45, 19, Ink, FontStyles.Bold);
-            next.onClick.AddListener(() => { if (IsTrial || game.IsTrainingResult) { game.BeginLevel(1); return; } if (game.Level == 10) { game.GoToMenu(); return; } int level = game.Level + 1; if (level > game.Progress.Unlocked || level > 5 && game.Progress.Era < 2) game.GoToMenu(); else game.BeginLevel(level); });
+            next.onClick.AddListener(() => { if (IsTrial || game.IsTrainingResult) { game.BeginLevel(1); return; } if (game.Level == KitchenLevel.Count) { game.GoToMenu(); return; } int level = game.Level + 1; if (level > game.Progress.Unlocked || level > 5 && game.Progress.Era < 2) game.GoToMenu(); else game.BeginLevel(level); });
             var hub = Button(results.transform, "ResultsHub", -235, -280, 300, 52, C("34465D")); Label(hub.transform, "VOLVER AL PORTAL", -145, 0, 290, 45, 19, Color.white, FontStyles.Bold); hub.onClick.AddListener(game.GoToMenu);
             resultText.fontSize = 27; resultText.rectTransform.anchoredPosition = new Vector2(0, 60); resultText.rectTransform.sizeDelta = new Vector2(810, 365);
             restart.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -175);
@@ -117,8 +117,8 @@ namespace ChronosChef
             Label(menu.transform, "EL TIEMPO SE ACABA. LA COCINA NO PERDONA.", -600, 235, 1200, 40, 22, Pink, FontStyles.Bold);
             menuBank = Label(menu.transform, "", -600, 185, 1200, 45, 25, Gold, FontStyles.Bold);
             Label(menu.transform, "ELIGE UN TURNO / TIERRA → STEAMPUNK", -600, 130, 1200, 35, 20, Cyan);
-            levelButtons = new UnityEngine.UI.Button[10]; levelTexts = new TMP_Text[10];
-            for (int i = 0; i < 10; i++)
+            levelButtons = new UnityEngine.UI.Button[KitchenLevel.Count]; levelTexts = new TMP_Text[KitchenLevel.Count];
+            for (int i = 0; i < KitchenLevel.Count; i++)
             {
                 int level = i + 1; float x = -490 + i % 5 * 245, y = i < 5 ? 60 : -35;
                 var b = Button(menu.transform, "Level" + level, x, y, 215, 78, C("283C54"));
@@ -181,13 +181,13 @@ namespace ChronosChef
             var handle = Dot(handleArea, "Handle", 0, 0, 38, Gold); handle.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
             var slider = track.gameObject.AddComponent<UnityEngine.UI.Slider>(); slider.fillRect = fill; slider.handleRect = handle; slider.targetGraphic = handle.GetComponent<UnityEngine.UI.Image>(); slider.minValue = 0; slider.maxValue = 1; slider.value = value; slider.onValueChanged.AddListener(changed);
         }
-        public void ShowMenu(bool show) { if (!menu) return; if (home) home.SetActive(false); menu.SetActive(show); if (show) { selectedPlanet = game.Level>5 ? 1 : 0; LeaveGalleyTrial(); SetParadoxVisible(false); menu.transform.SetAsLastSibling(); RefreshHub(); } if (pauseOverlay) pauseOverlay.SetActive(false); if (!show) { recipes.SetActive(false); settings.SetActive(false); } }
+        public void ShowMenu(bool show) { if (!menu) return; if (home) home.SetActive(false); menu.SetActive(show); if (show) { selectedPlanet = KitchenLevel.World(game.Level); LeaveGalleyTrial(); SetParadoxVisible(false); menu.transform.SetAsLastSibling(); RefreshHub(); } if (pauseOverlay) pauseOverlay.SetActive(false); if (!show) { recipes.SetActive(false); settings.SetActive(false); } }
         public void MenuNotice(string text) { if (menuMessage) menuMessage.text = text; audioFeedback?.Play("click"); }
         void RefreshHub()
         {
             var p = game.Progress; if (p == null) return;
             menuBank.text = $"{p.Bank} CRÉDITOS    /    {p.Gems} GEMAS    /    PROGRESO GUARDADO";
-            for (int i = 0; i < 10; i++) { bool open = i + 1 <= p.Unlocked && (i < 5 || p.Era == 2); levelButtons[i].interactable = open; levelTexts[i].text = $"{(i < 5 ? "TIERRA" : "STEAMPUNK")} {i % 5 + 1}\n" + (open ? p.BestStars(i + 1) + "/3 ESTRELLAS" : "BLOQUEADO"); }
+            for (int i = 0; i < KitchenLevel.Count; i++) { bool open = i + 1 <= p.Unlocked && (i < 5 || p.Era == 2); levelButtons[i].interactable = open; levelTexts[i].text = $"{(i < 5 ? "TIERRA" : "STEAMPUNK")} {i % 5 + 1}\n" + (open ? p.BestStars(i + 1) + "/3 ESTRELLAS" : "BLOQUEADO"); }
             speedText.text = $"BOTAS {p.Speed}/3  /  " + (p.Speed >= 3 ? "MÁXIMO" : 300 * (p.Speed + 1) + " CRÉDITOS");
             heatText.text = $"PLASMA {p.Heat}/3  /  " + (p.Heat >= 3 ? "MÁXIMO" : 300 * (p.Heat + 1) + " CRÉDITOS");
             eraText.text = p.Era == 2 ? "PORTAL STEAMPUNK ABIERTO" : "ABRIR STEAMPUNK / 3 GEMAS";

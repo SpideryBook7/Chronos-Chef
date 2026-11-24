@@ -21,6 +21,14 @@ namespace ChronosChef
         internal bool IsTrial => campaignProgress != null;
         internal bool InGalley => galley && galley.gameObject.activeSelf;
 
+        readonly Texture2D[] regionalKitchens = new Texture2D[2];
+        Texture2D WorldKitchen(int world)
+        {
+            if(world<2) return world==1 && steampunkArt ? steampunkArt : environmentArt;
+            int index=world-2;
+            if(!regionalKitchens[index]) regionalKitchens[index]=Resources.Load<Texture2D>(world==2?"Bruma":"Cumbre");
+            return regionalKitchens[index];
+        }
         void StartGalleyTrial()
         {
             campaignProgress = game.Progress;
@@ -202,7 +210,7 @@ namespace ChronosChef
                 flameMaterial.SetFloat("_Phase", flamePhase);
                 plasmaFlame.localScale = Vector3.one * (g.StoveFood == Food.Empty ? .82f : 1.12f);
             }
-            var texture = g.Level > 5 && steampunkArt ? steampunkArt : environmentArt;
+            var texture = WorldKitchen(KitchenLevel.World(g.Level));
             if (InGalley)
             {
                 environmentLayer.texture = galley.Image;

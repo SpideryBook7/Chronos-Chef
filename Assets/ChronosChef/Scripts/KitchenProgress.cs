@@ -9,7 +9,7 @@ namespace ChronosChef
         void Set(string key, int value) => PlayerPrefs.SetInt(prefix + key, value);
         public int Bank => Mathf.Clamp(Get("credits"), 0, 100000000);
         public int Gems => Mathf.Clamp(Get("gems"), 0, 30);
-        public int Unlocked => Mathf.Clamp(Get("unlocked", 1), 1, 10);
+        public int Unlocked => Mathf.Clamp(Mathf.Max(Get("unlocked", 1), BestStars(10)>0 ? 11 : 1), 1, KitchenLevel.Count);
         public int Era => Mathf.Clamp(Get("era", 1), 1, 2);
         public int Speed => Mathf.Clamp(Get("speed"), 0, 3);
         public int Heat => Mathf.Clamp(Get("heat"), 0, 3);
@@ -26,12 +26,12 @@ namespace ChronosChef
         }
         public void Complete(int level, int credits, int stars)
         {
-            if (level < 1 || level > 10) throw new System.ArgumentOutOfRangeException(nameof(level));
+            if (level < 1 || level > KitchenLevel.Count) throw new System.ArgumentOutOfRangeException(nameof(level));
             stars = Mathf.Clamp(stars, 0, 3);
             Set("credits", (int)System.Math.Min(100000000L, (long)Bank + Mathf.Max(0, credits)));
             if (stars == 3 && BestStars(level) < 3) Set("gems", Gems + 1);
             Set("stars." + level, Mathf.Max(BestStars(level), stars));
-            if (stars > 0) Set("unlocked", Mathf.Max(Unlocked, Mathf.Min(10, level + 1)));
+            if (stars > 0) Set("unlocked", Mathf.Max(Unlocked, Mathf.Min(KitchenLevel.Count, level + 1)));
             PlayerPrefs.Save();
         }
         public string Buy(bool speed)

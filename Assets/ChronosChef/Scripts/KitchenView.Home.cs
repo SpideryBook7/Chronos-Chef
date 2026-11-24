@@ -11,33 +11,20 @@ namespace ChronosChef
         GameObject home, creditsPanel;
         UnityEngine.UI.Button homeContinue, homeTraining, homeOptions, homeCredits;
         UnityEngine.UI.Image transition;
-        RectTransform[] homeStars;
         bool transitioning;
         void BuildHome()
         {
             home = ScreenPanel("StartHome");
-            if (homeArt)
-            {
-                var picture = new GameObject("HomeIllustration", typeof(RectTransform), typeof(UnityEngine.UI.RawImage));
-                var rect = picture.GetComponent<RectTransform>(); rect.SetParent(home.transform, false); rect.sizeDelta = new Vector2(1600, 900);
-                var raw = picture.GetComponent<UnityEngine.UI.RawImage>(); raw.texture = homeArt; raw.raycastTarget = false;
-            }
-            // Interactive typography and buttons remain independent from the illustration.
-            Panel(home.transform, "TitleScrim", -470, 0, 660, 900, new Color(.035f, .035f, .10f, .55f));
-            Label(home.transform, "CHRONOS", -730, 286, 660, 120, 79, Cyan, FontStyles.Bold, TextAlignmentOptions.Left);
-            Label(home.transform, "CHEF", -730, 190, 660, 120, 103, Color.white, FontStyles.Bold, TextAlignmentOptions.Left);
-            Label(home.transform, "COCINA FUERA DE TIEMPO", -723, 100, 610, 50, 22, Pink, FontStyles.Bold, TextAlignmentOptions.Left);
-            var play = HomeButton("HomePlay", "JUGAR", -22, Cyan, Ink, () => ScreenTransition(ShowPlanets));
-            homeContinue = HomeButton("HomeContinue", "CONTINUAR TURNO", -112, C("394C61"), Gold, () => ScreenTransition(() => { if (!game.ResumeSavedShift()) ShowHome(); }));
-            homeTraining = HomeButton("HomeTraining", "ENTRENAMIENTO", -202, C("273D54"), Cyan, () => { home.SetActive(false); game.GoToMenu(); RequestLevel(1, true); });
-            homeOptions = HomeButton("HomeOptions", "AJUSTES", -292, C("273D54"), Color.white, () => { settings.SetActive(true); settings.transform.SetAsLastSibling(); });
-            homeCredits = HomeButton("HomeCredits", "CRÉDITOS", -382, C("273D54"), Color.white, () => { creditsPanel.SetActive(true); creditsPanel.transform.SetAsLastSibling(); });
-            var trial = Button(home.transform,"TryOrbitalGalley",475,-329,435,72,C("214751"));
-            Label(trial.transform,"PRACTICAR EN LA TIERRA",-208,0,416,60,23,Cyan,FontStyles.Bold);
+            PageArt(home,"HomeStillLife");
+            Label(home.transform,"Chronos Chef",-695,200,740,130,88,C("373F35"),FontStyles.Bold,TextAlignmentOptions.Left);
+            var play = HomeButton("HomePlay", "JUGAR", -22, C("475847"), Color.white, () => ScreenTransition(ShowPlanets));
+            homeContinue = HomeButton("HomeContinue", "CONTINUAR TURNO", -112, C("EBDFCB"), C("343D34"), () => ScreenTransition(() => { if (!game.ResumeSavedShift()) ShowHome(); }));
+            homeTraining = HomeButton("HomeTraining", "ENTRENAMIENTO", -202, C("EBDFCB"), C("343D34"), () => { home.SetActive(false); game.GoToMenu(); RequestLevel(1, true); });
+            homeOptions = HomeButton("HomeOptions", "AJUSTES", -292, C("EBDFCB"), C("343D34"), () => { settings.SetActive(true); settings.transform.SetAsLastSibling(); });
+            homeCredits = HomeButton("HomeCredits", "CRÉDITOS", -382, C("EBDFCB"), C("343D34"), () => { creditsPanel.SetActive(true); creditsPanel.transform.SetAsLastSibling(); });
+            var trial = Button(home.transform,"TryOrbitalGalley",475,-329,435,72,C("465343"));
+            Label(trial.transform,"PRACTICAR EN LA TIERRA",-208,0,416,60,23,Color.white,FontStyles.Bold);
             trial.onClick.AddListener(() => ScreenTransition(StartGalleyTrial));
-            Label(home.transform, "PRIMERA BETA · 0.4.0", 300, -403, 430, 30, 15, C("B6D1E6"), FontStyles.Bold, TextAlignmentOptions.Right);
-            homeStars = new RectTransform[9];
-            for (int i = 0; i < homeStars.Length; i++) homeStars[i] = Dot(home.transform, "ChronoSpark", -740 + i * 69, 350 - i * 67, 3 + i % 3, new Color(.3f, .9f, 1, .45f));
             var back = Button(menu.transform, "HubHome", -640, 350, 155, 45, C("2D4357")); Label(back.transform, "< PLANETAS", -73, 0, 146, 40, 18, Cyan); back.onClick.AddListener(() => ScreenTransition(ShowPlanets));
             creditsPanel = ScreenPanel("Credits");
             Label(creditsPanel.transform, "CHRONOS CHEF", -600, 235, 1200, 80, 58, Cyan, FontStyles.Bold);
@@ -66,9 +53,7 @@ namespace ChronosChef
         void UpdateHome()
         {
             AnimateArrival();
-            if (!home || !home.activeSelf || homeStars == null) return;
-            for (int i = 0; i < homeStars.Length; i++)
-                homeStars[i].anchoredPosition = new Vector2(-740 + i * 69 + (ReducedMotion ? 0 : Mathf.Sin(Time.unscaledTime * .4f + i) * 8), 350 - i * 67 + (ReducedMotion ? 0 : Mathf.Sin(Time.unscaledTime * .6f + i) * 8));
+
         }
         void ScreenTransition(Action next)
         {

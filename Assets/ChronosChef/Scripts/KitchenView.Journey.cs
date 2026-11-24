@@ -26,16 +26,16 @@ namespace ChronosChef
             Panel(menu.transform, "RouteHeader", 0, 370, 1560, 145, new Color(.025f,.035f,.10f,.78f));
             planetTitle=Label(menu.transform, "TIERRA", -340, 365, 680, 72, 46, Cyan, FontStyles.Bold);
             menuBank.rectTransform.anchoredPosition = new Vector2(610,365); menuBank.rectTransform.sizeDelta = new Vector2(280,80); menuBank.alignment = TextAlignmentOptions.Right; menuBank.fontSize = 18;
-            routeLines = new UnityEngine.UI.Image[9];
-            for (int i = 0; i < 9; i++)
+            routeLines = new UnityEngine.UI.Image[KitchenLevel.Count-1];
+            for (int i = 0; i < KitchenLevel.Count-1; i++)
             {
-                var a = RouteNodes[i] - new Vector2(800,450); var b = RouteNodes[i+1] - new Vector2(800,450); var d = b-a;
+                var a = RouteNodes[i%5] - new Vector2(800,450); var b = RouteNodes[(i+1)%5] - new Vector2(800,450); var d = b-a;
                 var line = Panel(menu.transform, "TemporalRoute"+i, (a.x+b.x)/2, (a.y+b.y)/2, d.magnitude, 4, Cyan); line.localEulerAngles = new Vector3(0,0,Mathf.Atan2(d.y,d.x)*Mathf.Rad2Deg); line.SetSiblingIndex(1); routeLines[i] = line.GetComponent<UnityEngine.UI.Image>();
             }
-            portalAuras = new RectTransform[10]; routeNames = new TMP_Text[10]; routeStars = new UnityEngine.UI.Image[10,3];
-            for (int i = 0; i < 10; i++)
+            portalAuras = new RectTransform[KitchenLevel.Count]; routeNames = new TMP_Text[KitchenLevel.Count]; routeStars = new UnityEngine.UI.Image[KitchenLevel.Count,3];
+            for (int i = 0; i < KitchenLevel.Count; i++)
             {
-                var p = RouteNodes[i]-new Vector2(800,450); var button = levelButtons[i]; var r = button.GetComponent<RectTransform>(); r.anchoredPosition = p; r.sizeDelta = new Vector2(120,120);
+                var p = RouteNodes[i%5]-new Vector2(800,450); var button = levelButtons[i]; var r = button.GetComponent<RectTransform>(); r.anchoredPosition = p; r.sizeDelta = new Vector2(120,120);
                 var image = button.GetComponent<UnityEngine.UI.Image>(); image.sprite = circle; image.type = UnityEngine.UI.Image.Type.Simple; image.color = C("24354E");
                 var aura = Dot(menu.transform, "PortalAura"+i, p.x,p.y,134,i<5?Gold:Cyan); aura.SetSiblingIndex(button.transform.GetSiblingIndex()); portalAuras[i]=aura;
                 Dot(button.transform,"PortalInset",0,0,104,C("15233D"));
@@ -67,13 +67,13 @@ namespace ChronosChef
             if(portalAuras==null)return;var p=game.Progress;
             ApplyPlanet();
             menuBank.text=$"CRÉDITOS {p.Bank}\nGEMAS {p.Gems}";
-            for(int i=0;i<10;i++)
+            for(int i=0;i<KitchenLevel.Count;i++)
             {
                 bool open=i+1<=p.Unlocked&&(i<5||p.Era==2);levelTexts[i].text=(i%5+1).ToString();
                 levelTexts[i].color=open?Color.white:C("7A8BA6");routeNames[i].color=open?Color.white:C("90A1BC");
                 portalAuras[i].GetComponent<UnityEngine.UI.Image>().color=open?(i<5?Gold:Cyan):C("3A4662");
                 for(int star=0;star<3;star++)routeStars[i,star].color=star<p.BestStars(i+1)?Gold:C("42516B");
-                if(i<9)routeLines[i].color=i+2<=p.Unlocked&&(i<4||p.Era==2)?Cyan:C("35405B");
+                if(i<KitchenLevel.Count-1)routeLines[i].color=i+2<=p.Unlocked&&(i<4||p.Era==2)?Cyan:C("35405B");
             }
             speedText.text=$"BOTAS TEMPORALES {p.Speed}/3\n"+(p.Speed==3?"¡VELOCIDAD ABSURDA!":300*(p.Speed+1)+" CRÉDITOS");
             heatText.text=$"PLASMA DOMESTICADO {p.Heat}/3\n"+(p.Heat==3?"¡CASI LEGAL!":300*(p.Heat+1)+" CRÉDITOS");
@@ -82,7 +82,7 @@ namespace ChronosChef
         void UpdateJourneyMap()
         {
             if(portalAuras==null||!menu.activeSelf)return;
-            for(int i=0;i<10;i++)portalAuras[i].localScale=Vector3.one*(ReducedMotion||!levelButtons[i].interactable?1:1+Mathf.Sin(Time.unscaledTime*2+i)*.025f);
+            for(int i=0;i<KitchenLevel.Count;i++)portalAuras[i].localScale=Vector3.one*(ReducedMotion||!levelButtons[i].interactable?1:1+Mathf.Sin(Time.unscaledTime*2+i)*.025f);
         }
     }
 }

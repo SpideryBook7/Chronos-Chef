@@ -30,12 +30,14 @@ namespace ChronosChef
         internal void SetLevelEnvironment(int level)
         {
             if(level>5) { LeaveGalleyTrial(); return; }
-            if(InGalley) return;
+            bool alreadyInKitchen = InGalley;
             if (!galley)
             {
                 galley = new GameObject("Orbital Galley Trial").AddComponent<OrbitalGalley>();
                 galley.Build(ares);
             }
+            galley.SelectRestaurant(level);
+            if (alreadyInKitchen) return;
             galley.gameObject.SetActive(true);
             galley.BindChef(ares);
             counterLayer.gameObject.SetActive(false);

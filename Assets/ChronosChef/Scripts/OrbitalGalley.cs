@@ -58,22 +58,30 @@ namespace ChronosChef
             return true;
         }
         Sprite backdrop;
+        SpriteRenderer plate;
+        public void SelectRestaurant(int level)
+        {
+            string art = level == 2 ? "EarthIndustrial" : level == 3 ? "EarthTrattoria" : "EarthKitchen";
+            if (backdrop && backdrop.texture.name == art) return;
+            var texture = Resources.Load<Texture2D>(art);
+            var next = Sprite.Create(texture, new Rect(0,0,texture.width,texture.height), new Vector2(.5f,.5f),100,0,SpriteMeshType.FullRect);
+            float height = 72 * Mathf.Tan(lens.fieldOfView*Mathf.Deg2Rad*.5f);
+            plate.transform.localScale = new Vector3(height*lens.aspect/next.bounds.size.x,height/next.bounds.size.y,1);
+            plate.sprite = next;
+            if (backdrop) Destroy(backdrop);
+            backdrop = next;
+        }
         readonly Sprite[] portraits=new Sprite[4];
         readonly SpriteRenderer[] diners=new SpriteRenderer[3];
 
         void DressEarthKitchen()
         {
-            var texture=Resources.Load<Texture2D>("EarthKitchen");
-            backdrop=Sprite.Create(texture,new Rect(0,0,texture.width,texture.height),new Vector2(.5f,.5f),100,0,SpriteMeshType.FullRect);
             var wall=new GameObject("Earth restaurant");
             wall.layer=SceneLayer;
             wall.transform.SetParent(transform,false);
             wall.transform.position=lens.ViewportToWorldPoint(new Vector3(.5f,.5f,36));
             wall.transform.rotation=lens.transform.rotation;
-            float height=72*Mathf.Tan(lens.fieldOfView*Mathf.Deg2Rad*.5f);
-            wall.transform.localScale=new Vector3(height*lens.aspect/backdrop.bounds.size.x,height/backdrop.bounds.size.y,1);
-            var plate=wall.AddComponent<SpriteRenderer>();
-            plate.sprite=backdrop;
+            plate=wall.AddComponent<SpriteRenderer>();
             plate.sortingOrder=-10;
             var sheet=Resources.Load<Texture2D>("EarthGuests");
             float[] cuts={0,.284f,.493f,.753f,1};

@@ -28,7 +28,7 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 
 ## Mundo 1 · Tierra
 
-En **Jugar → Primer servicio**, Ares atiende un restaurante de barrio. El escenario ilustrado y los cuatro retratos de clientes se combinan con Ares y los alimentos en 3D. Los cinco turnos de Tierra comparten el restaurante y conservan sus metas y desbloqueos. **Practicar en la Tierra** usa un guardado independiente.
+En **Jugar → Primer servicio**, Ares atiende un restaurante de barrio. El escenario ilustrado y los cuatro retratos de clientes se combinan con Ares y los alimentos en 3D. El nivel 2 transcurre en una cocina industrial y el nivel 3 en una trattoria de piedra. Ambos reutilizan los clientes del barrio y conservan sus metas y desbloqueos. **Practicar en la Tierra** usa un guardado independiente.
 
 ![Primer servicio en la Tierra](Docs/media/tierra-nivel-1.png)
 

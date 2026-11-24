@@ -28,7 +28,7 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 
 ## Cocina orbital de prueba
 
-En la portada, **PROBAR COCINA 3D** abre un turno con las reglas del nivel 1. La cubierta, la barra, las máquinas y Ares se renderizan con una cámara ortográfica a 23° sobre el suelo. Los pedidos, los clientes y los controles usan la interfaz de la cocina original. Para salir, usa **Pausa → Portal y mejoras**. Los créditos y el guardado de esta prueba usan su propio perfil.
+En la portada, **PROBAR COCINA 3D** abre un turno con las reglas del nivel 1. La cubierta, la barra, las máquinas y Ares se renderizan con una cámara fija en perspectiva, centrada detrás del punto de inicio de Ares y con una inclinación de 10° hacia la barra. Los pedidos, los clientes y los controles usan la interfaz de la cocina original. Para salir, usa **Pausa → Portal y mejoras**. Los créditos y el guardado de esta prueba usan su propio perfil.
 
 ![Turno en la cocina orbital](Docs/media/cocina-orbital.png)
 

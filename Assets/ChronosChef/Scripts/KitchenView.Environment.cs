@@ -18,7 +18,7 @@ namespace ChronosChef
         UnityEngine.UI.Image clockSweep;
         OrbitalGalley galley;
         KitchenProgress campaignProgress;
-        bool InGalley => campaignProgress != null;
+        internal bool InGalley => campaignProgress != null;
 
         void StartGalleyTrial()
         {
@@ -36,12 +36,15 @@ namespace ChronosChef
             stations[3].transform.Find("AssemblyPlate").gameObject.SetActive(false);
             stations[3].transform.Find("BreadSupply").gameObject.SetActive(false);
             chef.Find("Shadow").gameObject.SetActive(false);
+            ApplyRearLayout();
+            angle = 180;
             game.BeginLevel(1);
         }
 
         void LeaveGalleyTrial()
         {
             if (!InGalley) return;
+            RestoreRearLayout();
             ares.SetWorldSkin(null);
             galley.gameObject.SetActive(false);
             counterLayer.gameObject.SetActive(true);
@@ -161,6 +164,8 @@ namespace ChronosChef
             {
                 environmentLayer.texture = galley.Image;
                 galley.UpdateService(g,ares.WorldScale);
+                chef.anchoredPosition = galley.FloorScreen(g.ChefPosition);
+                clone.anchoredPosition = galley.FloorScreen(g.ClonePosition);
             }
             else if (environmentLayer.texture != texture) { environmentLayer.texture = texture; counterLayer.texture = texture; }
             float age = KitchenGame.ParadoxSeconds - g.CloneRemaining;

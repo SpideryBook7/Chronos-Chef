@@ -217,15 +217,15 @@ namespace ChronosChef
             float lean = Mathf.Clamp(g.ChefPosition.x - lastChef.x, -1, 1); lastChef = g.ChefPosition;
             if (!ares && !g.Paused) { chef.localEulerAngles = new Vector3(0, 0, -lean * 6); chef.localScale *= 1 + pop * .25f; }
             feedbackLabel.gameObject.SetActive(pulse > 0); feedbackLabel.rectTransform.anchoredPosition = new Vector2(865, 410 + (1 - pulse) * 35); feedbackLabel.alpha = Mathf.Min(1, pulse * 3);
-            for (int i = 0; i < workSparks.Length; i++) { workSparks[i].gameObject.SetActive(pulse > .25f); if (pulse > .25f) workSparks[i].anchoredPosition = g.ChefPosition + new Vector2(Mathf.Cos(i * 2.4f), Mathf.Sin(i * 2.4f)) * ((.85f - pulse) * 170 + 15); }
-            for (int i = 0; i < routeDots.Length; i++) { bool visible = i < g.RoutePreview.Count; routeDots[i].gameObject.SetActive(visible); if (visible) routeDots[i].anchoredPosition = KitchenRules.Position(g.RoutePreview[i]); }
+            for (int i = 0; i < workSparks.Length; i++) { workSparks[i].gameObject.SetActive(pulse > .25f); if (pulse > .25f) workSparks[i].anchoredPosition = chef.anchoredPosition + new Vector2(Mathf.Cos(i * 2.4f), Mathf.Sin(i * 2.4f)) * ((.85f - pulse) * 170 + 15); }
+            for (int i = 0; i < routeDots.Length; i++) { bool visible = i < g.RoutePreview.Count; routeDots[i].gameObject.SetActive(visible); if (visible) routeDots[i].anchoredPosition = InGalley ? galley.FloorScreen(KitchenRules.Position(g.RoutePreview[i])) : KitchenRules.Position(g.RoutePreview[i]); }
             for (int i = 1; i < stoveFoods.Length; i++) stoveFoods[i].gameObject.SetActive((int)g.StoveFood == i);
             float clock = g.Running && !g.Paused ? Time.time : 0;
             for (int i = 0; i < steam.Length; i++)
             {
                 bool visible = g.StoveFood != Food.Empty; steam[i].gameObject.SetActive(visible);
                 float f = Mathf.Repeat(clock * .65f + i / 6f, 1);
-                steam[i].anchoredPosition = new Vector2(945 + i * 7 + Mathf.Sin(clock * 3 + i) * 9, 538 + f * 85);
+                steam[i].anchoredPosition = (InGalley ? galley.ScreenPoint(new Vector3(1.45f,1,.03f)) : new Vector2(945,538)) + new Vector2(i * 7 + Mathf.Sin(clock * 3 + i) * 9, f * 85);
                 steam[i].localScale = Vector3.one * (1 + f * 1.4f);
                 steam[i].GetComponent<UnityEngine.UI.Image>().color = new Color(g.StoveFood == Food.Burnt ? .7f : .5f, .8f, 1, (1 - f) * .5f);
             }

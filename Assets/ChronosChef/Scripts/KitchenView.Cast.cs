@@ -56,7 +56,7 @@ namespace ChronosChef
             if (g.NearbyStation.HasValue && !g.TutorialActive && !g.HasDestination)
                 stations[(int)g.NearbyStation.Value].image.color = new Color(.36f,1,.84f,.14f);
             float dt = Time.deltaTime;
-            if (g.Travelled < lastDistance) { gait = 0; angle = 0; }
+            if (g.Travelled < lastDistance) { gait = 0; angle = InGalley ? 180 : 0; }
             float distance = Mathf.Max(0, g.Travelled - lastDistance);
             lastDistance = g.Travelled;
             castClock += dt;
@@ -100,7 +100,7 @@ namespace ChronosChef
                 carriedIcon.localScale = Vector3.one * .80f;
                 float heading = angle * Mathf.Deg2Rad;
                 if (g.Carry != Food.Empty)
-                    carriedIcon.anchoredPosition = chef.InverseTransformPoint(ares.rectTransform.TransformPoint(ares.GripCenter()));
+                    carriedIcon.anchoredPosition = InGalley ? (galley.HandScreen(ares.GripPoint()) - chef.anchoredPosition) / chef.localScale.x : (Vector2)chef.InverseTransformPoint(ares.rectTransform.TransformPoint(ares.GripCenter()));
                 // Let the torso occlude the platter when the chef turns his back.
                 var body = ares.transform.parent;
                 if (Mathf.Cos(heading) < -.25f && carriedIcon.GetSiblingIndex() > body.GetSiblingIndex())

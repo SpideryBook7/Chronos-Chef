@@ -117,7 +117,7 @@ namespace ChronosChef
         }
         void ShowDeliveryReceipt(int slot, Food dish, int credits)
         {
-            receiptStart = new Vector2(630 + slot * 270, 678);
+            receiptStart = InGalley ? galley.ScreenPoint(new Vector3((slot-1)*3.9f,1.6f,2.92f)) : new Vector2(630 + slot * 270, 678);
             receipt.anchoredPosition = receiptStart;
             receiptDish.sprite = DishSprite(dish);
             receiptAmount.SetText("+{0}", credits);

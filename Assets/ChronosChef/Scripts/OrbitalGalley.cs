@@ -7,7 +7,9 @@ namespace ChronosChef
     // The camera's image occupies the same safe-area frame as the touch controls.
     public sealed class OrbitalGalley : MonoBehaviour
     {
-        const float Pitch = 23f;
+        // Floor coordinates are authored against the original deck projection.
+        const float FloorPixelsPerMetre = 39.07311f;
+        Camera lens;
         const int SceneLayer = 30;
         public RenderTexture Image { get; private set; }
         Mesh galleyMesh, actorMesh;
@@ -31,12 +33,12 @@ namespace ChronosChef
             actor = AddSurface("Ares",actorMesh,actorSurface);
 
 
-            var lens = new GameObject("Galley camera").AddComponent<Camera>();
+            lens = new GameObject("Galley camera").AddComponent<Camera>();
             lens.transform.SetParent(transform,false);
-            lens.transform.localRotation = Quaternion.Euler(Pitch,0,0);
-            lens.transform.localPosition = -(lens.transform.localRotation*Vector3.forward)*28;
-            lens.orthographic = true;
-            lens.orthographicSize = 4.5f;
+            lens.transform.localRotation = Quaternion.Euler(10,0,0);
+            lens.transform.localPosition = new Vector3(0,3.25f,-15.8f);
+            lens.orthographic = false;
+            lens.fieldOfView = 50;
             lens.clearFlags = CameraClearFlags.SolidColor;
             lens.backgroundColor = KitchenView.C("18263D");
             lens.cullingMask = 1 << SceneLayer;
@@ -50,9 +52,7 @@ namespace ChronosChef
 
         public void UpdateService(KitchenGame game, float modelScale)
         {
-            var floor = game.ChefPosition;
-            float sine = Mathf.Sin(Pitch*Mathf.Deg2Rad);
-            actor.localPosition = new Vector3((floor.x-800)/100f,.05f,(floor.y-473)/(100*sine));
+            actor.localPosition = FloorPoint(game.ChefPosition);
             actor.localScale = Vector3.one*modelScale;
             var feet = actor.localPosition;
             galleySurface.SetVector(ChefFloor,new Vector4(feet.x,feet.z,0,0));
@@ -60,6 +60,15 @@ namespace ChronosChef
             float heat = game.StoveFood == Food.Empty ? .17f : .75f;
             galleySurface.SetFloat(Burner,heat * (.9f + .1f*Mathf.Sin(burnerPhase*6)));
         }
+        static Vector3 FloorPoint(Vector2 floor) => new Vector3((floor.x-800)/100f,.05f,(floor.y-473)/FloorPixelsPerMetre);
+        public Vector2 FloorScreen(Vector2 floor) => ScreenPoint(FloorPoint(floor));
+        public Vector2 ScreenPoint(Vector3 local)
+        {
+            var v = lens.WorldToViewportPoint(transform.TransformPoint(local));
+            return new Vector2(v.x*1600,v.y*900);
+        }
+        public float ScreenScale(Vector3 local) => (ScreenPoint(local+Vector3.right).x-ScreenPoint(local).x)/100f;
+        public Vector2 HandScreen(Vector3 point) => ScreenPoint(actor.localPosition + new Vector3(point.x,point.z,point.y)*actor.localScale.x);
         Transform AddSurface(string title, Mesh mesh, Material mat)
         {
             var part = new GameObject(title,typeof(MeshFilter),typeof(MeshRenderer));

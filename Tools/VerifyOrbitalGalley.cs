@@ -37,6 +37,11 @@ try
     var room=UnityEngine.Object.FindFirstObjectByType<ChronosChef.OrbitalGalley>();
     if (!room || !room.Image.IsCreated() || room.GetComponentInChildren<UnityEngine.Camera>().targetTexture!=room.Image)
         throw new System.Exception("3D camera not rendering");
+    var camera = room.GetComponentInChildren<UnityEngine.Camera>();
+    var cameraPosition = camera.transform.position;
+    var cameraRotation = camera.transform.rotation;
+    if (camera.orthographic || game.Facing != UnityEngine.Vector2.up || UnityEngine.Mathf.Abs(camera.transform.localPosition.x) > .001f)
+        throw new System.Exception("Trial did not open with a centered rear perspective");
     var actor=room.transform.Find("Ares");
     var start=actor.localPosition;
     game.SetStick(UnityEngine.Vector2.left);
@@ -49,6 +54,8 @@ try
     Tap("PlasmaStove"); await Wait(()=>game.Carry==ChronosChef.Food.CookedDodo,"Plate");
     Tap("Assembly"); await Wait(()=>game.Carry==ChronosChef.Food.Burger,"Assemble");
     Tap("ServeCustomer0"); await Wait(()=>game.Served==1,"Serve");
+    if (camera.transform.position != cameraPosition || camera.transform.rotation != cameraRotation)
+        throw new System.Exception("Camera moved with chef");
     Tap("Pause"); await Wait(()=>game.Paused,"Pause");
     await System.Threading.Tasks.Task.Delay(180);
     Tap("PauseHub"); await Wait(()=>!room.gameObject.activeSelf,"Exit");

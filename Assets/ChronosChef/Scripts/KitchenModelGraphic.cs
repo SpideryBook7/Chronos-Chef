@@ -173,12 +173,16 @@ namespace ChronosChef
         }
         // The carried item is a sibling in the kitchen Canvas. Use the same
         // projection as the animated mitts so it stays seated through turns.
-        public Vector2 GripCenter()
+        public Vector3 GripPoint()
         {
             PrepareTransforms();
             var left = transforms[(int)Joint.ForeL].MultiplyPoint3x4(useSkin ? skinPivots[10] : new Vector3(-.72f,-.18f,.86f));
             var right = transforms[(int)Joint.ForeR].MultiplyPoint3x4(useSkin ? skinPivots[11] : new Vector3(.72f,-.18f,.86f));
-            var p = (left + right) * .5f;
+            return (left + right) * .5f;
+        }
+        public Vector2 GripCenter()
+        {
+            var p = GripPoint();
             var rect = rectTransform.rect;
             float scale = Mathf.Min(rect.width, rect.height) * model.fit;
             return rect.center + new Vector2(p.x, p.y*TiltSin + (p.z-model.middle)*TiltCos + .065f) * scale;

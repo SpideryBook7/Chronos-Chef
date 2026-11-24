@@ -95,8 +95,11 @@ namespace ChronosChef
             Credits = Served = Lost = Combo = arrivals = 0; Reputation = 100;
             Anomaly = CloneRemaining = CookTime = work = 0; CookDuration = 5;
             BorrowRemaining = BorrowCooldown = 0;
-            blocked = new Vector2Int(-1, -1); cell = new Vector2Int(5, 1);
-            ChefPosition = KitchenRules.Position(cell); route.Clear(); destination = null;
+            blocked = new Vector2Int(-1, -1); cell = new Vector2Int(5, view.InGalley ? 0 : 1);
+            if (view.InGalley) Facing = Vector2.up;
+            ChefPosition = KitchenRules.Position(cell);
+            if (view.InGalley) ChefPosition += Vector2.right * 40;
+            route.Clear(); destination = null;
             Running = true; Paused = false; TaskLabel = DestinationLabel = "";
             for (int i = 0; i < 3; i++) { SpawnCustomer(i); respawn[i] = 0; }
             Say("Desliza por el lado derecho para mover a Ares. Toca las estaciones para cocinar y a los clientes para entregar.");

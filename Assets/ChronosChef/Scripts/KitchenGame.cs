@@ -122,7 +122,7 @@ namespace ChronosChef
             MaxPatience[slot] = LevelRules.Patience + slot * 8;
             Patience[slot] = MaxPatience[slot]; special[slot] = false; speechTime[slot] = 3;
             banterCountdown[slot] = 8 + slot * 2; banterLine[slot] = 0;
-            Speech[slot] = Level<=5 ? "¡Mesa para uno!" : new[] { "¡Algo que no se haya extinguido!", "ERROR 404: comida no encontrada", "Exijo una estrella... de neutrones", "¡Rápido, tengo brazos cortos!" }[Species[slot]];
+            Speech[slot] = view.InGalley ? "¡Mesa para uno!" : new[] { "¡Algo que no se haya extinguido!", "ERROR 404: comida no encontrada", "Exijo una estrella... de neutrones", "¡Rápido, tengo brazos cortos!" }[Species[slot]];
         }
         public void SelectStation(int index)
         {
@@ -156,13 +156,13 @@ namespace ChronosChef
                     banterCountdown[i] -= dt;
                     if (banterCountdown[i] <= 0 && speechTime[i] <= 0 && Patience[i] >= 20)
                     {
-                        Speech[i] = Level<=5 ? EarthBanter[Species[i]] : Banter[Species[i]][banterLine[i]++ % 3]; speechTime[i] = 3.5f; banterCountdown[i] = 10 + i;
+                        Speech[i] = view.InGalley ? EarthBanter[Species[i]] : Banter[Species[i]][banterLine[i]++ % 3]; speechTime[i] = 3.5f; banterCountdown[i] = 10 + i;
                     }
                     Patience[i] -= pressure;
                     if (!special[i] && Patience[i] < 20)
                     {
                         special[i] = true; speechTime[i] = 4;
-                        Speech[i] = Level<=5 ? "¡Se me acaba el descanso!" : new[] { "¡GROOAR!", "¡BIP! ¡BIP! ¡ERROR!", "Mi reseña será devastadora", "¡GRRR! ¡Esta barra es mía!" }[Species[i]];
+                        Speech[i] = view.InGalley ? "¡Se me acaba el descanso!" : new[] { "¡GROOAR!", "¡BIP! ¡BIP! ¡ERROR!", "Mi reseña será devastadora", "¡GRRR! ¡Esta barra es mía!" }[Species[i]];
                         if (Species[i] == 0) for (int j = Mathf.Max(0, i - 1); j <= Mathf.Min(2, i + 1); j++) if (j != i && Customers[j]) Patience[j] = Mathf.Max(1, Patience[j] - 7);
                         Feedback?.Invoke("warn");
                     }

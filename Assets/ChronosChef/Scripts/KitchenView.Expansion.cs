@@ -305,6 +305,6 @@ namespace ChronosChef
             if (parent == clone) art.color = new Color(1, .5f, 1, .85f);
             if (parent == chef) { carriedIcon.SetAsLastSibling(); taskLabel.transform.SetAsLastSibling(); }
         }
-        void OnDestroy() { if (galley) Destroy(galley.gameObject); foreach (var sprite in castSprites) if (sprite) Destroy(sprite); DestroyLivingAssets(); }
+        void OnDestroy() { if (flameMaterial) Destroy(flameMaterial); if (galley) Destroy(galley.gameObject); foreach (var sprite in castSprites) if (sprite) Destroy(sprite); DestroyLivingAssets(); }
     }
 }

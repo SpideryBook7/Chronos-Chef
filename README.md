@@ -28,9 +28,9 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 
 ## Mundo 1 · Tierra
 
-En **Jugar → Primer servicio**, Ares atiende un restaurante de barrio. El escenario ilustrado y los cuatro retratos de clientes se combinan con Ares y los alimentos en 3D. El nivel 2 transcurre en una cocina industrial y el nivel 3 en una trattoria de piedra. Ambos reutilizan los clientes del barrio y conservan sus metas y desbloqueos. **Practicar en la Tierra** usa un guardado independiente.
+En **Jugar → Primer servicio**, la campaña usa la cocina isométrica de neón. Ares, los clientes y los alimentos se dibujan a partir de sus modelos 3D. El horno emite brasas y el plasma aumenta al cocinar. **Practicar en la Tierra** conserva el restaurante de barrio con un guardado independiente.
 
-![Primer servicio en la Tierra](Docs/media/tierra-nivel-1.png)
+![Cocina isométrica durante el primer turno](Docs/media/cocina-isometrica.png)
 
 ## Campaña y mecánicas
 

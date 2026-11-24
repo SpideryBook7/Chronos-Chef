@@ -29,7 +29,7 @@ namespace ChronosChef
         }
         internal void SetLevelEnvironment(int level)
         {
-            if(level>5) { LeaveGalleyTrial(); return; }
+            if(!IsTrial || level>5) { LeaveGalleyTrial(); return; }
             bool alreadyInKitchen = InGalley;
             if (!galley)
             {
@@ -69,6 +69,25 @@ namespace ChronosChef
             game.Progress = campaignProgress;
             campaignProgress = null;
         }
+        Material flameMaterial;
+        RectTransform hearthFlame, plasmaFlame;
+        float flamePhase;
+
+        RectTransform AddFlame(Transform parent, string name, Vector2 position, Vector2 size, Color tint)
+        {
+            var image = new GameObject(name, typeof(RectTransform), typeof(UnityEngine.UI.RawImage)).GetComponent<UnityEngine.UI.RawImage>();
+            var rect = image.rectTransform;
+            rect.SetParent(parent, false);
+            rect.anchorMin = rect.anchorMax = Vector2.zero;
+            rect.pivot = new Vector2(.5f, 0);
+            rect.anchoredPosition = position;
+            rect.sizeDelta = size;
+            image.material = flameMaterial;
+            image.color = tint;
+            image.raycastTarget = false;
+            return rect;
+        }
+
         void InstallEnvironment()
         {
             if (!environmentArt) return;
@@ -94,6 +113,10 @@ namespace ChronosChef
             var hotplate = Dot(stations[2].transform, "LiveHotplate", 0, 23, 66, C("243049")); hotplate.sizeDelta = new Vector2(71, 34); hotplate.SetAsFirstSibling();
             Dot(hotplate, "PlasmaCore", 0, 0, 32, Green).sizeDelta = new Vector2(40, 19);
             foreach (var food in stoveFoods) if (food) { food.anchoredPosition = new Vector2(0, 27); food.SetAsLastSibling(); }
+            flameMaterial = new Material(Resources.Load<Shader>("KitchenFlame"));
+            hearthFlame = AddFlame(rect, "Hearth embers", new Vector2(40,462), new Vector2(70,94), C("FF781E"));
+            plasmaFlame = AddFlame(stations[2].transform, "Plasma plume", new Vector2(102.5f,90), new Vector2(81,88), C("35FBC8"));
+            plasmaFlame.SetSiblingIndex(hotplate.GetSiblingIndex()+1);
             // A stationary window clips each visitor ABOVE the back edge of the bar.
             // It must not travel with the visitor: that exposed bodies during arrival/bobbing.
             for (int i = 0; i < 3; i++)
@@ -170,6 +193,15 @@ namespace ChronosChef
         void RefreshEnvironment(KitchenGame g)
         {
             if (!clockHand) return;
+            bool ambient = !InGalley && g.Level <= 5;
+            hearthFlame.gameObject.SetActive(ambient);
+            plasmaFlame.gameObject.SetActive(ambient);
+            if (ambient && g.Running && !g.Paused)
+            {
+                flamePhase += Time.deltaTime * (ReducedMotion ? .18f : 1);
+                flameMaterial.SetFloat("_Phase", flamePhase);
+                plasmaFlame.localScale = Vector3.one * (g.StoveFood == Food.Empty ? .82f : 1.12f);
+            }
             var texture = g.Level > 5 && steampunkArt ? steampunkArt : environmentArt;
             if (InGalley)
             {

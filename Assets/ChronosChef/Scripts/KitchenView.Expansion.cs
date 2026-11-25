@@ -123,7 +123,7 @@ namespace ChronosChef
                 int level = i + 1; float x = -490 + i % 5 * 245, y = i < 5 ? 60 : -35;
                 var b = Button(menu.transform, "Level" + level, x, y, 215, 78, C("283C54"));
                 levelButtons[i] = b; levelTexts[i] = Label(b.transform, "", -100, 0, 200, 72, 21, Color.white, FontStyles.Bold);
-                b.onClick.AddListener(() => { audioFeedback.Play("click"); RequestLevel(level, level == 1 && !game.Progress.TutorialDone); });
+                b.onClick.AddListener(() => { audioFeedback.Play("click"); OpenBrief(level); });
             }
             var speed = Button(menu.transform, "BuySpeed", -320, -145, 590, 64, C("2C4254")); speedText = Label(speed.transform, "", -285, 0, 570, 58, 21, Cyan, FontStyles.Bold);
             speed.onClick.AddListener(() => { MenuNotice(game.Progress.Buy(true)); RefreshHub(); });
@@ -166,22 +166,22 @@ namespace ChronosChef
         }
         GameObject ScreenPanel(string name)
         {
-            var r = Panel(stage, name, 800, 450, 1600, 900, new Color(.035f, .055f, .10f, .995f)); r.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
+            var r = Panel(stage, name, 800, 450, 1600, 900, new Color(.16f, .20f, .17f, .995f)); r.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
             Panel(r, "TopAccent", 0, 397, 1450, 4, Cyan); Panel(r, "BottomAccent", 0, -397, 1450, 4, Pink); return r.gameObject;
         }
         void ActionButton(Transform p, string name, string caption, float y, UnityEngine.Events.UnityAction action)
-        { var b = Button(p, name, 0, y, 620, 68, C("2A4058")); Label(b.transform, caption, -300, 0, 600, 60, 25, Cyan, FontStyles.Bold); b.onClick.AddListener(() => { audioFeedback.Play("click"); action(); }); }
+        { var b = Button(p, name, 0, y, 620, 68, C("4B6150")); Label(b.transform, caption, -300, 0, 600, 60, 25, Cyan, FontStyles.Bold); b.onClick.AddListener(() => { audioFeedback.Play("click"); action(); }); }
         void MakeSlider(Transform p, string name, float y, float value, UnityEngine.Events.UnityAction<float> changed)
         {
             Label(p, name, -500, y, 260, 50, 25, Gold, FontStyles.Bold);
-            var track = Panel(p, name + "Slider", 130, y, 650, 42, C("2A4058")); track.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
+            var track = Panel(p, name + "Slider", 130, y, 650, 42, C("4B6150")); track.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
             var fillArea = Panel(track, "FillArea", 0, 0, 620, 15, C("192638"));
             var fill = Panel(fillArea, "Fill", 0, 0, 620, 15, Cyan);
             var handleArea = new GameObject("HandleArea", typeof(RectTransform)).GetComponent<RectTransform>(); handleArea.SetParent(track, false); handleArea.anchorMin = Vector2.zero; handleArea.anchorMax = Vector2.one; handleArea.offsetMin = new Vector2(15, 0); handleArea.offsetMax = new Vector2(-15, 0);
             var handle = Dot(handleArea, "Handle", 0, 0, 38, Gold); handle.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
             var slider = track.gameObject.AddComponent<UnityEngine.UI.Slider>(); slider.fillRect = fill; slider.handleRect = handle; slider.targetGraphic = handle.GetComponent<UnityEngine.UI.Image>(); slider.minValue = 0; slider.maxValue = 1; slider.value = value; slider.onValueChanged.AddListener(changed);
         }
-        public void ShowMenu(bool show) { if (!menu) return; if (home) home.SetActive(false); menu.SetActive(show); if (show) { selectedPlanet = KitchenLevel.World(game.Level); LeaveGalleyTrial(); SetParadoxVisible(false); menu.transform.SetAsLastSibling(); RefreshHub(); } if (pauseOverlay) pauseOverlay.SetActive(false); if (!show) { recipes.SetActive(false); settings.SetActive(false); } }
+        public void ShowMenu(bool show) { if (!menu) return; if(levelBrief) levelBrief.SetActive(false); if (home) home.SetActive(false); menu.SetActive(show); if (show) { selectedPlanet = KitchenLevel.World(game.Level); LeaveGalleyTrial(); SetParadoxVisible(false); menu.transform.SetAsLastSibling(); RefreshHub(); } if (pauseOverlay) pauseOverlay.SetActive(false); if (!show) { recipes.SetActive(false); settings.SetActive(false); } }
         public void MenuNotice(string text) { if (menuMessage) menuMessage.text = text; audioFeedback?.Play("click"); }
         void RefreshHub()
         {

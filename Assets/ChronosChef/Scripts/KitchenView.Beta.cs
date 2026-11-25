@@ -60,13 +60,13 @@ namespace ChronosChef
         }
         void RequestLevel(int level, bool guided)
         {
-            if (game.Progress.LoadSession() != null) Confirm("¿COMENZAR OTRO TURNO?", "Hay una partida pendiente. El nuevo turno sustituirá ese guardado.\nPuedes cancelar y pulsar RECUPERAR para continuarla.", () => game.BeginLevel(level, guided));
+            if (game.Progress.LoadSession() != null) Confirm("¿COMENZAR OTRO TURNO?", "Hay una partida pendiente. El nuevo turno sustituirá ese guardado.\nPuedes recuperarla desde el menú principal.", () => game.BeginLevel(level, guided));
             else game.BeginLevel(level, guided);
         }
         void RefreshBetaHub()
         {
             if (!resumeShift) return;
-            var session = game.Progress.LoadSession(); resumeShift.gameObject.SetActive(session != null);
+            var session = game.Progress.LoadSession(); resumeShift.gameObject.SetActive(session != null && session.level==briefLevel);
             if (session != null) resumeCaption.text = "RECUPERAR NIVEL " + session.level;
         }
         void RefreshResultActions(KitchenGame g)

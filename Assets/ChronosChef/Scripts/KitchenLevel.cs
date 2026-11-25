@@ -31,7 +31,18 @@ namespace ChronosChef
             new KitchenLevel("Fiesta en la cima", 227, 10, 71, 3, 5),
         };
         public static int Count => All.Length;
-        public static readonly string[] Worlds = { "TIERRA", "FERRUM", "BRUMA", "CUMBRE" };
+        public readonly struct Destination
+        {
+            public readonly string Name, Map, Kitchen;
+            public Destination(string name,string map,string kitchen)
+            { Name=name; Map=map; Kitchen=kitchen; }
+        }
+        public static readonly Destination[] Worlds = {
+            new Destination("TIERRA","EarthRoute","EarthService"),
+            new Destination("FERRUM","FerrumRoute","FerrumService"),
+            new Destination("BRUMA","BrumaRoute","Bruma"),
+            new Destination("CUMBRE","CumbreRoute","Cumbre")
+        };
         public static int World(int level) => UnityEngine.Mathf.Clamp((level-1)/5,0,Worlds.Length-1);
         public static KitchenLevel For(int level) => All[UnityEngine.Mathf.Clamp(level - 1, 0, All.Length - 1)];
     }

@@ -28,13 +28,15 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 
 ## Mundo 1 · Tierra
 
-En **Jugar → Primer servicio**, la campaña usa la cocina isométrica de neón. Ares, los clientes y los alimentos se dibujan a partir de sus modelos 3D. El horno emite brasas y el plasma aumenta al cocinar. **Practicar en la Tierra** conserva el restaurante de barrio con un guardado independiente.
+En **Jugar → Tierra**, toca un nodo para consultar el objetivo, el tiempo y el mejor resultado antes de comenzar. Cada mundo tiene un mapa de maqueta y una cocina propia. Las mejoras se encuentran en la ficha del turno.
 
-![Cocina isométrica durante el primer turno](Docs/media/cocina-isometrica.png)
+![Mapa de Tierra](Docs/media/mapa-tierra.png)
+
+Los destinos de cinco turnos se registran en `KitchenLevel.Worlds` con su nombre, mapa y escenario de Resources. Añade los turnos a `KitchenLevel.All` en el mismo orden. El selector distribuye los mundos en páginas de cuatro; las ilustraciones de página son `PlanetAtlas`, `PlanetAtlas2` y sucesivas, con las miniaturas ordenadas de izquierda a derecha.
 
 ## Campaña y mecánicas
 
-Diez turnos, tres recetas y cuatro especies en tres puestos. KitchenRecipe reúne la ilustración, ingredientes, instrucciones y mensajes que usan la comanda y el recetario de cada plato. Grog ruge y reduce la paciencia de vecinos, BIP-08 tiembla al impacientarse, Rex penaliza más la reputación al arañar la barra y Zorg levita. Los clientes entran y salen detrás de ventanas fijas en el borde de la barra.
+Veinte turnos, tres recetas y cuatro especies en tres puestos. KitchenRecipe reúne la ilustración, ingredientes, instrucciones y mensajes que usan la comanda y el recetario de cada plato. Grog ruge y reduce la paciencia de vecinos, BIP-08 tiembla al impacientarse, Rex penaliza más la reputación al arañar la barra y Zorg levita. Los clientes entran y salen detrás de ventanas fijas en el borde de la barra.
 
 Cocción y margen de quemado independientes, basura, combos, propinas, reputación, estrellas y derrota por tiempo/reputación. El fogón funciona mientras Ares hace otras tareas. Las rutas evitan las estaciones con margen para sus pies. El clon aparece durante 15 segundos al alcanzar 100% de anomalía y no ocupa puntos de servicio. Un aviso translúcido aparece durante los primeros 3,2 segundos de la anomalía.
 

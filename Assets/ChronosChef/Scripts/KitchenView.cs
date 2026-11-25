@@ -20,7 +20,7 @@ namespace ChronosChef
         [SerializeField] TMP_FontAsset font;
         [SerializeField] RectTransform safeRoot;
         Rect lastSafe; int lastWidth, lastHeight;
-        static readonly Color Cyan = C("5CE7EA"), Pink = C("F17BC6"), Gold = C("FFC568"), Ink = C("141B30"), Green = C("98EF9A");
+        static readonly Color Cyan = C("C9DFC2"), Pink = C("E29E8A"), Gold = C("E6C58F"), Ink = C("303C34"), Green = C("BDD3A0");
         public static Color C(string hex) { ColorUtility.TryParseHtmlString("#" + hex, out var c); return c; }
         public void Bind(KitchenGame game)
         {

@@ -27,7 +27,10 @@ Shader "ChronosChef/MenuAtmosphere"
                     float wave=t*.75+slot*1.8;
                     uv.y-=mask*(.010*sin(wave)+local.x*.055*cos(wave));
                     uv.x+=mask*.002*cos(wave*.9);
-                    uv.x+=.0018*sin(t*.25+uv.y*7)*(1-smoothstep(.18,.34,uv.y))*sin(3.14159*uv.x);
+                    // The foreground cloud bank drifts independently of the islands.
+                    float clouds=1-smoothstep(.19,.34,uv.y);
+                    uv.x+=.012*sin(t*.16+uv.y*4)*clouds*sin(3.14159*uv.x);
+                    uv.y+=.003*sin(t*.22+uv.x*5)*clouds*sin(3.14159*uv.y);
                     return tex2D(_MainTex,uv);
                 }
                 float diagonal=uv.x-.61*uv.y+.033*sin(t*.23);

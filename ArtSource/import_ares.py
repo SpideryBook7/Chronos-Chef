@@ -38,7 +38,7 @@ def weights(p):
     x,y,z = p
     right = int(x>0)
     head = smooth((z-.69)/.07)
-    arm = smooth((abs(x)-(.196-(z-.48)*.31))/.035)*smooth((z-.345)/.025)*(1-smooth((z-.615)/.075))
+    arm = smooth((abs(x)-(.196-(z-.48)*.31))/.035)*smooth((z-.295)/.035)*(1-smooth((z-.615)/.075))
     leg = 1-smooth((z-.27)/.09)
     elbow = 1-smooth((z-.49)/.06)
     knee = 1-smooth((z-.12)/.065)

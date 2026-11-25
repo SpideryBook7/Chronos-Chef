@@ -125,7 +125,7 @@ namespace ChronosChef
             int kind = g.Species[slot];
             if(InGalley) { galley.Seat(slot,kind,ReducedMotion ? 0 : castClock*(1.6f+kind*.3f)+slot); return; }
             var model = visitors[slot,kind];
-            if (!model || !g.Customers[slot]) return;
+            if (!model) return;
             bool impatient = g.Patience[slot] < 20;
             if (kind == 1) model.Show(impatient ? "BipAlarm" : "BipIdle");
             float urgency = impatient ? 1.8f : 1;
@@ -155,6 +155,15 @@ namespace ChronosChef
                         pose.leftArm = -35+wave*12; pose.rightArm = -35-wave*12; break;
                 }
                 pose.bounce = Mathf.Sin(t*2.2f)*.027f;
+            }
+            float walking = Mathf.Clamp01(Mathf.Abs(aisleX[slot] - SeatX(slot)) / 40);
+            if (walking > 0 && !ReducedMotion)
+            {
+                float step = Mathf.Sin(aisleX[slot] * .048f);
+                model.Pose(Mathf.Lerp(kind == 3 ? -14 : 0, -70, walking));
+                model.Look(0);
+                pose.leftArm = step * 23; pose.rightArm = -step * 23;
+                pose.leftLeg = -step * 28; pose.rightLeg = step * 28;
             }
             model.Articulate(pose);
 

@@ -205,6 +205,7 @@ namespace ChronosChef
                 }
                 comicSounds[i].text = !g.Customers[i] || !emote && !angry ? "" : species == 0 ? angry ? "¡GROOOAR!" : "¡PUM!" : species == 1 ? angry ? "¡ERROR 404!" : "¡BIP-BUP!" : species == 2 ? angry ? "¿PERDÓN?" : "Mmm..." : angry ? "¡ÑAM-GRR!" : "¡CRUNCH!";
                 if (InGalley) comicSounds[i].text = angry ? "¿Falta mucho?" : emote ? "¡Qué aroma!" : "";
+                if (!InGalley && Mathf.Abs(aisleX[i] - SeatX(i)) > 8) comicSounds[i].text = "";
                 comicSounds[i].color = angry ? Pink : Gold;
             }
         }

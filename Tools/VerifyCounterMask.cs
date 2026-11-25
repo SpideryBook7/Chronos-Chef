@@ -4,7 +4,8 @@ for (int i = 0; i < 3; i++)
 {
     var window = stage.Find("CustomerWindow" + i).GetComponent<UnityEngine.RectTransform>();
     if (!window.GetComponent<UnityEngine.UI.RectMask2D>()) throw new System.Exception("Missing stationary counter mask");
-    if (window.anchoredPosition.y - window.rect.height / 2 != 650) throw new System.Exception("Mask no longer aligns with bar edge");
+    var lip = stage.Find("CounterForeground").GetComponent<UnityEngine.RectTransform>();
+    if (window.rect.width < 1000 || UnityEngine.Mathf.Abs(window.anchoredPosition.y - window.rect.height / 2 - lip.anchoredPosition.y - lip.rect.height / 2) > .1f) throw new System.Exception("Mask no longer aligns with bar edge");
     foreach (UnityEngine.Transform visitor in window)
     {
         if (visitor.GetComponent<UnityEngine.UI.RectMask2D>()) throw new System.Exception("Mask incorrectly follows visitor movement");

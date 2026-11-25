@@ -211,6 +211,8 @@ namespace ChronosChef
             goal.text = $"NIVEL {g.Level}  /  PEDIDOS {g.Served}/{g.Target}  /  REPUTACIÓN {g.Reputation}%";
             comboLabel.text = g.Combo > 1 ? "COMBO ×" + g.Combo : "";
             workFill.fillAmount = g.WorkProgress; workFill.transform.parent.gameObject.SetActive(g.TaskLabel == "CORTANDO");
+            cookFill.transform.parent.gameObject.SetActive(g.StoveFood != Food.Empty);
+            burnFill.transform.parent.gameObject.SetActive(g.StoveFood == Food.CookedDodo || g.StoveFood == Food.Soup);
             burnFill.fillAmount = g.StoveFood == Food.CookedDodo || g.StoveFood == Food.Soup ? 1 - (g.CookTime - g.CookDuration) / g.BurnWindow : 0;
             taskLabel.text = g.TaskLabel == "" ? g.DestinationLabel : g.TaskLabel; taskLabel.fontSize = 16; taskLabel.rectTransform.sizeDelta = new Vector2(270, 35); taskLabel.rectTransform.anchoredPosition = new Vector2(0, 130);
             if (shownCarry != (int)g.Carry) { shownCarry = (int)g.Carry; for (int i = 1; i < carriedFood.Length; i++) carriedFood[i].gameObject.SetActive(i == shownCarry); }

@@ -14,7 +14,18 @@ namespace ChronosChef
         UnityEngine.UI.Image animatedChef;
         Sprite[] chefFrames;
         readonly bool[] wasPresent = new bool[3];
-        readonly float[] arrival = new float[3];
+        readonly float[] aisleX = new float[3];
+        readonly float[] entranceDelay = new float[3];
+        int lastAisleFrame;
+        internal void ResetDiningQueue()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                wasPresent[i] = false;
+                aisleX[i] = DiningRight;
+                entranceDelay[i] = i * .52f;
+            }
+        }
         public bool ReducedMotion { get; private set; }
 
         void BuildBetaShell()
@@ -96,13 +107,23 @@ namespace ChronosChef
                     else if (i < 5 || i == 8) stations[i].GetComponent<UnityEngine.UI.Image>().color = Color.clear;
                 }
             float dt = g.Running && !g.Paused ? Time.deltaTime : 0;
+            if (lastAisleFrame == Time.frameCount) dt = 0;
+            lastAisleFrame = Time.frameCount;
             for (int i = 0; i < 3; i++)
             {
-                if (wasPresent[i] != g.Customers[i]) { wasPresent[i] = g.Customers[i]; arrival[i] = 0; }
-                arrival[i] = Mathf.Min(1, arrival[i] + dt * 3);
+                bool present = g.Customers[i];
+                if (present && !wasPresent[i]) aisleX[i] = DiningRight;
+                wasPresent[i] = present;
+                float target = present ? SeatX(i) : DiningLeft;
+                entranceDelay[i] = Mathf.Max(0, entranceDelay[i] - dt);
+                if (ReducedMotion) aisleX[i] = target;
+                else if (entranceDelay[i] == 0) aisleX[i] = Mathf.MoveTowards(aisleX[i], target, 510 * dt);
                 var art = customerArt[i][g.Species[i]];
-                if (!ReducedMotion && g.Running) art.anchoredPosition += new Vector2((g.Customers[i] ? 1 - arrival[i] : -arrival[i]) * 80, 0);
-                art.GetComponent<CanvasGroup>().alpha = g.Customers[i] ? ReducedMotion ? 1 : arrival[i] : Mathf.Max(0, 1 - arrival[i] * 2);
+                float portal = Mathf.Clamp01(Mathf.Min(DiningRight - aisleX[i], aisleX[i] - DiningLeft) / 64);
+                float transit = Mathf.Clamp01(Mathf.Abs(aisleX[i] - SeatX(i)) / 52);
+                art.anchoredPosition += new Vector2(aisleX[i] - SeatX(i), transit * (10 + 3 * Mathf.Sin(aisleX[i] * .048f)));
+                art.localScale = Vector3.one * Mathf.Lerp(.80f, 1, portal);
+                art.GetComponent<CanvasGroup>().alpha = portal;
                 stations[5 + i].interactable = g.Customers[i];
                 if (ReducedMotion) art.localEulerAngles = Vector3.zero;
             }

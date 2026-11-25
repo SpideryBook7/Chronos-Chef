@@ -8,7 +8,30 @@ namespace ChronosChef
         [SerializeField] Texture2D environmentArt;
         [SerializeField] Texture2D steampunkArt;
         UnityEngine.UI.RawImage environmentLayer, counterLayer;
+        UnityEngine.UI.RawImage diningFloor;
+        RectTransform counterBead;
         bool fixedCustomerWindows;
+        const float DiningLeft = 348, DiningRight = 1312;
+        readonly RectTransform[] diningWindows = new RectTransform[3];
+        readonly RectTransform[] diningDoors = new RectTransform[2];
+        static float SeatX(int slot) => 630 + 270 * slot;
+
+        void LayoutDiningRoom(int world)
+        {
+            // Stage coordinates of the rear lip, measured on the 1600 x 900 background.
+            float edge = world switch { 1 => 654, 2 => 652, 3 => 658, _ => 647 };
+            for (int i = 0; i < diningDoors.Length; i++)
+                diningDoors[i].anchoredPosition = new Vector2(i == 0 ? DiningLeft : DiningRight, edge + 120);
+            diningFloor.rectTransform.anchoredPosition = new Vector2(824, edge + 16);
+            diningFloor.texture = WorldKitchen(world);
+            counterBead.anchoredPosition = new Vector2(824, edge - 1);
+            foreach (var window in diningWindows)
+                window.anchoredPosition = new Vector2(800, edge + 94);
+            var lip = counterLayer.rectTransform;
+            lip.anchoredPosition = new Vector2(800, edge - 20);
+            lip.sizeDelta = new Vector2(1100, 40);
+            counterLayer.uvRect = new Rect(250f/1600, (edge-40)/900, 1100f/1600, 40f/900);
+        }
         RectTransform clockHand;
         CanvasGroup alertCanvas, borderCanvas;
 
@@ -47,6 +70,8 @@ namespace ChronosChef
             galley.gameObject.SetActive(true);
             galley.BindChef(ares);
             counterLayer.gameObject.SetActive(false);
+            foreach (var door in diningDoors) door.gameObject.SetActive(false);
+            diningFloor.enabled = false; counterBead.gameObject.SetActive(false);
             stations[2].transform.Find("LiveHotplate").gameObject.SetActive(false);
             stations[3].transform.Find("AssemblyPlate").gameObject.SetActive(false);
             stations[3].transform.Find("BreadSupply").gameObject.SetActive(false);
@@ -64,6 +89,8 @@ namespace ChronosChef
             ares.SetWorldSkin(null);
             galley.gameObject.SetActive(false);
             counterLayer.gameObject.SetActive(true);
+            foreach (var door in diningDoors) door.gameObject.SetActive(true);
+            diningFloor.enabled = true; counterBead.gameObject.SetActive(true);
             stations[2].transform.Find("LiveHotplate").gameObject.SetActive(true);
             stations[3].transform.Find("AssemblyPlate").gameObject.SetActive(true);
             stations[3].transform.Find("BreadSupply").gameObject.SetActive(true);
@@ -123,12 +150,33 @@ namespace ChronosChef
             hearthFlame = AddFlame(rect, "Hearth embers", new Vector2(40,462), new Vector2(70,94), C("FF781E"));
             plasmaFlame = AddFlame(stations[2].transform, "Plasma plume", new Vector2(102.5f,90), new Vector2(81,88), C("35FBC8"));
             plasmaFlame.SetSiblingIndex(hotplate.GetSiblingIndex()+1);
-            // A stationary window clips each visitor ABOVE the back edge of the bar.
+            // Real floor texture from the same kitchen spans the passage between the thresholds.
+            diningFloor = new GameObject("Dining aisle", typeof(RectTransform), typeof(UnityEngine.UI.RawImage)).GetComponent<UnityEngine.UI.RawImage>();
+            diningFloor.transform.SetParent(rect, false);
+            diningFloor.rectTransform.anchorMin = diningFloor.rectTransform.anchorMax = Vector2.zero;
+            diningFloor.rectTransform.sizeDelta = new Vector2(1080, 34);
+            diningFloor.uvRect = new Rect(.23f, .21f, .54f, .048f);
+            diningFloor.color = new Color(.74f,.70f,.64f,1);
+            diningFloor.raycastTarget = false;
+            counterBead = Panel(stage, "Counter back moulding", 824, 650, 1080, 5, C("755C47"), false);
+            var arch = Resources.Load<Texture2D>("ServiceArch");
+            for (int side = 0; side < diningDoors.Length; side++)
+            {
+                var doorway = new GameObject(side == 0 ? "Dining exit" : "Dining entrance", typeof(RectTransform), typeof(UnityEngine.UI.RawImage)).GetComponent<UnityEngine.UI.RawImage>();
+                doorway.transform.SetParent(rect, false);
+                doorway.texture = arch;
+                doorway.raycastTarget = false;
+                doorway.uvRect = side == 0 ? new Rect(1,0,-1,1) : new Rect(0,0,1,1);
+                var frame = diningDoors[side] = doorway.rectTransform;
+                frame.anchorMin = frame.anchorMax = Vector2.zero;
+                frame.sizeDelta = new Vector2(130, 188);
+            }
+            // The full aisle shares one counter edge throughout the walk.
             // It must not travel with the visitor: that exposed bodies during arrival/bobbing.
             for (int i = 0; i < 3; i++)
             {
                 var window = new GameObject("CustomerWindow" + i, typeof(RectTransform), typeof(UnityEngine.UI.RectMask2D)).GetComponent<RectTransform>();
-                window.SetParent(stage, false); window.anchorMin = window.anchorMax = Vector2.zero; window.anchoredPosition = new Vector2(630 + i * 270, 706); window.sizeDelta = new Vector2(250, 112);
+                window.SetParent(stage, false); window.anchorMin = window.anchorMax = Vector2.zero; window.anchoredPosition = new Vector2(630 + i * 270, 706); window.sizeDelta = new Vector2(1100, 188); diningWindows[i] = window;
                 for (int j = 0; j < 4; j++)
                 {
                     var visitor = customerArt[i][j]; visitor.SetParent(window, false); visitor.anchorMin = visitor.anchorMax = new Vector2(.5f, .5f); visitor.anchoredPosition = new Vector2(0, -26); visitor.sizeDelta = new Vector2(190, 145);
@@ -139,7 +187,8 @@ namespace ChronosChef
             fixedCustomerWindows = true;
             var foreground = new GameObject("CounterForeground", typeof(RectTransform), typeof(UnityEngine.UI.RawImage));
             var foregroundRect = foreground.GetComponent<RectTransform>(); foregroundRect.SetParent(stage, false); foregroundRect.anchorMin = foregroundRect.anchorMax = Vector2.zero; foregroundRect.anchoredPosition = new Vector2(835, 612.5f); foregroundRect.sizeDelta = new Vector2(1070, 75);
-            var foregroundImage = foreground.GetComponent<UnityEngine.UI.RawImage>(); foregroundImage.texture = environmentArt; foregroundImage.uvRect = new Rect(300f / 1600, 575f / 900, 1070f / 1600, 75f / 900); foregroundImage.raycastTarget = false; counterLayer = foregroundImage;
+            var foregroundImage = foreground.GetComponent<UnityEngine.UI.RawImage>(); foregroundImage.texture = environmentArt; foregroundImage.uvRect = new Rect(300f / 1600, 575f / 900, 1070f / 1600, 75f / 900); foregroundImage.raycastTarget = false; counterLayer = foregroundImage; LayoutDiningRoom(0);
+            counterBead.SetAsLastSibling();
             for (int i = 0; i < 3; i++)
             {
                 var card = customerLabels[i].transform.parent;
@@ -165,7 +214,12 @@ namespace ChronosChef
             cookFill.transform.parent.GetComponent<RectTransform>().anchoredPosition = new Vector2(945, 446);
             burnFill.transform.parent.GetComponent<RectTransform>().anchoredPosition = new Vector2(945, 436);
             wallet.rectTransform.anchoredPosition = new Vector2(1450, 790); wallet.rectTransform.sizeDelta = new Vector2(260, 80); wallet.fontSize = 21; wallet.alignment = TextAlignmentOptions.Right;
-            goal.rectTransform.anchoredPosition = new Vector2(855, 882); goal.rectTransform.sizeDelta = new Vector2(860, 28); goal.alignment = TextAlignmentOptions.Left; goal.fontSize = 17;
+            var lacquer = new Color(.09f, .12f, .10f, .78f);
+            Panel(stage, "ShiftRibbon", 835, 881, 477, 31, lacquer).SetSiblingIndex(goal.transform.GetSiblingIndex());
+            goal.rectTransform.anchoredPosition = new Vector2(835, 881);
+            goal.rectTransform.sizeDelta = new Vector2(465, 30);
+            goal.alignment = TextAlignmentOptions.Center;
+            goal.color = Color.white;
             // Compact lower hotbar, matching the reference composition.
             var bottom = stage.Find("BottomPanel").GetComponent<RectTransform>(); bottom.anchoredPosition = new Vector2(800, 74); bottom.sizeDelta = new Vector2(1488, 140); bottom.GetComponent<UnityEngine.UI.Image>().color = new Color(.03f, .06f, .11f, .88f);
             foreach (var label in stage.GetComponentsInChildren<TMP_Text>()) if (label.text == "EN MANOS") label.gameObject.SetActive(false);
@@ -217,7 +271,7 @@ namespace ChronosChef
                 chef.anchoredPosition = galley.FloorScreen(g.ChefPosition);
                 clone.anchoredPosition = galley.FloorScreen(g.ClonePosition);
             }
-            else if (environmentLayer.texture != texture) { environmentLayer.texture = texture; counterLayer.texture = texture; }
+            else if (environmentLayer.texture != texture) { environmentLayer.texture = texture; counterLayer.texture = texture; LayoutDiningRoom(KitchenLevel.World(g.Level)); }
             float age = KitchenGame.ParadoxSeconds - g.CloneRemaining;
             bool visible = g.Running && g.CloneRemaining > 0 && age < NoticeSeconds;
 
@@ -253,6 +307,7 @@ namespace ChronosChef
             var caption = stage.Find("Text_TIEMPO DEL TURNO").GetComponent<TMP_Text>();
             caption.rectTransform.anchoredPosition = new Vector2(161,757);
             caption.fontSize = 12;
+            Panel(stage,"WalletGlass",161,667,228,61,new Color(.07f,.12f,.10f,.68f)).SetSiblingIndex(wallet.transform.GetSiblingIndex());
             Label(stage,"GEMAS\nCRÉDITOS",66,667,120,56,18,Cyan,FontStyles.Bold,TextAlignmentOptions.Left);
             wallet.rectTransform.anchoredPosition = new Vector2(218,667);
             wallet.rectTransform.sizeDelta = new Vector2(96,56);
@@ -283,7 +338,7 @@ namespace ChronosChef
         {
             float x = species == 3 ? Mathf.Sin(clock * 5) * 7 : 0;
             float y = species == 2 ? Mathf.Sin(clock * 2) * 7 : 0;
-            return fixedCustomerWindows ? new Vector2(x, -26 + y) : new Vector2(630 + slot * 270 + x, 652 + y);
+            return fixedCustomerWindows ? new Vector2(SeatX(slot) - 800 + x, -58 + y) : new Vector2(630 + slot * 270 + x, 652 + y);
         }
     }
 }

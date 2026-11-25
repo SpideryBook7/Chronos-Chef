@@ -90,6 +90,7 @@ namespace ChronosChef
         }
         public void ResetShift()
         {
+            view.ResetDiningQueue();
             ResetBetaState();
             ResetMovement();
             Carry = StoveFood = PrepFood = Food.Empty; Remaining = LevelRules.Seconds;

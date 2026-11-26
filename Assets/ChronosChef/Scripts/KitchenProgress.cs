@@ -8,8 +8,8 @@ namespace ChronosChef
         int Get(string key, int fallback = 0) => PlayerPrefs.GetInt(prefix + key, fallback);
         void Set(string key, int value) => PlayerPrefs.SetInt(prefix + key, value);
         public int Bank => Mathf.Clamp(Get("credits"), 0, 100000000);
-        public int Gems => Mathf.Clamp(Get("gems"), 0, 30);
-        public int Unlocked => Mathf.Clamp(Mathf.Max(Get("unlocked", 1), BestStars(10)>0 ? 11 : 1), 1, KitchenLevel.Count);
+        public int Gems => Mathf.Clamp(Get("gems"), 0, KitchenLevel.Count);
+        public int Unlocked => Mathf.Clamp(Mathf.Max(Get("unlocked", 1), BestStars(20)>0 ? 21 : BestStars(10)>0 ? 11 : 1), 1, KitchenLevel.Count);
         public int Era => Mathf.Clamp(Get("era", 1), 1, 2);
         public int Speed => Mathf.Clamp(Get("speed"), 0, 3);
         public int Heat => Mathf.Clamp(Get("heat"), 0, 3);

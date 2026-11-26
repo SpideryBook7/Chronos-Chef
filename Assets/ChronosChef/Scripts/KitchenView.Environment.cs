@@ -8,23 +8,16 @@ namespace ChronosChef
         [SerializeField] Texture2D environmentArt;
         [SerializeField] Texture2D steampunkArt;
         UnityEngine.UI.RawImage environmentLayer, counterLayer;
-        UnityEngine.UI.RawImage diningFloor;
-        RectTransform counterBead;
         bool fixedCustomerWindows;
         const float DiningLeft = 348, DiningRight = 1312;
         readonly RectTransform[] diningWindows = new RectTransform[3];
-        readonly RectTransform[] diningDoors = new RectTransform[2];
+        readonly Transform[] orderRims = new Transform[3];
         static float SeatX(int slot) => 630 + 270 * slot;
 
         void LayoutDiningRoom(int world)
         {
             // Stage coordinates of the rear lip, measured on the 1600 x 900 background.
-            float edge = world switch { 1 => 654, 2 => 652, 3 => 658, _ => 647 };
-            for (int i = 0; i < diningDoors.Length; i++)
-                diningDoors[i].anchoredPosition = new Vector2(i == 0 ? DiningLeft : DiningRight, edge + 120);
-            diningFloor.rectTransform.anchoredPosition = new Vector2(824, edge + 16);
-            diningFloor.texture = WorldKitchen(world);
-            counterBead.anchoredPosition = new Vector2(824, edge - 1);
+            float edge = world switch { 1 or 6 => 654, 2 or 5 => 652, 3 or 4 => 658, _ => 647 };
             foreach (var window in diningWindows)
                 window.anchoredPosition = new Vector2(800, edge + 94);
             var lip = counterLayer.rectTransform;
@@ -70,8 +63,6 @@ namespace ChronosChef
             galley.gameObject.SetActive(true);
             galley.BindChef(ares);
             counterLayer.gameObject.SetActive(false);
-            foreach (var door in diningDoors) door.gameObject.SetActive(false);
-            diningFloor.enabled = false; counterBead.gameObject.SetActive(false);
             stations[2].transform.Find("LiveHotplate").gameObject.SetActive(false);
             stations[3].transform.Find("AssemblyPlate").gameObject.SetActive(false);
             stations[3].transform.Find("BreadSupply").gameObject.SetActive(false);
@@ -89,8 +80,6 @@ namespace ChronosChef
             ares.SetWorldSkin(null);
             galley.gameObject.SetActive(false);
             counterLayer.gameObject.SetActive(true);
-            foreach (var door in diningDoors) door.gameObject.SetActive(true);
-            diningFloor.enabled = true; counterBead.gameObject.SetActive(true);
             stations[2].transform.Find("LiveHotplate").gameObject.SetActive(true);
             stations[3].transform.Find("AssemblyPlate").gameObject.SetActive(true);
             stations[3].transform.Find("BreadSupply").gameObject.SetActive(true);
@@ -150,27 +139,6 @@ namespace ChronosChef
             hearthFlame = AddFlame(rect, "Hearth embers", new Vector2(40,462), new Vector2(70,94), C("FF781E"));
             plasmaFlame = AddFlame(stations[2].transform, "Plasma plume", new Vector2(102.5f,90), new Vector2(81,88), C("35FBC8"));
             plasmaFlame.SetSiblingIndex(hotplate.GetSiblingIndex()+1);
-            // Real floor texture from the same kitchen spans the passage between the thresholds.
-            diningFloor = new GameObject("Dining aisle", typeof(RectTransform), typeof(UnityEngine.UI.RawImage)).GetComponent<UnityEngine.UI.RawImage>();
-            diningFloor.transform.SetParent(rect, false);
-            diningFloor.rectTransform.anchorMin = diningFloor.rectTransform.anchorMax = Vector2.zero;
-            diningFloor.rectTransform.sizeDelta = new Vector2(1080, 34);
-            diningFloor.uvRect = new Rect(.23f, .21f, .54f, .048f);
-            diningFloor.color = new Color(.74f,.70f,.64f,1);
-            diningFloor.raycastTarget = false;
-            counterBead = Panel(stage, "Counter back moulding", 824, 650, 1080, 5, C("755C47"), false);
-            var arch = Resources.Load<Texture2D>("ServiceArch");
-            for (int side = 0; side < diningDoors.Length; side++)
-            {
-                var doorway = new GameObject(side == 0 ? "Dining exit" : "Dining entrance", typeof(RectTransform), typeof(UnityEngine.UI.RawImage)).GetComponent<UnityEngine.UI.RawImage>();
-                doorway.transform.SetParent(rect, false);
-                doorway.texture = arch;
-                doorway.raycastTarget = false;
-                doorway.uvRect = side == 0 ? new Rect(1,0,-1,1) : new Rect(0,0,1,1);
-                var frame = diningDoors[side] = doorway.rectTransform;
-                frame.anchorMin = frame.anchorMax = Vector2.zero;
-                frame.sizeDelta = new Vector2(130, 188);
-            }
             // The full aisle shares one counter edge throughout the walk.
             // It must not travel with the visitor: that exposed bodies during arrival/bobbing.
             for (int i = 0; i < 3; i++)
@@ -188,12 +156,11 @@ namespace ChronosChef
             var foreground = new GameObject("CounterForeground", typeof(RectTransform), typeof(UnityEngine.UI.RawImage));
             var foregroundRect = foreground.GetComponent<RectTransform>(); foregroundRect.SetParent(stage, false); foregroundRect.anchorMin = foregroundRect.anchorMax = Vector2.zero; foregroundRect.anchoredPosition = new Vector2(835, 612.5f); foregroundRect.sizeDelta = new Vector2(1070, 75);
             var foregroundImage = foreground.GetComponent<UnityEngine.UI.RawImage>(); foregroundImage.texture = environmentArt; foregroundImage.uvRect = new Rect(300f / 1600, 575f / 900, 1070f / 1600, 75f / 900); foregroundImage.raycastTarget = false; counterLayer = foregroundImage; LayoutDiningRoom(0);
-            counterBead.SetAsLastSibling();
             for (int i = 0; i < 3; i++)
             {
                 var card = customerLabels[i].transform.parent;
                 var cardRect = card.GetComponent<RectTransform>(); cardRect.anchoredPosition = new Vector2(630 + i * 270, 810); cardRect.sizeDelta = new Vector2(247, 100);
-                var rim = stage.Cast<Transform>().Where(t => t.name == "OrderRim").ElementAt(i).GetComponent<RectTransform>(); rim.anchoredPosition = cardRect.anchoredPosition; rim.sizeDelta = new Vector2(252, 105);
+                var rim = stage.Cast<Transform>().Where(t => t.name == "OrderRim").ElementAt(i).GetComponent<RectTransform>(); orderRims[i] = rim; rim.anchoredPosition = cardRect.anchoredPosition; rim.sizeDelta = new Vector2(252, 105);
                 patienceFills[i].transform.parent.GetComponent<RectTransform>().anchoredPosition = new Vector2(630 + i * 270, 751);
                 var hit = stations[5 + i].GetComponent<RectTransform>(); hit.anchoredPosition = new Vector2(630 + i * 270, 746); hit.sizeDelta = new Vector2(250, 232);
                 customerLabels[i].rectTransform.anchoredPosition = new Vector2(48, 6);

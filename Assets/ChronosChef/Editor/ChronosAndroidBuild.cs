@@ -12,7 +12,10 @@ public static class ChronosAndroidBuild
     [MenuItem("Chronos Chef/Android/Build signed upload bundle")]
     public static void BuildForUpload() => Build(true);
 
-    static void Build(bool forUpload)
+    [MenuItem("Chronos Chef/Android/Build playable beta APK")]
+    public static void BuildMobileBeta() => Build(false, true);
+
+    static void Build(bool forUpload, bool apk = false)
     {
         if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
             throw new BuildFailedException("Switch the active build target to Android first.");
@@ -26,18 +29,20 @@ public static class ChronosAndroidBuild
             throw new BuildFailedException("ChronosKitchen must be the first enabled scene.");
         bool previousBundle = EditorUserBuildSettings.buildAppBundle;
         bool previousExport = EditorUserBuildSettings.exportAsGoogleAndroidProject;
-        string channel = forUpload ? "Upload" : "Validation";
+        bool previousKeystore = PlayerSettings.Android.useCustomKeystore;
+        string channel = apk ? "Beta" : forUpload ? "Upload" : "Validation";
         string directory = Path.Combine("Builds", "Android", channel);
         Directory.CreateDirectory(directory);
         try
         {
             EditorUserBuildSettings.exportAsGoogleAndroidProject = false;
-            EditorUserBuildSettings.buildAppBundle = true;
+            EditorUserBuildSettings.buildAppBundle = !apk;
+            if (apk) PlayerSettings.Android.useCustomKeystore = false;
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
             {
                 scenes = scenes,
                 target = BuildTarget.Android,
-                locationPathName = Path.Combine(directory, "ChronosChef-" + PlayerSettings.Android.bundleVersionCode + ".aab"),
+                locationPathName = Path.Combine(directory, "ChronosChef-" + PlayerSettings.Android.bundleVersionCode + (apk ? ".apk" : ".aab")),
                 options = BuildOptions.StrictMode
             });
             if (report.summary.result != BuildResult.Succeeded)
@@ -45,6 +50,7 @@ public static class ChronosAndroidBuild
         }
         finally
         {
+            PlayerSettings.Android.useCustomKeystore = previousKeystore;
             EditorUserBuildSettings.buildAppBundle = previousBundle;
             EditorUserBuildSettings.exportAsGoogleAndroidProject = previousExport;
         }

@@ -17,13 +17,13 @@ namespace ChronosChef
         readonly float[] aisleX = new float[3];
         readonly float[] entranceDelay = new float[3];
         int lastAisleFrame;
-        internal void ResetDiningQueue()
+        internal void ResetDiningQueue(bool[] restored = null)
         {
             for (int i = 0; i < 3; i++)
             {
-                wasPresent[i] = false;
-                aisleX[i] = DiningRight;
-                entranceDelay[i] = i * .52f;
+                wasPresent[i] = restored != null && restored[i];
+                aisleX[i] = restored == null ? DiningRight : restored[i] ? SeatX(i) : DiningLeft;
+                entranceDelay[i] = restored == null ? i * .52f : 0;
             }
         }
         public bool ReducedMotion { get; private set; }
@@ -121,10 +121,13 @@ namespace ChronosChef
                 var art = customerArt[i][g.Species[i]];
                 float portal = Mathf.Clamp01(Mathf.Min(DiningRight - aisleX[i], aisleX[i] - DiningLeft) / 64);
                 float transit = Mathf.Clamp01(Mathf.Abs(aisleX[i] - SeatX(i)) / 52);
-                art.anchoredPosition += new Vector2(aisleX[i] - SeatX(i), transit * (10 + 3 * Mathf.Sin(aisleX[i] * .048f)));
-                art.localScale = Vector3.one * Mathf.Lerp(.80f, 1, portal);
+                art.anchoredPosition += new Vector2(aisleX[i] - SeatX(i), transit * (48 + (1 - portal) * 30 + 2 * Mathf.Sin(aisleX[i] * .048f)));
+                art.localScale = Vector3.one * Mathf.Lerp(1, .64f + .16f * portal, transit);
                 art.GetComponent<CanvasGroup>().alpha = portal;
-                stations[5 + i].interactable = g.Customers[i];
+                bool atCounter = present && (InGalley || transit < .12f);
+                customerLabels[i].transform.parent.gameObject.SetActive(atCounter);
+                if (orderRims[i]) orderRims[i].gameObject.SetActive(atCounter);
+                stations[5 + i].interactable = atCounter;
                 if (ReducedMotion) art.localEulerAngles = Vector3.zero;
             }
             if (!ares && animatedChef && chefFrames != null)

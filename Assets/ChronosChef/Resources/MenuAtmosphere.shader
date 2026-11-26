@@ -2,6 +2,7 @@ Shader "ChronosChef/MenuAtmosphere"
 {
     Properties {
         [PerRendererData] _MainTex ("Illustration", 2D) = "white" {}
+        _Slots ("Worlds on page", Float) = 4
         _Worlds ("World selection", Float) = 0
         _Phase ("Animation phase", Float) = 0
     }
@@ -14,14 +15,14 @@ Shader "ChronosChef/MenuAtmosphere"
             #pragma fragment frag
             #include "UnityCG.cginc"
             sampler2D _MainTex;
-            float _Worlds, _Phase;
+            float _Worlds, _Phase, _Slots;
             fixed4 frag(v2f_img input) : SV_Target
             {
                 float2 uv=input.uv;
                 float t=_Phase;
                 if (_Worlds>.5) {
-                    float slot=min(3,floor(uv.x*4));
-                    float2 center=float2((slot+.5)*.25,.59);
+                    float slot=min(_Slots-1,floor(uv.x*_Slots));
+                    float2 center=float2((slot+.5)/_Slots,.59);
                     float2 local=uv-center;
                     float mask=(1-smoothstep(.114,.125,abs(local.x)))*(1-smoothstep(.255,.31,abs(local.y)));
                     float wave=t*.75+slot*1.8;

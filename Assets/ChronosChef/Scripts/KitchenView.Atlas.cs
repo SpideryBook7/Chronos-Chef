@@ -22,6 +22,7 @@ namespace ChronosChef
         void OpenSheet(int sheet)
         {
             atlasSheet=sheet;
+            driftingWorlds.SetFloat("_Slots", Mathf.Min(4, planetTargets.Length - sheet * 4));
             atlasPicture.texture=Resources.Load<Texture2D>(sheet==0?"PlanetAtlas":"PlanetAtlas"+(sheet+1));
             for(int i=0;i<planetTargets.Length;i++) planetTargets[i].SetActive(i/4==sheet);
             previousSheet.SetActive(sheet>0);
@@ -63,7 +64,8 @@ namespace ChronosChef
             for(int i=0;i<KitchenLevel.Worlds.Length;i++)
             {
                 int planet=i;
-                int x=-600+(i%4)*400;
+                int slots = Mathf.Min(4, planetTargets.Length - i / 4 * 4);
+                int x = Mathf.RoundToInt(1600f * (i % 4 + .5f) / slots - 800);
                 var button=Button(atlasPage.transform,"Planet"+i,x,20,385,650,Color.clear);
                 planetTargets[i]=button.gameObject;
                 var plaque=Panel(button.transform,"Nameplate",0,-232,260,65,C("142639"));

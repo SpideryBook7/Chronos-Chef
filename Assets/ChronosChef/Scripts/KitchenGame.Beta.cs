@@ -66,6 +66,7 @@ namespace ChronosChef
             if (s.hasExactPosition) { ChefPosition = s.position; Facing = s.facing.sqrMagnitude > .01f ? s.facing.normalized : Vector2.down; }
             CookTime = s.cookTime; CookDuration = s.cookDuration; work = s.work; TaskLabel = work > 0 ? "CORTANDO" : ""; DestinationLabel = "";
             if (work > 0 && PrepFood == Food.Empty && Carry == Food.RawDodo) { PrepFood = Carry; Carry = Food.Empty; }
+            view.ResetDiningQueue(s.customers);
             Customers = s.customers; Orders = s.orders; Species = s.species; Patience = s.patience; MaxPatience = s.maxPatience;
             for (int i = 0; i < 3; i++) { special[i] = s.special[i]; respawn[i] = s.respawn[i]; speechTime[i] = 0; Speech[i] = ""; banterCountdown[i] = 8 + i * 2; banterLine[i] = 0; }
             route.Clear(); destination = null; Running = true; Paused = true; autosave = 5;

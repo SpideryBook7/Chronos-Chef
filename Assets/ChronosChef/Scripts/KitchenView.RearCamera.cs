@@ -30,7 +30,7 @@ namespace ChronosChef
             Place(stoveLabel.rectTransform,burner+Vector2.down*23,.77f);
             Place((RectTransform)cookFill.transform.parent,burner+Vector2.down*4,.74f);
             Place((RectTransform)burnFill.transform.parent,burner+Vector2.down*10,.74f);
-            Place((RectTransform)stage.Find("RecipeHelp"),galley.ScreenPoint(new Vector3(6.50f,.63f,-5.92f)),.82f);
+
             var rims=stage.Cast<Transform>().Where(t=>t.name=="OrderRim").ToArray();
             const float scale=.73f;
             for (int i=0;i<3;i++)

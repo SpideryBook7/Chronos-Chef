@@ -17,7 +17,7 @@ namespace ChronosChef
             if (!Object.FindFirstObjectByType<AudioListener>()) Camera.main.gameObject.AddComponent<AudioListener>();
             music = gameObject.AddComponent<AudioSource>(); music.loop = true; music.playOnAwake = false; music.spatialBlend = 0;
             effects = gameObject.AddComponent<AudioSource>(); effects.playOnAwake = false; effects.spatialBlend = 0;
-            foreach (var key in new[] { "click", "good", "cut", "cook", "ready", "serve", "bad", "warn", "paradox", "win", "borrow" }) clips[key] = Synthesize(key);
+            foreach (var key in new[] { "click", "good", "cut", "cook", "ready", "serve", "bad", "warn", "paradox", "win", "borrow", "stomp", "shortCircuit", "spore", "snarl" }) clips[key] = Synthesize(key);
             music.clip = Resources.Load<AudioClip>("MenuScore");
             shiftMusic = gameObject.AddComponent<AudioSource>();
             shiftMusic.loop = true; shiftMusic.playOnAwake = false; shiftMusic.spatialBlend = 0;
@@ -48,7 +48,7 @@ namespace ChronosChef
         static AudioClip Synthesize(string key)
         {
             const int rate = 22050;
-            float seconds = key == "borrow" ? .85f : key == "win" || key == "paradox" ? .6f : key == "serve" || key == "cook" || key == "cut" ? .36f : .12f;
+            float seconds = key == "shortCircuit" || key == "snarl" || key == "spore" || key == "stomp" ? .48f : key == "borrow" ? .85f : key == "win" || key == "paradox" ? .6f : key == "serve" || key == "cook" || key == "cut" ? .36f : .12f;
             var data = new float[(int)(rate * seconds)];
             float phase = 0;
             float[] triad = { 523.25f, 659.25f, 783.99f };
@@ -61,11 +61,15 @@ namespace ChronosChef
                 if (key == "borrow") frequency = Mathf.Lerp(1220, 145, p) + 35 * Mathf.Sin(t * 38);
                 if (key == "cut") frequency = 900 - 710 * Mathf.Repeat(p * 3, 1);
                 if (key == "cook") frequency = 82 + 38 * Mathf.Sin(t * 24);
+                if (key == "stomp") frequency = 65 + 90*Mathf.Exp(-25*p);
+                if (key == "shortCircuit") frequency = 90 + 1400*Mathf.Pow(1-p,3) + 180*Mathf.Sin(t*600);
+                if (key == "spore") frequency = 220 + 160*Mathf.Sin(4*p);
+                if (key == "snarl") frequency = 105 + 39*Mathf.Sin(t*67);
                 phase += frequency * 2 * Mathf.PI / rate;
                 float envelope = Mathf.Pow(1 - p, 2);
                 envelope *= Mathf.Min(1, t / .005f) * Mathf.Min(1, (seconds - t) / .005f);
                 data[i] = (Mathf.Sin(phase) + .2f * Mathf.Sin(phase * 2)) * envelope * .35f;
-                if (key == "cook") data[i] += (float)(noise.NextDouble() * 2 - 1) * .3f * envelope;
+                if (key == "cook" || key == "shortCircuit" || key == "snarl") data[i] += (float)(noise.NextDouble() * 2 - 1) * .3f * envelope;
                 if (key == "cut") data[i] *= Mathf.Exp(-7 * Mathf.Repeat(p * 3, 1));
             }
             var clip = AudioClip.Create("Chronos_" + key, data.Length, 1, rate, false); clip.SetData(data, 0); return clip;

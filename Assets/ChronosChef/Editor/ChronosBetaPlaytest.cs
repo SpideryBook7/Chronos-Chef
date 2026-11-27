@@ -118,7 +118,8 @@ public static class ChronosBetaPlaytest
             case Food.RawDodo: game.SelectStation(1); break;
             case Food.Root: game.SelectStation(plannedDish == Food.Toast ? 1 : 8); break;
             case Food.ChoppedRoot: game.SelectStation(3); break;
-            case Food.ChoppedDodo: case Food.Roots: case Food.ChoppedRoots: game.SelectStation(2); break;
+            case Food.Roots: game.SelectStation(game.SoupNeedsDicing ? 1 : 2); break;
+            case Food.ChoppedDodo: case Food.ChoppedRoots: game.SelectStation(2); break;
             case Food.CookedDodo: game.SelectStation(3); break;
             case Food.Toast: case Food.Burger: case Food.Soup: int target = Customer(game.Carry); if (target >= 0) game.SelectStation(5 + target); break;
             case Food.Burnt: game.SelectStation(4); break;

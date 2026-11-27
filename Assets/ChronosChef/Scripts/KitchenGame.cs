@@ -13,6 +13,10 @@ namespace ChronosChef
         public float Remaining { get; private set; }
         public float Anomaly { get; private set; }
         public const float ParadoxSeconds = 15;
+        public float BoardJam { get; private set; }
+        public bool MeterDiscovered { get; private set; }
+        public event Action<int,int> CustomerStormedOut;
+        static readonly string[] GuestSounds = { "stomp","shortCircuit","spore","snarl" };
         public float CloneRemaining { get; private set; }
         public const float BorrowDuration = 5, BorrowRecharge = 32, BorrowAnomaly = 25;
         public float BorrowRemaining { get; private set; }
@@ -34,6 +38,7 @@ namespace ChronosChef
         public int Combo { get; private set; }
         public int Level { get; private set; } = 1;
         public KitchenLevel LevelRules => KitchenLevel.For(Level);
+        public bool SoupNeedsDicing => RegionalMenu.SoupNeedsDicing(Level);
         public int Target => LevelRules.Goal;
         public float BurnWindow => LevelRules.BurnWindow;
         public int Stars => Reputation <= 0 || Served < Target ? 0 : Served < Target + 2 ? 1 : Served < Target + 4 ? 2 : 3;
@@ -90,6 +95,7 @@ namespace ChronosChef
         }
         public void ResetShift()
         {
+            BoardJam = 0; MeterDiscovered = false;
             view.ResetDiningQueue();
             ResetBetaState();
             ResetMovement();
@@ -146,7 +152,17 @@ namespace ChronosChef
             float pressure = TutorialActive ? 0 : Mathf.Max(0, dt - BorrowRemaining);
             BorrowRemaining = Mathf.Max(0, BorrowRemaining - dt);
             BorrowCooldown = Mathf.Max(0, BorrowCooldown - dt);
+            float beforeClock = Remaining;
             Remaining = Mathf.Max(0, Remaining - pressure);
+            BoardJam = Mathf.Max(0, BoardJam - dt);
+            float riftTime = LevelRules.Seconds * .5f;
+            if (!TutorialActive && beforeClock > riftTime + 8 && Remaining <= riftTime + 8)
+            {
+                AddAnomaly(15);
+                Respond("Grieta temporal en 8 s. Vigila el fogón.", "warn");
+            }
+            if (!TutorialActive && beforeClock > riftTime && Remaining <= riftTime && CloneRemaining <= 0)
+                AddAnomaly(100);
             autosave -= dt; if (autosave <= 0) { SaveCurrentSession(); autosave = 5; }
             if (messageTime > 0) messageTime -= dt; else Message = "Entrega tocando el personaje o su tarjeta. Consulta RECETAS si necesitas ayuda.";
             for (int i = 0; i < 3; i++)
@@ -165,29 +181,39 @@ namespace ChronosChef
                         special[i] = true; speechTime[i] = 4;
                         Speech[i] = view.InGalley ? "¡Se me acaba el descanso!" : new[] { "¡GROOAR!", "¡BIP! ¡BIP! ¡ERROR!", "Mi reseña será devastadora", "¡GRRR! ¡Esta barra es mía!" }[Species[i]];
                         if (Species[i] == 0) for (int j = Mathf.Max(0, i - 1); j <= Mathf.Min(2, i + 1); j++) if (j != i && Customers[j]) Patience[j] = Mathf.Max(1, Patience[j] - 7);
-                        Feedback?.Invoke("warn");
+                        Feedback?.Invoke(GuestSounds[Species[i]]);
                     }
                     if (Patience[i] <= 0)
                     {
                         Customers[i] = false; respawn[i] = 4; Lost++; Combo = 0;
                         Reputation = Mathf.Max(0, Reputation - (Species[i] == 3 ? 22 : 12));
-                        AddAnomaly(25); Respond("Cliente perdido. " + (Level>5 && Species[i] == 3 ? "¡El raptor arañó el mostrador!" : "El tiempo también se come."), "bad");
+                        int kind = Species[i];
+                        if (kind == 0 || kind == 2) BoardJam = kind == 0 ? 2.5f : 4;
+                        if (kind == 1 && StoveFood != Food.Empty && StoveFood != Food.Burnt) CookTime += 3;
+                        if (kind == 3) Remaining = Mathf.Max(0, Remaining - 3);
+                        CustomerStormedOut?.Invoke(i,kind);
+                        Respond(new[] {"¡Portazo! La tabla vibra durante 2,5 s.", "¡Cortocircuito! El fogón recibe una descarga.", "¡Esporas en la tabla! Ventilando durante 4 s.", "¡Estampida! Pierdes 3 s de servicio."}[kind],GuestSounds[kind]);
+                        AddAnomaly(kind == 1 ? 35 : 25);
                     }
                 }
                 else { respawn[i] -= dt; if (respawn[i] <= 0) SpawnCustomer(i); }
             }
             if (StoveFood != Food.Empty && StoveFood != Food.Burnt)
             {
-                CookTime += dt;
+                CookTime += dt * (CloneRemaining > 0 ? 1.65f : 1);
                 if (!TutorialActive && CookTime >= CookDuration + BurnWindow) { StoveFood = Food.Burnt; Combo = 0; AddAnomaly(35); Respond("¡Quemado! Retíralo y llévalo a BASURA.", "bad"); }
                 else if (CookTime >= CookDuration && (StoveFood == Food.ChoppedDodo || StoveFood == Food.Roots))
                 { StoveFood = StoveFood == Food.Roots ? Food.Soup : Food.CookedDodo; Respond("¡LISTO! Retira la comida antes de que se queme.", "ready"); }
             }
             if (CloneRemaining > 0)
-            { CloneRemaining = Mathf.Max(0, CloneRemaining - dt); if (CloneRemaining == 0) { blocked = new Vector2Int(-1, -1); Say("Tu otro yo se fue. Probablemente a almorzar."); } }
+            {
+                float oldTime = CloneRemaining;
+                CloneRemaining = Mathf.Max(0, CloneRemaining - dt);
+                if ((oldTime > 10 && CloneRemaining <= 10) || (oldTime > 5 && CloneRemaining <= 5)) MoveEcho();
+                if (CloneRemaining == 0) { blocked = new Vector2Int(-1, -1); Say("Tu otro yo se fue. Probablemente a almorzar."); } }
             if (work > 0)
             {
-                work -= dt;
+                if (BoardJam <= 0) work -= dt;
                 if (work <= 0)
                 {
                     work = 0;
@@ -221,14 +247,15 @@ namespace ChronosChef
                     if (Carry == Food.Empty) { Carry = Food.RawDodo; Respond("¡Dodo fresco de hace 65 millones de años! Toca CORTE."); }
                     else Respond("Ya llevas algo. Entrégalo o usa BASURA.", "bad"); break;
                 case Station.Roots:
-                    if (Carry == Food.Empty) { Carry = Food.Root; Respond("Una raíz. Toca RAÍCES otra vez para recoger la segunda."); }
-                    else if (Carry == Food.Root || Carry == Food.ChoppedRoot) { Carry = Food.Roots; Respond("Dos raíces listas. Puedes cocinarlas directamente o cortarlas juntas."); }
+                    if (Carry == Food.Empty) { Carry = Food.Root; Respond("Una porción de "+RegionalMenu.Produce(Level)+". Toca RAÍCES de nuevo para reunir dos."); }
+                    else if (Carry == Food.Root || Carry == Food.ChoppedRoot) { Carry = Food.Roots; Respond(SoupNeedsDicing ? "Dos porciones listas. Pásalas por CORTE antes del fogón." : "Dos porciones listas para el fogón."); }
                     else Respond("Necesitas las manos libres o una sola raíz.", "bad"); break;
                 case Station.Cut:
+                    if (BoardJam > 0) { Respond("La tabla se recupera en " + Mathf.CeilToInt(BoardJam) + " s.", "bad"); break; }
                     if (work > 0) { Respond("La cuchilla láser sigue trabajando. Puedes ir a otra estación.", "click"); break; }
                     if (PrepFood != Food.Empty)
                     {
-                        if (Carry == Food.Empty) { Carry = PrepFood; PrepFood = Food.Empty; Respond("Recogido: " + KitchenRules.FoodNames[(int)Carry] + "."); }
+                        if (Carry == Food.Empty) { Carry = PrepFood; PrepFood = Food.Empty; Respond("Recogido: " + RegionalMenu.Dish(Level,Carry) + "."); }
                         else Respond("La mesa ya tiene comida. Recógela con las manos libres.", "bad");
                     }
                     else if (Carry != Food.Empty)
@@ -239,17 +266,19 @@ namespace ChronosChef
                     }
                     else Respond("La mesa está vacía. Trae carne o raíces.", "bad"); break;
                 case Station.Stove:
+                    if (Carry==Food.Roots && SoupNeedsDicing)
+                    { Respond("Esta receta lleva "+RegionalMenu.Produce(Level)+" en dados. Toca CORTE y recoge los dados.", "click"); break; }
                     if ((Carry == Food.ChoppedDodo || Carry == Food.Roots || Carry == Food.ChoppedRoots) && StoveFood == Food.Empty)
                     {
-                        CookDuration = (Carry == Food.ChoppedDodo ? 5 : 7) / (1 + (Progress?.Heat ?? 0) * .15f);
+                        CookDuration = RegionalMenu.CookSeconds(Level, Carry != Food.ChoppedDodo) / (1 + (Progress?.Heat ?? 0) * .15f);
                         StoveFood = Carry == Food.ChoppedRoots ? Food.Roots : Carry; Carry = Food.Empty; CookTime = 0; Respond("Plasma encendido. Retira la comida cuando esté LISTA.", "cook");
                     }
                     else if (Carry == Food.Empty && (StoveFood == Food.CookedDodo || StoveFood == Food.Soup || StoveFood == Food.Burnt))
                     { Carry = StoveFood; StoveFood = Food.Empty; Respond(Carry == Food.Burnt ? "A BASURA. Ni Grog comería esto." : Carry == Food.Soup ? "Sopa servida en bol de energía. ¡A entregar!" : "¡Perfecto! Toca MONTAJE para añadir pan."); }
                     else Respond(Carry != Food.Empty ? "Libera las manos o espera a que el fogón esté libre." : "Todavía se cocina. ¡No mires el reloj tan fuerte!", "bad"); break;
                 case Station.Assemble:
-                    if (Carry == Food.CookedDodo) { Carry = Food.Burger; Respond("¡Cyber-Dodo Burger! Toca un cliente que pida hamburguesa.", "ready"); }
-                    else if (Carry == Food.ChoppedRoot) { Carry = Food.Toast; Respond("¡Tostada mutante! Si te mira, mantén el contacto visual.", "ready"); }
+                    if (Carry == Food.CookedDodo) { Carry = Food.Burger; Respond(RegionalMenu.Dish(Level,Carry) + " listo. Toca su comanda para entregar.", "ready"); }
+                    else if (Carry == Food.ChoppedRoot) { Carry = Food.Toast; Respond(RegionalMenu.Dish(Level,Carry) + " lista para entregar.", "ready"); }
                     else Respond("Trae dodo cocinado para una burger o una raíz cortada para una tostada.", "bad"); break;
                 case Station.Trash:
                     if (Carry != Food.Empty) { Carry = Food.Empty; Combo = 0; AddAnomaly(10); Respond("Basura enviada a otra línea temporal. +10 anomalía.", "bad"); } break;
@@ -257,7 +286,7 @@ namespace ChronosChef
                     int customer = (int)station - 5;
                     if (customer < 0 || customer >= 3) return;
                     if (!Customers[customer]) { Respond("El próximo viajero está llegando.", "bad"); return; }
-                    if (Carry != Orders[customer]) { Respond("Este cliente pide " + KitchenRules.FoodNames[(int)Orders[customer]] + ". Llevas: " + KitchenRules.FoodNames[(int)Carry] + ".", "bad"); return; }
+                    if (Carry != Orders[customer]) { Respond("Este cliente pide " + RegionalMenu.Dish(Level,Orders[customer]) + ". Llevas: " + RegionalMenu.Dish(Level,Carry) + ".", "bad"); return; }
                     Carry = Food.Empty; Customers[customer] = false; respawn[customer] = LevelRules.ReturnDelay; Combo++;
                     int reward = 100 + Mathf.CeilToInt(Patience[customer]) + Mathf.Min(Combo, 5) * 10;
                     Credits += reward; Served++; Reputation = Mathf.Min(100, Reputation + 3); Anomaly = Mathf.Max(0, Anomaly - 8);
@@ -274,15 +303,21 @@ namespace ChronosChef
         }
         public void AddAnomaly(float amount)
         {
+            MeterDiscovered |= amount > 0;
             Anomaly = Mathf.Min(100, Anomaly + amount);
             if (Anomaly < 100 || CloneRemaining > 0) return;
             Anomaly = 0; CloneRemaining = ParadoxSeconds;
+            if (!MoveEcho()) { CloneRemaining = 0; return; }
+            Respond("¡PARADOJA! El eco cambia de sitio y acelera el fogón.", "paradox");
+        }
+        bool MoveEcho()
+        {
             var candidates = new List<Vector2Int>();
             for (int x = 2; x < 10; x++) for (int y = 1; y < 3; y++)
             { var p = new Vector2Int(x, y); if (p != cell && (KitchenRules.Position(p) - ChefPosition).sqrMagnitude > 80*80 && KitchenRules.IsWalkable(p, blocked) && !KitchenRules.IsStationApproach(p) && !route.Contains(p)) candidates.Add(p); }
-            if (candidates.Count == 0) { CloneRemaining = 0; return; }
+            if (candidates.Count == 0) return false;
             blocked = candidates[UnityEngine.Random.Range(0, candidates.Count)];
-            Respond("¡PARADOJA! Tu yo del futuro bloquea una casilla durante 15 s.", "paradox");
+            return true;
         }
     }
 }

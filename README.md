@@ -1,4 +1,4 @@
-# Chronos Chef — beta 0.4.0-beta.2
+# Chronos Chef — beta 0.4.0-beta.3
 
 Unity 6000.3.28f1 · 2D URP · horizontal · sin conexión.
 Escena inicial: Assets/ChronosChef/Scenes/ChronosKitchen.unity.
@@ -26,6 +26,8 @@ El tutorial enseña ambas recetas en doce pasos, señala la estación siguiente 
 - La comida transportada se muestra en las manos. BASURA descarta ese objeto.
 - La registradora abre el recetario ilustrado y pausa el turno. ENTENDIDO lo reanuda directamente. Puedes elegir receta y paso o dejar que la demostración avance sola.
 
+Desde **Ajustes → Acomodar controles**, arrastra los controles de cocina y guarda su posición. El recetario empieza en la esquina inferior derecha.
+
 ## Mundo 1 · Tierra
 
 En **Jugar → Tierra**, toca un nodo para consultar el objetivo, el tiempo y el mejor resultado antes de comenzar. Cada mundo tiene un mapa de maqueta y una cocina propia. Las mejoras se encuentran en la ficha del turno.
@@ -36,15 +38,15 @@ Los destinos de cinco turnos se registran en `KitchenLevel.Worlds` con su nombre
 
 ## Campaña y mecánicas
 
-Treinta y cinco turnos, tres recetas y cuatro especies en tres puestos. KitchenRecipe reúne la ilustración, ingredientes, instrucciones y mensajes que usan la comanda y el recetario de cada plato. Grog ruge y reduce la paciencia de vecinos, BIP-08 tiembla al impacientarse, Rex penaliza más la reputación al arañar la barra y Zorg levita. Los clientes llegan desde el pasillo derecho del comedor. La comanda aparece al alcanzar el mostrador y, tras el servicio o al agotarse su paciencia, regresan al fondo por la izquierda.
+Treinta y cinco turnos con veintiún platos regionales y cuatro familias de clientes en tres puestos. Ferrum, Cumbre y Xeno requieren cortar las raíces para preparar la sopa. KitchenRecipe reúne la ilustración, ingredientes, instrucciones y mensajes que usan la comanda y el recetario de cada plato. Grog ruge y reduce la paciencia de vecinos, BIP-08 tiembla al impacientarse, Rex penaliza más la reputación al arañar la barra y Zorg levita. Los clientes llegan desde el pasillo derecho del comedor. La comanda aparece al alcanzar el mostrador y, tras el servicio o al agotarse su paciencia, regresan al fondo por la izquierda.
 
-Cocción y margen de quemado independientes, basura, combos, propinas, reputación, estrellas y derrota por tiempo/reputación. El fogón funciona mientras Ares hace otras tareas. Las rutas evitan las estaciones con margen para sus pies. El clon aparece durante 15 segundos al alcanzar 100% de anomalía y no ocupa puntos de servicio. Un aviso translúcido aparece durante los primeros 3,2 segundos de la anomalía.
+Cocción y margen de quemado independientes, basura, combos, propinas, reputación, estrellas y derrota por tiempo/reputación. El fogón funciona mientras Ares hace otras tareas. Las rutas evitan las estaciones con margen para sus pies. El clon aparece durante 15 segundos al alcanzar 100% de anomalía y no ocupa puntos de servicio. Un aviso translúcido anuncia la anomalía durante 3,2 segundos. El eco cambia de puesto y, cuando alcanza el fogón, acelera la cocción. Un robot que agota su paciencia puede sobrecalentar el plato. La tabla también puede quedar atascada temporalmente.
 
 Tierra, Ferrum, Bruma, Cumbre, Jurásico, Futuro y Xeno tienen cinco turnos cada uno, un mapa y una cocina con comedor propio. Comparten distribución física para conservar rutas e interacciones. Completar un nivel abre el siguiente; tres gemas abren la segunda era. Cada nivel da una gema solo la primera vez que obtiene tres estrellas. Botas y plasma tienen tres mejoras compradas con créditos ganados en juego.
 
 ## Beta para Android
 
-La beta 0.4.0-beta.2 se instala con el APK ARM64 en Android 7.1 o posterior. El menú **Chronos Chef → Android → Build playable beta APK** genera la versión de prueba en `Builds/Android/Beta`. La versión instalada conserva el progreso si la actualización usa la misma firma y el mismo identificador de aplicación.
+La beta 0.4.0-beta.3 se instala con el APK ARM64 en Android 7.1 o posterior. El menú **Chronos Chef → Android → Build playable beta APK** genera la versión de prueba en `Builds/Android/Beta`. La versión instalada conserva el progreso si la actualización usa la misma firma y el mismo identificador de aplicación.
 
 ## Guardado e interrupciones
 

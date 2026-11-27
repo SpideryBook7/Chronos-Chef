@@ -12,7 +12,6 @@ namespace ChronosChef
         UnityEngine.UI.Image[,] customerPictures;
         RectTransform[] prepIcons;
         KitchenModelGraphic[] handModels, tableModels, stoveModels;
-        KitchenModelGraphic breadModel;
         RectTransform prepLaser;
         GameObject prepReadout;
         TMP_Text prepCaption;
@@ -64,14 +63,12 @@ namespace ChronosChef
                 DrawFood(holder, (Food)i); prepIcons[i] = holder; holder.gameObject.SetActive(false);
             }
             prepLaser = Panel(stations[1].transform, "LaserSweep", 0, 15, 122, 4, Cyan); prepLaser.gameObject.SetActive(false);
-            prepReadout = Panel(stations[1].transform, "PrepReadout", 0, 87, 245, 35, C("15243C")).gameObject;
-            prepCaption = Label(prepReadout.transform, "", -118, 0, 236, 32, 16, Cyan, FontStyles.Bold);
+            prepReadout = Panel(stage, "PrepReadout", 670, 590, 210, 30, C("15243C")).gameObject;
+            prepReadout.transform.SetSiblingIndex(menu.transform.GetSiblingIndex());
+            prepCaption = Label(prepReadout.transform, "", -103, 0, 206, 28, 15, Cyan, FontStyles.Bold);
             prepFill = Bar(stations[1].transform, "PrepProgress", 0, 65, 205, 6, Cyan);
             // Bread is the assembly ingredient; a completed burger only appears after mounting.
-            var tray = Dot(stations[3].transform, "AssemblyPlate", 0, 10, 150, C("382C43")); tray.sizeDelta = new Vector2(150, 96);
-            Dot(tray, "PlateInset", 0, 0, 139, C("706078")).sizeDelta = new Vector2(139, 85);
-            var bread = FoodPicture(stations[3].transform, "BreadSupply", Food.Bread, new Vector2(0, 18), new Vector2(138, 120));
-            breadModel = ReplacePictureWithMesh(bread, Food.Bread);
+            // The regional environment already contains an illuminated bun on the assembly board.
             handModels = BuildFoodModels(carriedFood);
             tableModels = BuildFoodModels(prepIcons);
             stoveModels = BuildFoodModels(stoveFoods);
@@ -108,6 +105,7 @@ namespace ChronosChef
             borrowRect.anchoredPosition = new Vector2(288,77);
             borrowRect.localScale = Vector3.one * .70f;
             BuildCastControls();
+            InstallServiceHud();
             receipt = Panel(stage, "DeliveryReceipt", 0, 0, 140, 42, C("163444"));
             receipt.SetSiblingIndex(menu.transform.GetSiblingIndex());
             receiptDish = FoodPicture(receipt, "DeliveredDish", Food.Burger, new Vector2(-47, 0), new Vector2(45, 40));
@@ -147,16 +145,19 @@ namespace ChronosChef
             nextMeshPose = Time.unscaledTime + 1f / 12;
             float t = ReducedMotion ? 0 : Time.time;
             var hand = handModels[(int)g.Carry];
+            if (hand && KitchenRecipe.Index(g.Carry)>=0) hand.Show(KitchenModelGraphic.RegionModel(KitchenLevel.World(g.Level),g.Carry.ToString()));
             if (hand) hand.Pose(-18 + Mathf.Sin(t * (g.IsMoving ? 7 : 1.2f)) * (g.IsMoving ? 15 : 5));
             var board = tableModels[(int)g.PrepFood];
+            if (board && KitchenRecipe.Index(g.PrepFood)>=0) board.Show(KitchenModelGraphic.RegionModel(KitchenLevel.World(g.Level),g.PrepFood.ToString()));
             if (board) board.Pose(g.IsWorking ? -14 + Mathf.Sin(t * 14) * 16 : -14);
             var stove = stoveModels[(int)g.StoveFood];
+            if (stove && g.StoveFood==Food.Soup) stove.Show(KitchenModelGraphic.RegionModel(KitchenLevel.World(g.Level),"Soup"));
             if (stove) stove.Pose(-20 + Mathf.Sin(t * 2) * 9);
-            if (breadModel) breadModel.Pose(-12);
         }
         void RefreshLivingKitchen(KitchenGame g)
         {
             if (prepIcons == null) return;
+            RefreshServiceHud(g);
             PoseFoodModels(g);
             RefreshCastControls(g);
             if (receipt.gameObject.activeSelf)
@@ -177,10 +178,11 @@ namespace ChronosChef
             borrowDial.localEulerAngles = new Vector3(0, 0, ReducedMotion ? -30 : -360 * borrowFill.fillAmount - 30);
             if (borrowed) timer.color = Cyan;
             for (int i = 1; i < prepIcons.Length; i++) prepIcons[i].gameObject.SetActive(!InGalley && (int)g.PrepFood == i);
-            prepReadout.SetActive(g.PrepFood != Food.Empty);
+            prepReadout.SetActive(g.Running && !g.Paused && (g.PrepFood != Food.Empty || g.BoardJam > 0));
+            ((RectTransform)prepReadout.transform).anchoredPosition = ((RectTransform)stations[1].transform).anchoredPosition + Vector2.up * (InGalley ? 60 : 81);
             prepFill.transform.parent.gameObject.SetActive(g.PrepFood != Food.Empty);
             prepFill.fillAmount = g.IsWorking ? g.WorkProgress : g.PrepFood == Food.Empty ? 0 : 1;
-            prepCaption.text = g.IsWorking ? "CORTANDO · " + Mathf.RoundToInt(g.WorkProgress * 100) + "%" : "LISTO · TOCA PARA RECOGER";
+            prepCaption.text = g.BoardJam > 0 ? $"ATASCO · {Mathf.CeilToInt(g.BoardJam)} s" : g.IsWorking ? "CORTANDO · " + Mathf.RoundToInt(g.WorkProgress * 100) + "%" : "LISTO · RECOGER";
             prepLaser.gameObject.SetActive(g.IsWorking);
             float t = g.Running && !g.Paused ? Time.time : 0;
             prepLaser.anchoredPosition = new Vector2(0, 15 + (ReducedMotion ? 0 : Mathf.Sin(t * 22) * 24));
@@ -212,7 +214,7 @@ namespace ChronosChef
         void UpdateLivingUI() { UpdateJourneyMap(); UpdateRecipeTerminal(); }
         void DestroyLivingAssets()
         {
-            if (game) game.OrderServed -= ShowDeliveryReceipt;
+            if (game) { game.OrderServed -= ShowDeliveryReceipt; game.CustomerStormedOut -= StartReaction; }
             if (ingredientFrames != null) foreach (var sprite in ingredientFrames) if (sprite) Destroy(sprite);
             if (customerPoses != null) foreach (var sprite in customerPoses) if (sprite) Destroy(sprite);
         }

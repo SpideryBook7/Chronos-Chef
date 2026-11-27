@@ -56,6 +56,7 @@ namespace ChronosChef
         void RefreshMotionCaption() { motionCaption.text = "MOVIMIENTO REDUCIDO: " + (ReducedMotion ? "SÍ" : "NO"); }
         public void HandleBack()
         {
+            if (controlEditor && controlEditor.activeSelf) { CloseControlEditor(); return; }
             if (transitioning) return;
             if (privacy && privacy.activeSelf) { privacy.SetActive(false); return; }
             if (confirmation && confirmation.activeSelf) { confirmation.SetActive(false); confirmed = null; return; }
@@ -112,7 +113,7 @@ namespace ChronosChef
             for (int i = 0; i < 3; i++)
             {
                 bool present = g.Customers[i];
-                if (present && !wasPresent[i]) aisleX[i] = DiningRight;
+                if (present && !wasPresent[i]) { aisleX[i] = DiningRight; burstKind[i] = -1; burstAge[i] = 2; }
                 wasPresent[i] = present;
                 float target = present ? SeatX(i) : DiningLeft;
                 entranceDelay[i] = Mathf.Max(0, entranceDelay[i] - dt);
@@ -123,7 +124,14 @@ namespace ChronosChef
                 float transit = Mathf.Clamp01(Mathf.Abs(aisleX[i] - SeatX(i)) / 52);
                 art.anchoredPosition += new Vector2(aisleX[i] - SeatX(i), transit * (48 + (1 - portal) * 30 + 2 * Mathf.Sin(aisleX[i] * .048f)));
                 art.localScale = Vector3.one * Mathf.Lerp(1, .64f + .16f * portal, transit);
-                art.GetComponent<CanvasGroup>().alpha = portal;
+                if (!present && burstAge[i]<1 && !ReducedMotion)
+                {
+                    float t=burstAge[i];int kind=burstKind[i];
+                    art.localEulerAngles=Vector3.forward*(kind==1?45:kind==3?18:9)*Mathf.Sin(t*22);
+                    float squash=Mathf.Sin(t*Mathf.PI)*(kind==1?.42f:.16f);
+                    art.localScale=Vector3.Scale(art.localScale,new Vector3(1+squash,1-squash,1));
+                }
+                art.GetComponent<CanvasGroup>().alpha = portal * (!present && burstKind[i]==1 ? Mathf.Clamp01(1-burstAge[i]*2) : 1);
                 bool atCounter = present && (InGalley || transit < .12f);
                 customerLabels[i].transform.parent.gameObject.SetActive(atCounter);
                 if (orderRims[i]) orderRims[i].gameObject.SetActive(atCounter);

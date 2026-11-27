@@ -42,8 +42,11 @@ namespace ChronosChef
         {
             chef.anchoredPosition = g.ChefPosition;
             if (!ares) chef.localScale = new Vector3(1, 1 + (g.Running && !g.Paused ? Mathf.Sin(Time.time * 7) * .025f : 0), 1);
+            bool echoWasVisible = clone.gameObject.activeSelf;
             clone.gameObject.SetActive(g.CloneRemaining > 0);
-            clone.anchoredPosition = g.ClonePosition;
+            clone.anchoredPosition = echoWasVisible && !ReducedMotion && !InGalley
+                ? Vector2.MoveTowards(clone.anchoredPosition, g.ClonePosition, Time.deltaTime * 1400)
+                : g.ClonePosition;
             cloneLabel.text = "ECO TEMPORAL  /  " + Mathf.CeilToInt(g.CloneRemaining) + " s";
             cloneLabel.gameObject.SetActive(false);
             timer.text = $"{Mathf.FloorToInt(g.Remaining / 60):00}:{Mathf.FloorToInt(g.Remaining % 60):00}";
@@ -56,7 +59,7 @@ namespace ChronosChef
             cookFill.fillAmount = g.StoveFood == Food.Empty ? 0 : Mathf.Clamp01(g.CookTime / g.CookDuration);
             bool ready = g.StoveFood == Food.CookedDodo || g.StoveFood == Food.Soup;
             cookFill.color = g.StoveFood == Food.Burnt ? Pink : ready ? Green : Gold;
-            stoveLabel.text = g.StoveFood == Food.Empty ? "FOGÓN · LIBRE" : g.StoveFood == Food.Burnt ? "¡QUEMADO!" : ready ? "¡LISTO! RETIRAR" : $"COCINANDO  {Mathf.CeilToInt(g.CookDuration - g.CookTime)} s";
+            stoveLabel.text = g.StoveFood == Food.Empty ? "FOGÓN · LIBRE" : g.StoveFood == Food.Burnt ? "¡QUEMADO!" : ready ? $"RETIRAR · {Mathf.Max(1,Mathf.CeilToInt((g.CookDuration+g.BurnWindow-g.CookTime)/(g.CloneRemaining>0?1.65f:1)))} s" : $"COCINANDO  {Mathf.CeilToInt(g.CookDuration - g.CookTime)} s";
             taskLabel.text = g.TaskLabel;
             pauseLabel.text = g.Paused ? "CONTINUAR" : "PAUSA";
             for (int i = 0; i < 3; i++)
@@ -64,7 +67,7 @@ namespace ChronosChef
                 patienceFills[i].fillAmount = g.Customers[i] ? g.Patience[i] / Mathf.Max(1, g.MaxPatience[i]) : 0;
                 patienceFills[i].transform.parent.gameObject.SetActive(g.Customers[i]);
                 patienceFills[i].color = Color.Lerp(new Color(1,.29f,.12f),new Color(1,.68f,.19f),patienceFills[i].fillAmount);
-                customerLabels[i].text = g.Customers[i] ? KitchenRecipe.All[KitchenRecipe.Index(g.Orders[i])].Card : "VIAJERO\nEN CAMINO...";
+                customerLabels[i].text = g.Customers[i] ? RegionalMenu.Dish(g.Level,g.Orders[i]).ToUpperInvariant() : "VIAJERO\nEN CAMINO...";
             }
             RefreshExpansion(g);
         }
@@ -186,7 +189,15 @@ namespace ChronosChef
         UnityEngine.UI.Button Button(Transform p, string name, float x, float y, float w, float h, Color color)
         {
             var r = Panel(p, name, x, y, w, h, color); r.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
-            var b = r.gameObject.AddComponent<UnityEngine.UI.Button>(); b.targetGraphic = r.GetComponent<UnityEngine.UI.Image>(); var colors = b.colors; colors.highlightedColor = new Color(1.2f, 1.2f, 1.2f); colors.pressedColor = new Color(.7f, .9f, 1); b.colors = colors; b.navigation = new Navigation { mode = Navigation.Mode.None }; return b;
+            if (color.a > .5f && p != stage)
+            {
+                var bevel = r.gameObject.AddComponent<UnityEngine.UI.Shadow>();
+                bevel.effectColor = new Color(.075f,.085f,.08f,.48f);
+                bevel.effectDistance = new Vector2(0,-3);
+                if (w >= 180 && h >= 44)
+                    Panel(r, "Inset highlight",0,h*.5f-4,w-20,2,new Color(1,.91f,.72f,.30f),false);
+            }
+            var b = r.gameObject.AddComponent<UnityEngine.UI.Button>(); b.targetGraphic = r.GetComponent<UnityEngine.UI.Image>(); if (color.a > .5f && p != stage) EnamelButton.Style(b); var colors = b.colors; colors.highlightedColor = new Color(1.2f, 1.2f, 1.2f); colors.pressedColor = new Color(.7f, .9f, 1); b.colors = colors; b.navigation = new Navigation { mode = Navigation.Mode.None }; return b;
         }
         UnityEngine.UI.Image Bar(Transform p, string name, float x, float y, float w, float h, Color color)
         {

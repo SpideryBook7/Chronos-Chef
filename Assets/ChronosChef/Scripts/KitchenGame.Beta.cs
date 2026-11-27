@@ -45,7 +45,7 @@ namespace ChronosChef
             var session = new KitchenSession
             {
                 level = Level, carry = Carry, stove = StoveFood, prep = PrepFood, remaining = Remaining, anomaly = Anomaly, cloneTime = CloneRemaining,
-                borrowRemaining = BorrowRemaining, borrowCooldown = BorrowCooldown,
+                borrowRemaining = BorrowRemaining, borrowCooldown = BorrowCooldown, boardJam = BoardJam, meterDiscovered = MeterDiscovered,
                 credits = Credits, served = Served, lost = Lost, reputation = Reputation, combo = Combo, arrivals = arrivals,
                 cell = cell, blocked = blocked, cookTime = CookTime, cookDuration = CookDuration, work = work,
                 hasExactPosition = true, position = ChefPosition, facing = Facing,
@@ -60,6 +60,7 @@ namespace ChronosChef
             ResetMovement();
             TutorialActive = IsTrainingResult = false; Level = s.level; view.SetLevelEnvironment(Level);
             Carry = s.carry; StoveFood = s.stove; PrepFood = s.prep; Remaining = s.remaining; Anomaly = s.anomaly; CloneRemaining = s.cloneTime;
+            BoardJam = Mathf.Clamp(s.boardJam,0,4); MeterDiscovered = s.meterDiscovered || Anomaly>0 || CloneRemaining>0;
             BorrowRemaining = s.borrowRemaining; BorrowCooldown = s.borrowCooldown;
             Credits = s.credits; Served = s.served; Lost = s.lost; Reputation = s.reputation; Combo = s.combo; arrivals = s.arrivals;
             cell = s.cell; blocked = s.cloneTime > 0 ? s.blocked : new Vector2Int(-1, -1); ChefPosition = KitchenRules.Position(cell);

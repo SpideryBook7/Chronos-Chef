@@ -64,8 +64,6 @@ namespace ChronosChef
             galley.BindChef(ares);
             counterLayer.gameObject.SetActive(false);
             stations[2].transform.Find("LiveHotplate").gameObject.SetActive(false);
-            stations[3].transform.Find("AssemblyPlate").gameObject.SetActive(false);
-            stations[3].transform.Find("BreadSupply").gameObject.SetActive(false);
             chef.Find("Shadow").gameObject.SetActive(false);
             for(int i=0;i<3;i++) stage.Find("CustomerWindow"+i).gameObject.SetActive(false);
             ApplyRearLayout();
@@ -81,8 +79,6 @@ namespace ChronosChef
             galley.gameObject.SetActive(false);
             counterLayer.gameObject.SetActive(true);
             stations[2].transform.Find("LiveHotplate").gameObject.SetActive(true);
-            stations[3].transform.Find("AssemblyPlate").gameObject.SetActive(true);
-            stations[3].transform.Find("BreadSupply").gameObject.SetActive(true);
             chef.Find("Shadow").gameObject.SetActive(true);
             environmentLayer.texture = game.Level > 5 && steampunkArt ? steampunkArt : environmentArt;
             counterLayer.texture = environmentLayer.texture;
@@ -208,7 +204,7 @@ namespace ChronosChef
             clockHand.pivot = new Vector2(.5f,0);
             clockHand.anchoredPosition = Vector2.zero;
             Label(face,"¡ANOMALÍA!",-101,13,247,33,22,Color.white,FontStyles.Bold,TextAlignmentOptions.Left);
-            Label(face,"Tu eco bloquea el paso",-101,-15,247,27,17,C("F9CDE7"),FontStyles.Normal,TextAlignmentOptions.Left);
+            Label(face,"¡Vigila el fogón!",-101,-15,247,27,17,C("F9CDE7"),FontStyles.Normal,TextAlignmentOptions.Left);
             alertCanvas = face.gameObject.AddComponent<CanvasGroup>();
             borderCanvas = paradoxBorder.AddComponent<CanvasGroup>();
             SetParadoxVisible(false);

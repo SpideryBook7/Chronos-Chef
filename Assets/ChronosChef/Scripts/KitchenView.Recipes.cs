@@ -55,11 +55,18 @@ namespace ChronosChef
             var next=Button(recipes.transform,"RecipeNext",125,-347,80,52,C("30475F"));Label(next.transform,">",-35,0,70,48,30,Cyan,FontStyles.Bold);next.onClick.AddListener(()=>{bookStep=(bookStep+1)%CurrentRecipe.Steps.Length;bookClock=0;RenderRecipe();});
             close.transform.SetAsLastSibling();close.GetComponent<RectTransform>().anchoredPosition=new Vector2(485,-347);close.GetComponent<RectTransform>().sizeDelta=new Vector2(390,58);var label=close.GetComponentInChildren<TMP_Text>();label.rectTransform.sizeDelta=new Vector2(370,52);label.rectTransform.anchoredPosition=Vector2.zero;label.fontSize=24;
             close.onClick.RemoveAllListeners();close.onClick.AddListener(CloseRecipeBook);
-            var register=stage.Find("RecipeHelp").GetComponent<UnityEngine.UI.Button>();register.GetComponent<RectTransform>().anchoredPosition=new Vector2(1450,260);register.GetComponent<RectTransform>().sizeDelta=new Vector2(190,100);
+            var register=stage.Find("RecipeHelp").GetComponent<UnityEngine.UI.Button>();register.GetComponent<RectTransform>().anchoredPosition=new Vector2(1485,71);register.GetComponent<RectTransform>().sizeDelta=new Vector2(190,100);
             foreach(Transform child in register.transform)child.gameObject.SetActive(false);
             register.GetComponent<UnityEngine.UI.Image>().color=new Color(.04f,.13f,.23f,.94f);
             registerHalo=Panel(register.transform,"HologramRim",0,0,196,106,Cyan);registerHalo.SetAsFirstSibling();Panel(register.transform,"TerminalGlass",0,0,187,97,C("173049"));
-            FoodPicture(register.transform,"BurgerShortcut",Food.Burger,new Vector2(-40,12),new Vector2(68,62));FoodPicture(register.transform,"SoupShortcut",Food.Soup,new Vector2(40,12),new Vector2(68,62));
+            var cover=Panel(register.transform,"Leather binding",0,13,103,55,C("8D5736"));
+            for(int side=-1;side<=1;side+=2)
+            {
+                var leaf=Panel(cover,"Leaf",side*24,3,47,45,C("F6DFA7"));
+                leaf.localEulerAngles=Vector3.forward*side*5;
+                for(int j=0;j<3;j++)Panel(leaf,"Printed line",0,10-j*9,j==2?19:31,2,C("937457"),false);
+            }
+            Panel(cover,"Bookmark",31,-13,7,26,C("C76443"),false);
             Label(register.transform,"RECETARIO",-90,-31,180,28,17,Cyan,FontStyles.Bold);SelectRecipe(0);
         }
         void OpenRecipeBook()
@@ -78,14 +85,23 @@ namespace ChronosChef
         void RenderRecipe()
         {
             if(recipeCards==null)return;bookStep=Mathf.Clamp(bookStep,0,CurrentRecipe.Steps.Length-1);
-            recipeName.text=CurrentRecipe.Card;
+            recipeName.text=RegionalMenu.Dish(game.Level,CurrentRecipe.Dish);
+            foreach (var entry in KitchenRecipe.All)
+                recipes.transform.Find(entry.Dish+"Tab").GetComponentInChildren<TMP_Text>().text=RegionalMenu.Dish(game.Level,entry.Dish);
+
             recipeHero.sprite=DishSprite(CurrentRecipe.Dish);
-            if (recipeDisplay) recipeDisplay.Show(CurrentRecipe.Dish);
-            recipeDetail.text="PASO "+(bookStep+1)+" · "+CurrentRecipe.Steps[bookStep].Instruction;recipeJoke.text=CurrentRecipe.Steps[bookStep].Joke;recipeAutoLabel.text=bookAuto?"ANIMACIÓN: ACTIVADA":"ANIMACIÓN: PAUSADA";
+            if (recipeDisplay) recipeDisplay.Show(KitchenModelGraphic.RegionModel(KitchenLevel.World(game.Level),CurrentRecipe.Dish.ToString()));
+            recipeDetail.text="PASO "+(bookStep+1)+" · "+(bookStep==CurrentRecipe.Steps.Length-1
+                ? "Lleva "+RegionalMenu.Dish(game.Level,CurrentRecipe.Dish)+" al cliente que muestre su comanda."
+                : CurrentRecipe.Steps[bookStep].Instruction);recipeJoke.text=CurrentRecipe.Steps[bookStep].Joke;recipeAutoLabel.text=bookAuto?"ANIMACIÓN: ACTIVADA":"ANIMACIÓN: PAUSADA";
+            bool diced=CurrentRecipe.Dish==Food.Soup && game.SoupNeedsDicing;
+            if(CurrentRecipe.Dish==Food.Soup && bookStep==0) recipeDetail.text="Toma dos porciones de "+RegionalMenu.Produce(game.Level)+".";
+            if(diced && bookStep==1) recipeDetail.text="Deja ambas porciones en CORTE y recoge los dados antes de encender el fogón.";
+            if(diced && bookStep==2) recipeDetail.text="Lleva los dados al fogón. Esta crema necesita los ingredientes cortados.";
             for(int i=0;i<recipeCards.Length;i++)
             {
                 bool active=i<CurrentRecipe.Steps.Length;recipeCards[i].gameObject.SetActive(active);if(!active)continue;
-                recipeCardLabels[i].text=CurrentRecipe.Steps[i].Name;recipeCardIcons[i].sprite=DishSprite(CurrentRecipe.Steps[i].Picture);
+                recipeCardLabels[i].text=diced && i==1 ? "CORTAR EN DADOS" : CurrentRecipe.Steps[i].Name;recipeCardIcons[i].sprite=DishSprite(CurrentRecipe.Steps[i].Picture);
                 recipeCards[i].GetComponent<UnityEngine.UI.Image>().color=i==bookStep?C("386378"):C("253A53");
             }
         }

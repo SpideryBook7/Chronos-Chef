@@ -127,7 +127,7 @@ namespace ChronosChef
             var model = visitors[slot,kind];
             if (!model) return;
             bool impatient = g.Patience[slot] < 20;
-            if (kind == 1) model.Show(impatient ? "BipAlarm" : "BipIdle");
+            model.Show(KitchenModelGraphic.RegionModel(KitchenLevel.World(g.Level), kind == 1 && impatient ? "BipAlarm" : VisitorMeshes[kind]));
             float urgency = impatient ? 1.8f : 1;
             float t = (castClock + slot*1.73f) * urgency;
             float gesture = Mathf.SmoothStep(0,1, Mathf.Clamp01((Mathf.Sin(t*1.35f)-.24f)*1.8f));

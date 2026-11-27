@@ -236,10 +236,10 @@ namespace ChronosChef
             if (g.CloneRemaining > 0) { clone.localEulerAngles = new Vector3(0, 0, Mathf.Sin(clock * 35) * 4); clone.GetComponent<CanvasGroup>().alpha = .35f + Mathf.Abs(Mathf.Sin(clock * 17)) * .35f; }
             for (int i = 0; i < 3; i++)
             {
-                burgers[i].gameObject.SetActive(g.Customers[i] && g.Orders[i] == Food.Burger);
-                bowls[i].gameObject.SetActive(g.Customers[i] && g.Orders[i] == Food.Soup);
-                toastOrders[i].gameObject.SetActive(g.Customers[i] && g.Orders[i] == Food.Toast);
-                speciesLabels[i].text = g.Customers[i] ? (InGalley ? earthNames : speciesNames)[g.Species[i]] : "";
+                burgers[i].gameObject.SetActive(false);
+                bowls[i].gameObject.SetActive(false);
+                toastOrders[i].gameObject.SetActive(false);
+                speciesLabels[i].text = g.Customers[i] ? (InGalley ? earthNames[g.Species[i]] : RegionalMenu.Guest(g.Level,g.Species[i])) : "";
                 speciesLabels[i].fontSize = 15;
                 speechLabels[i].gameObject.SetActive(false);
                 for (int j = 0; j < 4; j++)

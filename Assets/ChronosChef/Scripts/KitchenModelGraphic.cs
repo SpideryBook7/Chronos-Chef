@@ -107,6 +107,29 @@ namespace ChronosChef
             models = new Dictionary<string, Model>();
             var bytes = Resources.Load<TextAsset>("KitchenModels");
             if (!bytes) return;
+            ReadLibrary(bytes);
+        }
+        static int loadedRegion = -1;
+        static readonly string[] regionalParts = { "Grog","BipIdle","BipAlarm","Zorg","Rex","Burger","Soup","Toast" };
+        static string[] regionNames;
+        internal static string RegionModel(int world,string part)
+        {
+            if (loadedRegion != world)
+            {
+                LoadLibrary();
+                if (regionNames != null) foreach (string key in regionNames) models.Remove(key);
+                var asset = Resources.Load<TextAsset>("ServiceCast" + world);
+                if (!asset) return part;
+                ReadLibrary(asset);
+                Resources.UnloadAsset(asset);
+                regionNames = Array.ConvertAll(regionalParts, name => "W" + world + name);
+                loadedRegion = world;
+            }
+            int i = Array.IndexOf(regionalParts,part);
+            return i < 0 ? part : regionNames[i];
+        }
+        static void ReadLibrary(TextAsset bytes)
+        {
             using var reader = new BinaryReader(new MemoryStream(bytes.bytes));
             if (Encoding.ASCII.GetString(reader.ReadBytes(4)) != "CCM3") throw new InvalidDataException("Unknown kitchen model format");
             pivots = new Vector3[reader.ReadByte()];
